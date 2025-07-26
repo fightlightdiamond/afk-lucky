@@ -1,0 +1,76 @@
+# 📝 Yêu cầu công việc: Xây dựng lại stories cho các component shadcn/ui
+
+## 1. Mục tiêu
+
+- Tạo lại toàn bộ file stories (`*.stories.tsx`) cho các component lấy từ shadcn/ui trong repo [`afk-lucky`](https://github.com/fightlightdiamond/afk-lucky).
+- Mỗi stories phải hiển thị đầy đủ tất cả trạng thái, variant, size, disabled, icon, loading... của component.
+- Stories phải chạy tốt ở cả light & dark mode, chuyển đổi đúng như [demo của shadcn](https://ui.shadcn.com/docs/dark-mode/next).
+
+---
+
+## 2. Yêu cầu cụ thể
+
+### a. Tạo stories cho từng component
+
+- Mỗi component UI (Button, Input, Dialog, Card, Switch, ...) phải có ít nhất:
+  - **Default state**
+  - Các **variants** (`primary`, `secondary`, `destructive`, `outline`, ...)
+  - **Kích thước** (`sm`, `md`, `lg`, ...)
+  - Các trạng thái đặc biệt (`disabled`, `loading`, có icon, v.v.)
+
+### b. Đảm bảo hỗ trợ Dark Mode
+
+- Stories phải tương thích hoàn toàn với dark mode bằng chuẩn [shadcn dark mode](https://ui.shadcn.com/docs/dark-mode/next).
+- Kiểm tra với cả hai theme **light** và **dark** trong Storybook.
+  - Nên dùng addon/decorator (ví dụ `@storybook/addon-styling` với `withThemeByClassName`) để chuyển theme.
+
+### c. Chất lượng code
+
+- Code stories bằng **TypeScript**.
+- Viết stories rõ ràng, đặt tên các trạng thái dễ hiểu.
+- Nếu component dùng icon, lấy icon từ `lucide-react`.
+- Tất cả stories import style chính xác từ Tailwind/shadcn.
+
+### d. Document rõ trong Storybook
+
+- Sử dụng **Storybook Doc Blocks** để mô tả ý nghĩa, props chính của component.
+- Thêm ví dụ code vào Doc tab, kèm giải thích ngắn gọn (có thể dùng `<Source />` trong doc block).
+
+### e. Bonus
+
+- Nếu component có custom logic (ví dụ Modal có handle open/close), hãy mô phỏng interaction trong story.
+- Có thể tạo các "playground stories" cho người dùng test nhiều props.
+
+---
+
+## 3. Yêu cầu giao diện Storybook
+
+- Chạy mượt trên cả light/dark (kiểm tra thật kỹ!)
+- Trình bày rõ ràng, dễ tìm component, không trùng lặp story hoặc thiếu trạng thái.
+- Không để lỗi lint, type hoặc CSS vỡ.
+
+---
+
+## 4. Kết quả bàn giao
+
+- Mỗi component UI có 1 file `ComponentName.stories.tsx` trong đúng thư mục stories của repo.
+- Có thể chạy demo Storybook (`npm run storybook`) để kiểm tra mọi trạng thái, dark/light đều đúng chuẩn shadcn.
+- Tài liệu Doc của mỗi component rõ ràng, có ví dụ, có guide, có link reference nếu cần.
+
+---
+
+## 5. Tham khảo
+
+- shadcn demo: [https://ui.shadcn.com/docs/dark-mode/next](https://ui.shadcn.com/docs/dark-mode/next)
+- Storybook docs: [https://storybook.js.org/docs/api/doc-blocks/doc-block-source#dark](https://storybook.js.org/docs/api/doc-blocks/doc-block-source#dark)
+
+---
+
+## 6. Tinh thần thực hiện
+
+- **Không làm qua loa, không code lướt cho xong!**
+- Code stories là để dùng lâu dài, giúp toàn team test UI – làm phải CHẤT như production.
+
+---
+
+> Nếu cần template mẫu story cho từng loại component (Button, Switch, Dialog, ...), hoặc muốn mình viết sẵn một story mẫu chuẩn dark mode cho repo, chỉ cần nói "Cho tôi mẫu story Button chuẩn dark mode", sẽ nhận được code mẫu ngay!
