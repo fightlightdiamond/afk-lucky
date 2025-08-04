@@ -2,23 +2,33 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import CardFrame from "./CardFrame";
 
 const meta: Meta<typeof CardFrame> = {
-  title: "Card Components/CardFrame",
+  title: "Game Components/CardFrame",
   component: CardFrame,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "Card frame component tối ưu với Tailwind CSS + CSS Module. Tailwind cho layout, colors, gradients cơ bản. CSS Module cho glow effects, animations, sparkle effects phức tạp.",
+      },
+    },
   },
-  tags: ["autodocs"],
   argTypes: {
     rarity: {
       control: "select",
       options: ["common", "rare", "epic", "legendary"],
-      description: "Rarity of the card",
+      description: "Độ hiếm của card, ảnh hưởng đến màu sắc và effects",
     },
-    children: {
-      control: "text",
-      description: "Content inside the card frame",
+    glowing: {
+      control: "boolean",
+      description: "Bật/tắt glow effect xung quanh frame",
+    },
+    animated: {
+      control: "boolean",
+      description: "Bật/tắt animations (float, sparkle)",
     },
   },
+  tags: ["autodocs"],
 };
 
 export default meta;
@@ -27,58 +37,93 @@ type Story = StoryObj<typeof meta>;
 export const Common: Story = {
   args: {
     rarity: "common",
-    children: <div className="p-4">Common Card Content</div>,
+    children: (
+      <div className="p-6 text-center">
+        <h3 className="text-lg font-bold mb-2">Common Card</h3>
+        <p className="text-sm text-gray-600">Basic card content</p>
+      </div>
+    ),
   },
 };
 
 export const Rare: Story = {
   args: {
     rarity: "rare",
-    children: <div className="p-4">Rare Card Content</div>,
+    glowing: true,
+    children: (
+      <div className="p-6 text-center">
+        <h3 className="text-lg font-bold mb-2 text-blue-700">Rare Card</h3>
+        <p className="text-sm text-gray-600">Enhanced with blue glow</p>
+      </div>
+    ),
   },
 };
 
 export const Epic: Story = {
   args: {
     rarity: "epic",
-    children: <div className="p-4">Epic Card Content</div>,
+    glowing: true,
+    animated: true,
+    children: (
+      <div className="p-6 text-center">
+        <h3 className="text-lg font-bold mb-2 text-purple-700">Epic Card</h3>
+        <p className="text-sm text-gray-600">
+          Purple glow with floating animation
+        </p>
+      </div>
+    ),
   },
 };
 
 export const Legendary: Story = {
   args: {
     rarity: "legendary",
-    children: <div className="p-4">Legendary Card Content</div>,
+    glowing: true,
+    animated: true,
+    children: (
+      <div className="p-6 text-center">
+        <h3 className="text-lg font-bold mb-2 text-yellow-700">
+          Legendary Card
+        </h3>
+        <p className="text-sm text-gray-600">
+          Golden glow with sparkle effects
+        </p>
+      </div>
+    ),
   },
 };
 
 export const AllRarities: Story = {
   render: () => (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="flex gap-4 flex-wrap">
       <CardFrame rarity="common">
         <div className="p-4 text-center">
-          <h3 className="font-bold">Common</h3>
-          <p className="text-sm">Basic card</p>
+          <h4 className="font-bold">Common</h4>
         </div>
       </CardFrame>
-      <CardFrame rarity="rare">
+      <CardFrame rarity="rare" glowing>
         <div className="p-4 text-center">
-          <h3 className="font-bold">Rare</h3>
-          <p className="text-sm">Uncommon card</p>
+          <h4 className="font-bold text-blue-700">Rare</h4>
         </div>
       </CardFrame>
-      <CardFrame rarity="epic">
+      <CardFrame rarity="epic" glowing animated>
         <div className="p-4 text-center">
-          <h3 className="font-bold">Epic</h3>
-          <p className="text-sm">Powerful card</p>
+          <h4 className="font-bold text-purple-700">Epic</h4>
         </div>
       </CardFrame>
-      <CardFrame rarity="legendary">
+      <CardFrame rarity="legendary" glowing animated>
         <div className="p-4 text-center">
-          <h3 className="font-bold">Legendary</h3>
-          <p className="text-sm">Ultimate card</p>
+          <h4 className="font-bold text-yellow-700">Legendary</h4>
         </div>
       </CardFrame>
     </div>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Showcase tất cả các rarity với effects tương ứng. Legendary có sparkle animation đặc biệt.",
+      },
+    },
+  },
 };
