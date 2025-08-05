@@ -4,18 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="586fd6e6-103f-4f6e-8ece-0c96c5e242f9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/data/skills.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stories/HPBar.stories.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stories/HPBar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stories/Skill.stories.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stories/Skill.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stories/SkillList.stories.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stories/SkillList.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/types/skill.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="586fd6e6-103f-4f6e-8ece-0c96c5e242f9" name="Changes" comment="feat: skill component">
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GameCard.stories.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GameCard.stories.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/StatusBar.stories.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StatusBar.stories.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,9 +67,23 @@
       <workItem from="1753486371113" duration="3000" />
       <workItem from="1753486408600" duration="285000" />
     </task>
+    <task id="LOCAL-00001" summary="feat: skill component">
+      <option name="closed" value="true" />
+      <created>1754265440174</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1754265440174</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: add task 1" />
+    <MESSAGE value="feat: skill component" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: skill component" />
   </component>
 </project>

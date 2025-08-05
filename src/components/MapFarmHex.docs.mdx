@@ -1,0 +1,185 @@
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import MapFarmHex from "./MapFarmHex";
+import * as MapFarmHexStories from "./MapFarmHex.stories";
+
+<Meta of={MapFarmHexStories} />
+
+# MapFarmHex Component
+
+Hexagonal farm map component tối ưu với Tailwind CSS + CSS Module. 7x7 hex grid với hero positioning, monster spawns, highlight effects, và selection system.
+
+## Interactive Playground
+
+<Canvas of={MapFarmHexStories.BattleScene} />
+
+<Controls of={MapFarmHexStories.BattleScene} />
+
+## Examples
+
+### Empty Map
+
+<Canvas of={MapFarmHexStories.EmptyMap} />
+
+<Controls of={MapFarmHexStories.EmptyMap} />
+
+### Single Hero
+
+<Canvas of={MapFarmHexStories.SingleHero} />
+
+<Controls of={MapFarmHexStories.SingleHero} />
+
+### Two Heroes
+
+<Canvas of={MapFarmHexStories.TwoHeroes} />
+
+<Controls of={MapFarmHexStories.TwoHeroes} />
+
+### With Monsters
+
+<Canvas of={MapFarmHexStories.WithMonsters} />
+
+<Controls of={MapFarmHexStories.WithMonsters} />
+
+### With Highlights
+
+<Canvas of={MapFarmHexStories.WithHighlights} />
+
+<Controls of={MapFarmHexStories.WithHighlights} />
+
+### With Selection
+
+<Canvas of={MapFarmHexStories.WithSelection} />
+
+<Controls of={MapFarmHexStories.WithSelection} />
+
+### Battle Scene
+
+<Canvas of={MapFarmHexStories.BattleScene} />
+
+<Controls of={MapFarmHexStories.BattleScene} />
+
+### All Hero Types
+
+<Canvas of={MapFarmHexStories.AllHeroTypes} />
+
+<Controls of={MapFarmHexStories.AllHeroTypes} />
+
+### All Monster Types
+
+<Canvas of={MapFarmHexStories.AllMonsterTypes} />
+
+<Controls of={MapFarmHexStories.AllMonsterTypes} />
+
+### Interactive
+
+<Canvas of={MapFarmHexStories.Interactive} />
+
+<Controls of={MapFarmHexStories.Interactive} />
+
+### Without Animation
+
+<Canvas of={MapFarmHexStories.WithoutAnimation} />
+
+<Controls of={MapFarmHexStories.WithoutAnimation} />
+
+### Large Scale
+
+<Canvas of={MapFarmHexStories.LargeScale} />
+
+<Controls of={MapFarmHexStories.LargeScale} />
+
+## Props
+
+<Controls of={MapFarmHexStories.BattleScene} />
+
+## Features
+
+- **7x7 Hexagonal Grid** - 49 hex cells với perfect positioning
+- **Hero Support** - Tối đa 2 heroes với custom positioning
+- **Monster Support** - Unlimited monsters với spawn positions
+- **Highlight System** - Array cells để highlight skill ranges
+- **Selection System** - Selected cell với glow effects
+- **Click Handler** - Interactive onCellClick callback
+- **Borderless Design** - Clean hex shapes, chỉ glow khi cần
+- **Tailwind CSS** - Layout, colors, spacing, responsive
+- **CSS Module** - Advanced animations, glow effects, transitions
+
+## Hero Types
+
+- **Warrior** ⚔️ - Red background, melee fighter
+- **Mage** 🔮 - Blue background, spell caster
+- **Archer** 🏹 - Green background, ranged attacker
+- **Assassin** 🗡️ - Purple background, stealth unit
+
+## Monster Types
+
+- **Goblin** 👹 - Green, low level enemies
+- **Orc** 👺 - Gray, medium level enemies
+- **Dragon** 🐉 - Red, high level boss
+- **Skeleton** 💀 - Black, undead enemies
+
+## Coordinate System
+
+Uses axial coordinates (q, r) for hexagonal grid:
+
+- **q**: Column (0-6)
+- **r**: Row (0-6)
+- **Position**: `{ q: 3, r: 3 }` = center of map
+
+## Usage Examples
+
+### Basic Setup
+
+```tsx
+<MapFarmHex
+  heroPositions={[
+    {
+      position: { q: 1, r: 1 },
+      hero: { id: "1", name: "Warrior", type: "warrior" },
+    },
+  ]}
+  animated
+/>
+```
+
+### With Monsters and Highlights
+
+```tsx
+<MapFarmHex
+  heroPositions={[
+    {
+      position: { q: 2, r: 2 },
+      hero: { id: "1", name: "Mage", type: "mage", level: 30 },
+    },
+  ]}
+  monsterPositions={[
+    {
+      position: { q: 4, r: 4 },
+      monster: { id: "1", name: "Dragon", type: "dragon", level: 50 },
+    },
+  ]}
+  highlightCells={[
+    { q: 1, r: 1 },
+    { q: 1, r: 2 },
+    { q: 2, r: 1 },
+  ]}
+  selectedCell={{ q: 3, r: 3 }}
+  onCellClick={(pos) => console.log("Clicked:", pos)}
+  animated
+/>
+```
+
+## Animations
+
+- **Staggered Entrance** - Hex cells appear với delay
+- **Hero Float** - Heroes float gently
+- **Monster Idle** - Monsters có idle animation
+- **Glow Effects** - Pulsing glows cho highlights
+- **Hover Effects** - Scale và brightness changes
+- **Selection Bounce** - Selected cells bounce effect
+
+## Responsive Design
+
+- **Desktop**: Full animations và effects
+- **Mobile**: Reduced animations cho performance
+- **Reduced Motion**: Respects user preferences
