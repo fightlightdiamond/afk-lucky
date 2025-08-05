@@ -5,10 +5,58 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="586fd6e6-103f-4f6e-8ece-0c96c5e242f9" name="Changes" comment="feat: skill component">
+      <change afterPath="$PROJECT_DIR$/public/images/skills/1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/11.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/12.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/13.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/14.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/15.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/17.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/18.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/19.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/21.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/22.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/23.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/24.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/25.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/26.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/27.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/28.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/29.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/30.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/31.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/33.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/34.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/35.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/36.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/37.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/38.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/39.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/40.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/41.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/42.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/43.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/44.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/45.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/46.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/47.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/48.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/49.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/50.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/skills/9.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GameCard.stories.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GameCard.stories.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/StatusBar.stories.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/StatusBar.stories.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +74,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "fightlightdiamond"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/fightlightdiamond/afk-lucky.git",
+    "accountId": "d8aef907-79b1-49d5-9214-376e78f00721"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -38,7 +98,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/cuongpm/Documents/GitHub/lucky",
+    "last_opened_file_path": "/Users/cuongpm/Documents/GitHub/lucky/public/images",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -48,6 +108,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/images" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

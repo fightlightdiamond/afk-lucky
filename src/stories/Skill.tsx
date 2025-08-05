@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import styles from "./Skill.module.css";
 
@@ -11,6 +12,7 @@ export interface SkillProps {
   rarity?: "common" | "rare" | "epic" | "legendary";
   unlocked?: boolean;
   animated?: boolean;
+  size?: "small" | "medium" | "large" | "xlarge";
   onClick?: () => void;
 }
 
@@ -23,9 +25,56 @@ export default function Skill({
   rarity = "common",
   unlocked = true,
   animated = false,
+  size = "medium",
   onClick,
 }: SkillProps) {
   const isMaxLevel = level >= maxLevel;
+
+  // Size configurations
+  const sizeConfig = {
+    small: {
+      cardWidth: "w-32",
+      iconSize: "w-12 h-12",
+      imageSize: 48,
+      padding: "p-3",
+      nameSize: "text-sm",
+      levelSize: "text-xs",
+      descSize: "text-xs",
+      spacing: "mb-1",
+    },
+    medium: {
+      cardWidth: "w-40",
+      iconSize: "w-16 h-16",
+      imageSize: 64,
+      padding: "p-4",
+      nameSize: "text-lg",
+      levelSize: "text-sm",
+      descSize: "text-sm",
+      spacing: "mb-2",
+    },
+    large: {
+      cardWidth: "w-48",
+      iconSize: "w-24 h-24",
+      imageSize: 96,
+      padding: "p-6",
+      nameSize: "text-xl",
+      levelSize: "text-sm",
+      descSize: "text-sm",
+      spacing: "mb-3",
+    },
+    xlarge: {
+      cardWidth: "w-56",
+      iconSize: "w-32 h-32",
+      imageSize: 128,
+      padding: "p-8",
+      nameSize: "text-2xl",
+      levelSize: "text-base",
+      descSize: "text-base",
+      spacing: "mb-4",
+    },
+  };
+
+  const currentSize = sizeConfig[size];
 
   // Tailwind classes cho rarity colors
   const rarityClasses = {
@@ -48,25 +97,33 @@ export default function Skill({
   return (
     <Card
       className={`
-        w-36 cursor-pointer transition-all duration-300 border-2
+        ${
+          currentSize.cardWidth
+        } cursor-pointer transition-all duration-300 border-2
         ${rarityClasses[rarity]}
         ${effectClasses}
         ${unlocked ? "hover:shadow-lg hover:-translate-y-1" : "opacity-60"}
       `}
       onClick={unlocked ? onClick : undefined}
     >
-      <CardContent className="flex flex-col items-center p-4 relative">
+      <CardContent
+        className={`flex flex-col items-center ${currentSize.padding} relative`}
+      >
         {/* Skill Icon Container */}
         <div
           className={`
-          relative w-16 h-16 rounded-xl mb-2 overflow-hidden
+          relative ${currentSize.iconSize} rounded-xl ${
+            currentSize.spacing
+          } overflow-hidden
           ${unlocked ? "border shadow" : "border-dashed border-gray-300"}
           ${animated ? styles.iconContainer : ""}
         `}
         >
-          <img
+          <Image
             src={img}
             alt={name}
+            width={currentSize.imageSize}
+            height={currentSize.imageSize}
             className={`
               w-full h-full object-contain transition-all duration-300
               ${unlocked ? "" : "grayscale opacity-50"}
@@ -92,7 +149,7 @@ export default function Skill({
         {/* Skill Name */}
         <div
           className={`
-          text-lg font-semibold text-center mb-1
+          ${currentSize.nameSize} font-semibold text-center mb-1
           ${unlocked ? "text-gray-800" : "text-gray-400"}
           ${animated ? styles.skillName : ""}
         `}
@@ -103,7 +160,7 @@ export default function Skill({
         {/* Skill Level */}
         <div
           className={`
-          text-xs font-medium mb-2
+          ${currentSize.levelSize} font-medium mb-2
           ${isMaxLevel ? "text-yellow-600" : "text-blue-600"}
         `}
         >
@@ -113,7 +170,7 @@ export default function Skill({
         {/* Skill Description */}
         <div
           className={`
-          text-xs text-center leading-relaxed
+          ${currentSize.descSize} text-center leading-relaxed
           ${unlocked ? "text-gray-500" : "text-gray-400"}
         `}
         >

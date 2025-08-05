@@ -1,4 +1,64 @@
-/* CSS Module chỉ cho skill list effects và animations */
+/* CSS Module cho skill list effects, animations và layouts */
+
+/* Base skill list container */
+.skillList {
+  width: 100%;
+  padding: 1rem;
+}
+
+/* Grid Layout */
+.gridLayout {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
+.columns2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.columns3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.columns4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.columns5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.columns6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.columns7 {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.columns8 {
+  grid-template-columns: repeat(8, 1fr);
+}
+
+/* List Layout */
+.listLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Masonry Layout */
+.masonryLayout {
+  columns: 3;
+  column-gap: 1rem;
+  column-fill: balance;
+}
+
+/* Animated container */
+.animated {
+  animation: listFadeIn 0.8s ease-out;
+}
 
 /* Animated list container */
 .animatedList {
