@@ -72,6 +72,27 @@ export const authApi = {
     });
   },
 
+  forgotPassword: async (email: string) => {
+    return apiRequest<{ message: string; resetLink?: string }>(
+      "/api/forgot-password",
+      {
+        method: "POST",
+        body: JSON.stringify({ email }),
+      }
+    );
+  },
+
+  resetPassword: async (data: {
+    token: string;
+    email: string;
+    password: string;
+  }) => {
+    return apiRequest<{ message: string }>("/api/reset-password", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  },
+
   logout: async () => {
     return apiRequest("/api/logout", { method: "POST" });
   },

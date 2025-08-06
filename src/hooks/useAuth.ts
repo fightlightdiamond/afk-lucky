@@ -94,6 +94,47 @@ export function useRegister() {
   });
 }
 
+// Forgot password mutation
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: authApi.forgotPassword,
+    onSuccess: (data) => {
+      toast.success(data.message);
+
+      // In development, show reset link
+      if (data.resetLink) {
+        console.log("🔗 Reset link:", data.resetLink);
+        toast.info("Check console for reset link (dev only)");
+      }
+    },
+    onError: (error: any) => {
+      console.error("Forgot password failed:", error);
+      toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+    },
+  });
+}
+
+// Reset password mutation
+export function useResetPassword() {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: authApi.resetPassword,
+    onSuccess: (data) => {
+      toast.success(data.message);
+
+      // Navigate to login page after 2 seconds
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    },
+    onError: (error: any) => {
+      console.error("Reset password failed:", error);
+      toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
+    },
+  });
+}
+
 // Logout mutation
 export function useLogout() {
   const router = useRouter();

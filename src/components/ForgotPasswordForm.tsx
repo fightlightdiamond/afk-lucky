@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -24,37 +23,31 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useLogin } from "@/hooks/useAuth";
+import { useForgotPassword } from "@/hooks/useAuth";
 
 // Validation schema
-const loginSchema = z.object({
+const forgotPasswordSchema = z.object({
   email: z.string().min(1, "Email là bắt buộc").email("Email không hợp lệ"),
-  password: z
-    .string()
-    .min(1, "Mật khẩu là bắt buộc")
-    .min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
-export default function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false);
-  const loginMutation = useLogin();
+export default function ForgotPasswordForm() {
+  const forgotPasswordMutation = useForgotPassword();
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<ForgotPasswordFormValues>({
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
-  const onSubmit = async (values: LoginFormValues) => {
+  const onSubmit = async (values: ForgotPasswordFormValues) => {
     try {
-      await loginMutation.mutateAsync(values);
+      await forgotPasswordMutation.mutateAsync(values.email);
+      form.reset();
     } catch (error) {
-      // Error is handled in the mutation
-      console.error("Login error:", error);
+      console.error("Forgot password error:", error);
     }
   };
 
@@ -64,10 +57,10 @@ export default function LoginForm() {
         <Card className="shadow-lg">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center text-gray-900">
-              Đăng nhập
+              Quên mật khẩu
             </CardTitle>
             <CardDescription className="text-center text-gray-600">
-              Nhập email và mật khẩu để truy cập tài khoản
+              Nhập email để nhận link reset mật khẩu
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -86,46 +79,9 @@ export default function LoginForm() {
                         <Input
                           type="email"
                           placeholder="example@email.com"
-                          className="w-full"
                           {...field}
-                          disabled={loginMutation.isPending}
+                          disabled={forgotPasswordMutation.isPending}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700">Mật khẩu</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Nhập mật khẩu"
-                            className="w-full pr-10"
-                            {...field}
-                            disabled={loginMutation.isPending}
-                          />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                            onClick={() => setShowPassword(!showPassword)}
-                            disabled={loginMutation.isPending}
-                          >
-                            {showPassword ? (
-                              <EyeOff className="h-4 w-4 text-gray-500" />
-                            ) : (
-                              <Eye className="h-4 w-4 text-gray-500" />
-                            )}
-                          </Button>
-                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -135,15 +91,15 @@ export default function LoginForm() {
                 <Button
                   type="submit"
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                  disabled={loginMutation.isPending}
+                  disabled={forgotPasswordMutation.isPending}
                 >
-                  {loginMutation.isPending ? (
+                  {forgotPasswordMutation.isPending ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Đang đăng nhập...
+                      Đang gửi...
                     </>
                   ) : (
-                    "Đăng nhập"
+                    "Gửi link reset mật khẩu"
                   )}
                 </Button>
               </form>
@@ -151,10 +107,11 @@ export default function LoginForm() {
 
             <div className="text-center space-y-2">
               <Link
-                href="/forgot-password"
-                className="text-sm text-blue-600 hover:text-blue-500"
+                href="/login"
+                className="inline-flex items-center text-sm text-blue-600 hover:text-blue-500"
               >
-                Quên mật khẩu?
+                <ArrowLeft className="mr-1 h-4 w-4" />
+                Quay lại đăng nhập
               </Link>
 
               <p className="text-sm text-gray-600">

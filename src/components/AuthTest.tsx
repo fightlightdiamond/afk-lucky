@@ -11,15 +11,23 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuthStore } from "@/store";
-import { useLogin, useRegister, useLogout } from "@/hooks/useAuth";
+import {
+  useLogin,
+  useRegister,
+  useLogout,
+  useForgotPassword,
+} from "@/hooks/useAuth";
 
 export default function AuthTest() {
   const { isAuthenticated, user } = useAuthStore();
-  const [testMode, setTestMode] = useState<"login" | "register">("login");
+  const [testMode, setTestMode] = useState<"login" | "register" | "forgot">(
+    "login"
+  );
 
   const loginMutation = useLogin();
   const registerMutation = useRegister();
   const logoutMutation = useLogout();
+  const forgotPasswordMutation = useForgotPassword();
 
   const testLogin = async () => {
     try {
