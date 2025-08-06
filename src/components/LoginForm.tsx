@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -147,6 +148,18 @@ export default function LoginForm() {
                 </Button>
               </form>
             </Form>
+
+            <div className="text-center">
+              <p className="text-sm text-gray-600">
+                Chưa có tài khoản?{" "}
+                <Link
+                  href="/register"
+                  className="font-medium text-green-600 hover:text-green-500"
+                >
+                  Đăng ký ngay
+                </Link>
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>

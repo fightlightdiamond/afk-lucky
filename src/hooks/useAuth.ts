@@ -56,6 +56,44 @@ export function useLogin() {
   });
 }
 
+// Register mutation
+export function useRegister() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { login } = useAuthStore();
+
+  return useMutation({
+    mutationFn: authApi.register,
+    onSuccess: (data) => {
+      // Update Zustand store
+      login(data.token, data.user);
+
+      // Invalidate and refetch profile
+      queryClient.invalidateQueries({ queryKey: authKeys.profile() });
+
+      // Show success message
+      toast.success(data.message || `Chào mừng ${data.user.name}!`);
+
+      // Navigate to home page
+      router.push("/");
+    },
+    onError: (error: any) => {
+      console.error("Register failed:", error);
+
+      // Show error message
+      let errorMessage = "Đăng ký thất bại. Vui lòng thử lại.";
+
+      if (error.status === 409) {
+        errorMessage = "Email hoặc số điện thoại đã được sử dụng!";
+      } else if (error.status === 400) {
+        errorMessage = "Thông tin không hợp lệ. Vui lòng kiểm tra lại.";
+      }
+
+      toast.error(errorMessage);
+    },
+  });
+}
+
 // Logout mutation
 export function useLogout() {
   const router = useRouter();

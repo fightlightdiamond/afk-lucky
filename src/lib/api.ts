@@ -41,12 +41,34 @@ export interface LoginResponse {
   user: User;
 }
 
+// Registration types
+export interface RegisterRequest {
+  firstName: string;
+  lastName?: string;
+  email: string;
+  password: string;
+  phoneNumber?: string;
+}
+
+export interface RegisterResponse {
+  token: string;
+  user: User;
+  message: string;
+}
+
 // Auth API functions
 export const authApi = {
   login: async (credentials: { email: string; password: string }) => {
     return apiRequest<LoginResponse>("/api/login", {
       method: "POST",
       body: JSON.stringify(credentials),
+    });
+  },
+
+  register: async (userData: RegisterRequest) => {
+    return apiRequest<RegisterResponse>("/api/register", {
+      method: "POST",
+      body: JSON.stringify(userData),
     });
   },
 

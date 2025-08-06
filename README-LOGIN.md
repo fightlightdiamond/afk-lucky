@@ -9,6 +9,15 @@ Email: admin@example.com
 Password: 123456
 ```
 
+## 🆕 **Registration**
+
+You can also create new accounts using the registration form:
+
+- Navigate to: `http://localhost:3001/register`
+- Fill in the required fields (Tên, Email, Mật khẩu)
+- Optional: Họ, Số điện thoại
+- Password must be at least 6 characters
+
 ## 🚀 **How to Test**
 
 ### 1. **Start the Development Server**
@@ -17,9 +26,10 @@ Password: 123456
 npm run dev
 ```
 
-### 2. **Access the Login Page**
+### 2. **Access the Pages**
 
-Navigate to: `http://localhost:3001/login`
+- **Login**: `http://localhost:3001/login`
+- **Register**: `http://localhost:3001/register`
 
 ### 3. **Test the Login Flow**
 
@@ -28,6 +38,14 @@ Navigate to: `http://localhost:3001/login`
 3. You should be redirected to the home page
 4. You'll see a welcome message with user info
 5. Use the "Đăng xuất" button to logout
+
+### 4. **Test the Registration Flow**
+
+1. Go to register page
+2. Fill in: Tên, Email, Mật khẩu, Xác nhận mật khẩu
+3. Optional: Họ, Số điện thoại
+4. Click "Đăng ký"
+5. You'll be automatically logged in and redirected to home
 
 ## 🛠 **System Architecture**
 
@@ -68,18 +86,24 @@ npx prisma db seed
 ## 📁 **Key Files**
 
 - `src/components/LoginForm.tsx` - Login form component
-- `src/hooks/useAuth.ts` - Authentication hooks
+- `src/components/RegisterForm.tsx` - Registration form component
+- `src/hooks/useAuth.ts` - Authentication hooks (login, register, logout)
 - `src/store/authStore.ts` - Auth state management
 - `src/app/api/login/route.ts` - Login API endpoint
+- `src/app/api/register/route.ts` - Registration API endpoint
 - `src/components/ProtectedRoute.tsx` - Route protection
 
 ## 🎯 **Features**
 
+### **Login & Registration**
+
 ✅ **Form Validation**: Real-time validation with error messages  
 ✅ **Password Toggle**: Show/hide password functionality  
-✅ **Loading States**: Visual feedback during login process  
+✅ **Password Confirmation**: Ensure passwords match during registration  
+✅ **Loading States**: Visual feedback during login/register process  
 ✅ **Error Handling**: User-friendly error messages  
-✅ **Auto-redirect**: Automatic navigation after login/logout  
+✅ **Auto-redirect**: Automatic navigation after login/logout/register  
+✅ **Duplicate Prevention**: Check for existing email/phone during registration  
 ✅ **Persistent Auth**: Login state survives page refresh  
 ✅ **Protected Routes**: Automatic redirect for unauthorized access  
 ✅ **Responsive Design**: Works on all screen sizes
