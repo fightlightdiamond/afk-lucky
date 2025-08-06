@@ -36,14 +36,14 @@ export const Default: Story = {
     createElement(AlertDialogTrigger, { 
       className: "inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2" 
     }, "Open Dialog"),
-    createElement(AlertDialogContent, null,
+    createElement(AlertDialogContent, {className: 'bg-white'},
       createElement(AlertDialogHeader, null,
         createElement(AlertDialogTitle, null, "Are you absolutely sure?"),
         createElement(AlertDialogDescription, null, "This action cannot be undone. This will permanently delete your account and remove your data from our servers.")
       ),
       createElement(AlertDialogFooter, null,
         createElement(AlertDialogCancel, null, "Từ Chối"),
-        createElement(AlertDialogAction, null, "Tiếp tục")
+        createElement(AlertDialogAction, {className:'bg-black text-white'}, "Tiếp tục")
       )
     )
   ),
@@ -54,7 +54,7 @@ export const DeleteConfirmation: Story = {
     createElement(AlertDialogTrigger, { 
       className: "inline-flex items-center justify-center rounded-md text-sm font-medium bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2" 
     }, "Delete Item"),
-    createElement(AlertDialogContent, null,
+    createElement(AlertDialogContent, {className:'bg-white'},
       createElement(AlertDialogHeader, null,
         createElement(AlertDialogTitle, null, "Dele Item"),
         createElement(AlertDialogDescription, null, "Bạn có chắc chắn muốn xóa mục này không? Hành động này không thể hoàn tác.")
@@ -62,7 +62,7 @@ export const DeleteConfirmation: Story = {
       createElement(AlertDialogFooter, null,
         createElement(AlertDialogCancel, null, "Từ Chối"),
         createElement(AlertDialogAction, { 
-          className: "bg-destructive text-destructive-foreground hover:bg-destructive/90" 
+          className: "bg-black text-white hover:bg-destructive/90" 
         }, "Xóa")
       )
     )
