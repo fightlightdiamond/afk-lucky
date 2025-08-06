@@ -1,95 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="586fd6e6-103f-4f6e-8ece-0c96c5e242f9" name="Changes" comment="feat: skill component">
-      <change afterPath="$PROJECT_DIR$/public/images/skills/1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/10.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/11.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/12.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/13.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/14.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/15.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/16.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/17.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/18.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/19.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/20.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/21.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/22.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/23.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/24.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/25.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/26.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/27.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/28.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/29.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/30.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/31.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/32.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/33.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/34.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/35.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/36.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/37.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/38.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/39.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/40.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/41.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/42.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/43.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/44.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/45.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/46.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/47.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/48.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/49.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/50.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/skills/9.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+    <list default="true" id="6d31232a-fb63-44ad-bc56-a52e1ed2abd2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="TypeScript File" />
-        <option value="TypeScript JSX File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "fightlightdiamond"
-  }
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
 }]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/fightlightdiamond/afk-lucky.git",
-    "accountId": "d8aef907-79b1-49d5-9214-376e78f00721"
-  }
-}]]></component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 8
-}</component>
-  <component name="ProjectId" id="30O6W6OJUNCmeTRnsEdyLmbTqXo" />
+  <component name="ProjectId" id="30v6yNVC4zMlgBY2dHgIwCtZEt5" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -98,21 +24,13 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/cuongpm/Documents/GitHub/lucky/public/images",
+    "last_opened_file_path": "/Users/cuongpm/Documents/GitHub/lucky_",
     "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "/Users/cuongpm/Documents/GitHub/lucky/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/public/images" />
-    </key>
-  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -123,32 +41,16 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="586fd6e6-103f-4f6e-8ece-0c96c5e242f9" name="Changes" comment="" />
-      <created>1753486300400</created>
+      <changelist id="6d31232a-fb63-44ad-bc56-a52e1ed2abd2" name="Changes" comment="" />
+      <created>1754495953038</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1753486300400</updated>
-      <workItem from="1753486301526" duration="67000" />
-      <workItem from="1753486371113" duration="3000" />
-      <workItem from="1753486408600" duration="285000" />
+      <updated>1754495953038</updated>
+      <workItem from="1754495954113" duration="51000" />
     </task>
-    <task id="LOCAL-00001" summary="feat: skill component">
-      <option name="closed" value="true" />
-      <created>1754265440174</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1754265440174</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="feat: add task 1" />
-    <MESSAGE value="feat: skill component" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: skill component" />
   </component>
 </project>

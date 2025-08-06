@@ -1,0 +1,476 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contact {
+  id           Int      @id @default(autoincrement())
+  created_by   Int
+  title        String
+  message      String
+  is_active    Int      @default(1)
+  created_at   DateTime?
+  updated_at   DateTime?
+  deleted_at   DateTime?
+  name         String?
+  email        String?
+  phone_number String?
+  @@map("contacts")
+}
+
+model User {
+  id                  Int        @id @default(autoincrement())
+  first_name          String?
+  last_name           String?
+  code                String?    @unique
+  email               String     @unique
+  phone_number        String?    @unique
+  sex                 Boolean    @default(true)
+  password            String
+  birthday            DateTime?
+  address             String?
+  avatar              String?
+  remember_token      String?
+  is_active           Boolean    @default(true)
+  last_login          DateTime?
+  last_logout         DateTime?
+  slack_webhook_url   String?
+  created_at          DateTime?
+  updated_at          DateTime?
+  deleted_at          DateTime?
+  coin                BigInt     @default(1000)
+  locale              String?    @default("en")
+  group_id            Int?       @default(1)
+  @@map("users")
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String
+  image       String?
+  description String?
+  is_active   Int      @default(0)
+  created_at  DateTime?
+  updated_at  DateTime?
+  deleted_at  DateTime?
+  @@map("categories")
+}
+
+model WordType {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("word_types")
+}
+
+model CrazyCourse {
+  id          Int      @id @default(autoincrement())
+  name        String
+  img         String?
+  description String?
+  is_active   Int      @default(0)
+  created_by  Int?
+  updated_by  Int?
+  created_at  DateTime?
+  updated_at  DateTime?
+  deleted_at  DateTime?
+  @@map("crazy_courses")
+}
+
+model Crazy {
+  id              Int      @id @default(autoincrement())
+  name            String
+  audio           String
+  created_by      Int?
+  updated_by      Int?
+  is_active       Int      @default(0)
+  created_at      DateTime?
+  updated_at      DateTime?
+  crazy_course_id Int?
+  img             String?
+  description     String?
+  @@map("crazies")
+}
+
+model CrazyDetail {
+  id         Int      @id @default(autoincrement())
+  crazy_id   Int
+  no         Int      @default(0)
+  sentence   String
+  meaning    String
+  created_by Int?
+  updated_by Int?
+  is_active  Int      @default(0)
+  created_at DateTime?
+  updated_at DateTime?
+  time       Int      @default(0)
+  @@map("crazy_details")
+}
+
+model CrazyHistory {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  crazy_id   Int
+  score      Int
+  type       Int      @default(1)
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("crazy_histories")
+}
+
+model CrazyReadHistory {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  crazy_id   Int
+  score      Int
+  type       Int      @default(1)
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("crazy_read_histories")
+}
+
+model CrazySpeakHistory {
+  id         BigInt   @id @default(autoincrement())
+  user_id    Int
+  crazy_id   Int
+  score      Int      @default(0)
+  audio      String?
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("crazy_speak_histories")
+}
+
+model CrazyWriteHistory {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  crazy_id   Int
+  score      Int      @default(0)
+  type       Int      @default(0)
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("crazy_write_histories")
+}
+
+model Group {
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("groups")
+}
+
+model Image {
+  id         Int      @id @default(autoincrement())
+  title      String
+  album_id   Int?
+  image      String?
+  link       String?
+  is_active  Int      @default(0)
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("images")
+}
+
+model PasswordReset {
+  email      String
+  token      String
+  created_at DateTime?
+  @@map("password_resets")
+  @@id([email, token])
+}
+
+model QuestionResult {
+  id         Int      @id @default(autoincrement())
+  question_id Int
+  created_by Int
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("question_results")
+}
+
+model QuestionTag {
+  question_id Int
+  tag_id      Int
+  @@map("question_tags")
+  @@id([question_id, tag_id])
+}
+
+
+model Sequence {
+  id         Int      @id @default(autoincrement())
+  question_id Int
+  reply      String
+  no         Int
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("sequences")
+}
+
+model Subject {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  is_active   Int
+  created_at  DateTime?
+  updated_at  DateTime?
+  @@map("subjects")
+}
+
+model UserProfile {
+  id           Int      @id @default(autoincrement())
+  user_id      Int
+  height       Int?
+  weight       Int?
+  round_one    Int?
+  round_two    Int?
+  round_three  Int?
+  image_one    String?
+  image_two    String?
+  image_three  String?
+  website      String?
+  hobby        String?
+  slogan       String?
+  created_at   DateTime?
+  updated_at   DateTime?
+  @@map("user_profiles")
+}
+
+
+model UserReport {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  created_by Int
+  content    String
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("user_reports")
+}
+
+model FillInTheBlank {
+  id         Int      @id @default(autoincrement())
+  lesson_id  Int
+  no         Int
+  sentence   String
+  meaning    String
+  answer     String?
+  created_by Int?
+  updated_by Int?
+  is_active  Int      @default(0)
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("fill_in_the_blanks")
+}
+
+model KeywordTag {
+  id         Int      @id @default(autoincrement())
+  keyword    String
+  tag_id     Int
+  @@map("keyword_tags")
+}
+
+model Question {
+  id         Int      @id @default(autoincrement())
+  question   String
+  score      Int
+  type       String
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("questions")
+}
+
+model Section {
+  id         Int      @id @default(autoincrement())
+  lesson_id  Int
+  name       String
+  description String?
+  no         Int
+  is_active  Int
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  course_id  Int?
+  parent_id  Int?
+  locale     String?
+  created_by Int?
+  updated_by Int?
+  @@map("sections")
+}
+
+model Tag {
+  id         Int      @id @default(autoincrement())
+  name       String
+  is_active  Int      @default(0)
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("tags")
+}
+
+model Video {
+  id         Int      @id @default(autoincrement())
+  title      String
+  url        String
+  description String?
+  is_active  Int      @default(0)
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("videos")
+}
+
+
+model Bank {
+  id         Int      @id @default(autoincrement())
+  name       String
+  code       String
+  bin        String
+  is_active  Int      @default(1)
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("banks")
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  object_id  Int
+  object_type String
+  content    String
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("comments")
+}
+
+model Lesson {
+  id          Int      @id @default(autoincrement())
+  name        String
+  audio       String
+  type        Int      @default(1)
+  img         String?
+  description String?
+  is_active   Boolean  @default(true)
+  created_at  DateTime?
+  updated_at  DateTime?
+  @@map("lessons")
+}
+
+model Feedback {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  title      String
+  message    String
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("feedback")
+}
+
+model LessonSub {
+  id           Int      @id @default(autoincrement())
+  lesson_id    Int
+  name         String
+  description  String?
+  created_at   DateTime?
+  updated_at   DateTime?
+  deleted_at   DateTime?
+  @@map("lesson_sub")
+}
+
+model CommentTitle {
+  id         Int      @id @default(autoincrement())
+  title      String
+  created_by Int
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("comment_title")
+}
+
+model Tutorial {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  content     String?
+  is_active   Boolean  @default(true)
+  created_at  DateTime?
+  updated_at  DateTime?
+  @@map("tutorial")
+}
+
+model Result {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  score      Int
+  object_id  Int
+  object_type String
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("result")
+}
+
+model Score {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  value      Int
+  description String?
+  created_at DateTime?
+  @@map("scores")
+}
+
+model UserFollow {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  created_by Int
+  created_at DateTime?
+  updated_at DateTime?
+  @@map("user_follows")
+}
+
+model News {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String
+  image      String?
+  is_active  Int      @default(0)
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("news")
+}
+
+model SectionResult {
+  id         Int      @id @default(autoincrement())
+  created_by Int
+  section_id Int
+  score      Int      @default(0)
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("section_result")
+}
+
+model SectionTest {
+  id         Int      @id @default(autoincrement())
+  section_id Int
+  question   String
+  reply1     String
+  reply2     String
+  reply3     String
+  reply4     String
+  answer     Int
+  is_active  Boolean
+  created_by Int
+  updated_by Int
+  created_at DateTime?
+  updated_at DateTime?
+  deleted_at DateTime?
+  @@map("section_test")
+}

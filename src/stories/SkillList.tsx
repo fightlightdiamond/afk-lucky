@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Skill from "./Skill";
 import styles from "./SkillList.module.css";
 
@@ -204,7 +203,9 @@ export default function SkillList({
       case "list":
         return `${baseClasses} ${styles.listLayout}`;
       case "masonry":
-        return `${baseClasses} ${styles.masonryLayout}`;
+        return `${baseClasses} ${styles.masonryLayout} ${
+          styles[`masonryColumns${columns}`]
+        }`;
       default:
         return baseClasses;
     }

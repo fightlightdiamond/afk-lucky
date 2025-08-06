@@ -81,6 +81,23 @@ export const ListLayout: Story = {
 export const MasonryLayout: Story = {
   args: {
     layout: "masonry",
+    columns: 3,
+    animated: true,
+  },
+};
+
+export const MasonryFourColumns: Story = {
+  args: {
+    layout: "masonry",
+    columns: 4,
+    animated: true,
+  },
+};
+
+export const MasonryFiveColumns: Story = {
+  args: {
+    layout: "masonry",
+    columns: 5,
     animated: true,
   },
 };
