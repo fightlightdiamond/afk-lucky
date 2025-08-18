@@ -1,0 +1,32 @@
+version: "3"
+
+networks:
+  luck_net:
+    driver: bridge
+
+services:
+  db:
+    image: "postgres:latest"
+    hostname: mysql
+    restart: always
+    networks:
+      - luck_net
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5432:5432"
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: "none" # disable saving logs
+    ports:
+      - 1027:1025 # smtp server
+      - 8027:8025 # web ui
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    networks:
+      - luck_net

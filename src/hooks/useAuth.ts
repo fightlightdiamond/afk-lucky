@@ -3,38 +3,70 @@ import { useRouter } from "next/navigation";
 import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/store";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 // Query keys
 export const authKeys = {
   all: ["auth"] as const,
   profile: () => [...authKeys.all, "profile"] as const,
+  session: () => [...authKeys.all, "session"] as const,
 };
 
-// Get user profile
+// Get user profile with auto-refresh
 export function useProfile() {
-  const { isAuthenticated, token } = useAuthStore();
+  const { isAuthenticated, token, isSessionValid, setRefreshing } =
+    useAuthStore();
 
   return useQuery({
     queryKey: authKeys.profile(),
-    queryFn: () => authApi.getProfile(token!),
-    enabled: isAuthenticated && !!token,
+    queryFn: async () => {
+      setRefreshing(true);
+      try {
+        const result = await authApi.getProfile(token!);
+        return result;
+      } finally {
+        setRefreshing(false);
+      }
+    },
+    enabled: isAuthenticated && !!token && isSessionValid(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchInterval: 15 * 60 * 1000, // Refresh every 15 minutes
+    refetchIntervalInBackground: false,
   });
 }
 
-// Login mutation
+// Session validation hook
+export function useSessionValidation() {
+  const { isAuthenticated, isSessionValid, logout } = useAuthStore();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (isAuthenticated && !isSessionValid()) {
+      logout();
+      queryClient.clear();
+      toast.error("Phiên đăng nhập đã hết hạn!");
+    }
+  }, [isAuthenticated, isSessionValid, logout, queryClient]);
+}
+
+// Login mutation with enhanced session management
 export function useLogin() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { login } = useAuthStore();
+  const { login, setInitializing } = useAuthStore();
 
   return useMutation({
     mutationFn: authApi.login,
+    onMutate: () => {
+      setInitializing(true);
+    },
     onSuccess: (data) => {
-      // Update Zustand store
-      login(data.token, data.user);
+      // Update Zustand store with session expiry
+      const expiresIn = 24 * 60 * 60 * 1000; // 24 hours
+      login(data.token, data.user, expiresIn);
 
-      // Invalidate and refetch profile
-      queryClient.invalidateQueries({ queryKey: authKeys.profile() });
+      // Pre-populate profile cache
+      queryClient.setQueryData(authKeys.profile(), { user: data.user });
 
       // Show success message
       toast.success(`Chào mừng ${data.user.name}!`);
@@ -49,9 +81,14 @@ export function useLogin() {
       const errorMessage =
         error.status === 401
           ? "Sai email hoặc mật khẩu!"
+          : error.status === 429
+          ? "Quá nhiều lần thử. Vui lòng thử lại sau."
           : "Đăng nhập thất bại. Vui lòng thử lại.";
 
       toast.error(errorMessage);
+    },
+    onSettled: () => {
+      setInitializing(false);
     },
   });
 }
