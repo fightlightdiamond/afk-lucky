@@ -1,4 +1,5 @@
 // API utility functions for TanStack Query
+import type { User } from "@/types/user";
 
 export class ApiError extends Error {
   status: number;
@@ -27,13 +28,6 @@ export async function apiRequest<T>(
   }
 
   return response.json();
-}
-
-// Types
-export interface User {
-  id: string;
-  email: string;
-  name: string;
 }
 
 export interface LoginResponse {
@@ -109,22 +103,22 @@ export const authApi = {
 // User API functions
 export const userApi = {
   getUsers: async () => {
-    return apiRequest<{ users: any[] }>("/api/users");
+    return apiRequest<{ users: User[] }>("/api/users");
   },
 
   getUser: async (id: string) => {
-    return apiRequest<{ user: any }>(`/api/users/${id}`);
+    return apiRequest<{ user: User }>(`/api/users/${id}`);
   },
 
-  createUser: async (userData: any) => {
-    return apiRequest<{ user: any }>("/api/users", {
+  createUser: async (userData: Partial<User>) => {
+    return apiRequest<{ user: User }>("/api/users", {
       method: "POST",
       body: JSON.stringify(userData),
     });
   },
 
-  updateUser: async (id: string, userData: any) => {
-    return apiRequest<{ user: any }>(`/api/users/${id}`, {
+  updateUser: async (id: string, userData: Partial<User>) => {
+    return apiRequest<{ user: User }>(`/api/users/${id}`, {
       method: "PUT",
       body: JSON.stringify(userData),
     });

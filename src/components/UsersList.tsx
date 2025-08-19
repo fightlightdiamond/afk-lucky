@@ -53,7 +53,7 @@ export default function UsersList() {
       </div>
 
       <div className="space-y-2">
-        {data?.users?.map((user: any) => (
+        {data?.users?.map((user) => (
           <div
             key={user.id}
             className="flex justify-between items-center p-3 border rounded-lg"
