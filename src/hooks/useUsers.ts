@@ -21,7 +21,8 @@ export function useUsers() {
     queryFn: () => userApi.getUsers(),
     staleTime: 2 * 60 * 1000, // 2 minutes
     select: (data) => {
-      let users = data.users;
+      // Clone the users array to avoid mutating the cached data
+      let users = [...data.users];
 
       // Apply client-side filtering
       if (userFilters.search) {
@@ -41,8 +42,8 @@ export function useUsers() {
         users = users.filter((user: any) => user.status === userFilters.status);
       }
 
-      // Apply sorting
-      users.sort((a: any, b: any) => {
+      // Apply sorting on the cloned array
+      users = [...users].sort((a: any, b: any) => {
         const aValue = a[userFilters.sortBy];
         const bValue = b[userFilters.sortBy];
 
