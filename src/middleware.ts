@@ -2,43 +2,40 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Temporarily disabled to fix hydration issues
+  // Get the pathname of the request (e.g. /, /login, /dashboard)
+  const path = request.nextUrl.pathname;
+
+  // Define paths that are considered public (accessible without authentication)
+  const isPublicPath = path === "/login";
+
+  // Get the token from the cookies or headers
+  const token = request.cookies.get("auth-storage")?.value;
+
+  // Parse the token to check if user is authenticated
+  let isAuthenticated = false;
+  if (token) {
+    try {
+      const authData = JSON.parse(token);
+      isAuthenticated =
+        authData.state?.isAuthenticated && authData.state?.token;
+    } catch {
+      // Invalid token format
+      isAuthenticated = false;
+    }
+  }
+
+  // Redirect logic
+  if (isPublicPath && isAuthenticated) {
+    // If user is authenticated and trying to access login page, redirect to home
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (!isPublicPath && !isAuthenticated) {
+    // If user is not authenticated and trying to access protected page, redirect to login
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
   return NextResponse.next();
-
-  // // Get the pathname of the request (e.g. /, /login, /dashboard)
-  // const path = request.nextUrl.pathname;
-
-  // // Define paths that are considered public (accessible without authentication)
-  // const isPublicPath = path === "/login";
-
-  // // Get the token from the cookies or headers
-  // const token = request.cookies.get("auth-storage")?.value;
-
-  // // Parse the token to check if user is authenticated
-  // let isAuthenticated = false;
-  // if (token) {
-  //   try {
-  //     const authData = JSON.parse(token);
-  //     isAuthenticated =
-  //       authData.state?.isAuthenticated && authData.state?.token;
-  //   } catch (error) {
-  //     // Invalid token format
-  //     isAuthenticated = false;
-  //   }
-  // }
-
-  // // Redirect logic
-  // if (isPublicPath && isAuthenticated) {
-  //   // If user is authenticated and trying to access login page, redirect to home
-  //   return NextResponse.redirect(new URL("/", request.url));
-  // }
-
-  // if (!isPublicPath && !isAuthenticated) {
-  //   // If user is not authenticated and trying to access protected page, redirect to login
-  //   return NextResponse.redirect(new URL("/login", request.url));
-  // }
-
-  // return NextResponse.next();
 }
 
 // Configure which paths the middleware should run on
