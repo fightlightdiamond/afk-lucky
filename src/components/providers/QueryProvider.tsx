@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState, useEffect } from "react";
+import { ApiError } from "@/lib/api";
 
 export default function QueryProvider({
   children,
@@ -17,7 +18,7 @@ export default function QueryProvider({
           queries: {
             staleTime: 5 * 60 * 1000, // 5 minutes
             gcTime: 10 * 60 * 1000, // 10 minutes
-            retry: (failureCount, error: any) => {
+            retry: (failureCount, error: ApiError) => {
               if (error?.status >= 400 && error?.status < 500) {
                 return false;
               }

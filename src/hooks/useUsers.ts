@@ -1,13 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { userApi } from "@/lib/api";
-import { useUserStore } from "@/store";
+import { userApi, ApiError } from "@/lib/api";
+import { useUserStore, type UserFilters } from "@/store";
+import { type User } from "@/types";
 import { toast } from "sonner";
 
 // Query keys factory
 export const userKeys = {
   all: ["users"] as const,
   lists: () => [...userKeys.all, "list"] as const,
-  list: (filters: any) => [...userKeys.lists(), filters] as const,
+  list: (filters: UserFilters) => [...userKeys.lists(), filters] as const,
   details: () => [...userKeys.all, "detail"] as const,
   detail: (id: string) => [...userKeys.details(), id] as const,
 };
@@ -16,33 +17,33 @@ export const userKeys = {
 export function useUsers() {
   const { userFilters } = useUserStore();
 
-  return useQuery({
+  return useQuery<{ users: User[] }, ApiError>({
     queryKey: userKeys.list(userFilters),
     queryFn: () => userApi.getUsers(),
     staleTime: 2 * 60 * 1000, // 2 minutes
     select: (data) => {
-      let users = data.users;
+      let users: User[] = data.users;
 
       // Apply client-side filtering
       if (userFilters.search) {
         const search = userFilters.search.toLowerCase();
         users = users.filter(
-          (user: any) =>
+          (user: User) =>
             user.name?.toLowerCase().includes(search) ||
             user.email?.toLowerCase().includes(search)
         );
       }
 
       if (userFilters.role) {
-        users = users.filter((user: any) => user.role === userFilters.role);
+        users = users.filter((user: User) => user.role === userFilters.role);
       }
 
       if (userFilters.status) {
-        users = users.filter((user: any) => user.status === userFilters.status);
+        users = users.filter((user: User) => user.status === userFilters.status);
       }
 
       // Apply sorting
-      users.sort((a: any, b: any) => {
+      users.sort((a: User, b: User) => {
         const aValue = a[userFilters.sortBy];
         const bValue = b[userFilters.sortBy];
 
@@ -60,7 +61,7 @@ export function useUsers() {
 
 // Get single user
 export function useUser(id: string) {
-  return useQuery({
+  return useQuery<{ user: User }, ApiError>({
     queryKey: userKeys.detail(id),
     queryFn: () => userApi.getUser(id),
     enabled: !!id,
@@ -72,7 +73,7 @@ export function useUser(id: string) {
 export function useCreateUser() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<{ user: User }, ApiError, Partial<User>>({
     mutationFn: userApi.createUser,
     onSuccess: (data) => {
       // Invalidate users list
@@ -85,7 +86,7 @@ export function useCreateUser() {
 
       toast.success("Tạo người dùng thành công!");
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       toast.error(error.message || "Tạo người dùng thất bại!");
     },
   });
@@ -95,9 +96,9 @@ export function useCreateUser() {
 export function useUpdateUser() {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) =>
-      userApi.updateUser(id, data),
+  return useMutation<{ user: User }, ApiError, { id: string; data: Partial<User> }>(
+    {
+    mutationFn: ({ id, data }) => userApi.updateUser(id, data),
     onSuccess: (data, variables) => {
       // Update cache
       queryClient.setQueryData(userKeys.detail(variables.id), {
@@ -109,7 +110,7 @@ export function useUpdateUser() {
 
       toast.success("Cập nhật người dùng thành công!");
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       toast.error(error.message || "Cập nhật người dùng thất bại!");
     },
   });
@@ -120,7 +121,7 @@ export function useDeleteUser() {
   const queryClient = useQueryClient();
   const { clearSelection } = useUserStore();
 
-  return useMutation({
+  return useMutation<{ message: string }, ApiError, string>({
     mutationFn: userApi.deleteUser,
     onSuccess: (_, deletedId) => {
       // Remove from cache
@@ -134,7 +135,7 @@ export function useDeleteUser() {
 
       toast.success("Xóa người dùng thành công!");
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       toast.error(error.message || "Xóa người dùng thất bại!");
     },
   });
@@ -145,7 +146,7 @@ export function useBulkDeleteUsers() {
   const queryClient = useQueryClient();
   const { clearSelection } = useUserStore();
 
-  return useMutation({
+  return useMutation<string[], ApiError, string[]>({
     mutationFn: async (userIds: string[]) => {
       // Delete users in parallel
       await Promise.all(userIds.map((id) => userApi.deleteUser(id)));
@@ -165,7 +166,7 @@ export function useBulkDeleteUsers() {
 
       toast.success(`Đã xóa ${deletedIds.length} người dùng!`);
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       toast.error(error.message || "Xóa người dùng thất bại!");
     },
   });

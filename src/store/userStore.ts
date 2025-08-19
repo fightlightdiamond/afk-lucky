@@ -13,7 +13,7 @@ export interface UserFilters {
   sortOrder: "asc" | "desc";
 }
 
-interface UserState {
+export interface UserState {
   // Selection state
   selectedUserId: string | null;
   selectedUserIds: string[]; // For bulk operations
