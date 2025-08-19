@@ -57,9 +57,11 @@ export async function POST(req: NextRequest) {
       process.env.NEXTAUTH_URL || "http://localhost:3001"
     }/reset-password?token=${resetToken}&email=${email}`;
 
-    console.log("🔗 Reset Password Link:", resetLink);
-    console.log("📧 Email:", email);
-    console.log("🔑 Token:", resetToken);
+    if (process.env.NODE_ENV === "development") {
+      console.log("🔗 Reset Password Link:", resetLink);
+      console.log("📧 Email:", email);
+      console.log("🔑 Token:", resetToken);
+    }
 
     // 6. Return success message
     return NextResponse.json({
