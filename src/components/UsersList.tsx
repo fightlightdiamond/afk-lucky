@@ -2,6 +2,7 @@
 
 import { useUsers, useDeleteUser } from "@/hooks/useUsers";
 import { useAuthStore } from "@/store";
+import { type User } from "@/types";
 
 export default function UsersList() {
   const { isAuthenticated } = useAuthStore();
@@ -53,7 +54,7 @@ export default function UsersList() {
       </div>
 
       <div className="space-y-2">
-        {data?.users?.map((user: any) => (
+        {data?.users?.map((user: User) => (
           <div
             key={user.id}
             className="flex justify-between items-center p-3 border rounded-lg"

@@ -1,6 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { authApi } from "@/lib/api";
+import {
+  authApi,
+  type LoginResponse,
+  type RegisterRequest,
+  type RegisterResponse,
+  ApiError,
+} from "@/lib/api";
+import { type User } from "@/types";
 import { useAuthStore } from "@/store";
 import { toast } from "sonner";
 import { useEffect } from "react";
@@ -17,7 +24,7 @@ export function useProfile() {
   const { isAuthenticated, token, isSessionValid, setRefreshing } =
     useAuthStore();
 
-  return useQuery({
+  return useQuery<{ user: User }, ApiError>({
     queryKey: authKeys.profile(),
     queryFn: async () => {
       setRefreshing(true);
@@ -55,7 +62,8 @@ export function useLogin() {
   const queryClient = useQueryClient();
   const { login, setInitializing } = useAuthStore();
 
-  return useMutation({
+  return useMutation<LoginResponse, ApiError, { email: string; password: string }>(
+    {
     mutationFn: authApi.login,
     onMutate: () => {
       setInitializing(true);
@@ -74,7 +82,7 @@ export function useLogin() {
       // Navigate to home page
       router.push("/");
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       console.error("Login failed:", error);
 
       // Show error message
@@ -99,7 +107,11 @@ export function useRegister() {
   const queryClient = useQueryClient();
   const { login } = useAuthStore();
 
-  return useMutation({
+  return useMutation<
+    RegisterResponse,
+    ApiError,
+    RegisterRequest
+  >({
     mutationFn: authApi.register,
     onSuccess: (data) => {
       // Update Zustand store
@@ -114,7 +126,7 @@ export function useRegister() {
       // Navigate to home page
       router.push("/");
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       console.error("Register failed:", error);
 
       // Show error message
@@ -133,7 +145,7 @@ export function useRegister() {
 
 // Forgot password mutation
 export function useForgotPassword() {
-  return useMutation({
+  return useMutation<{ message: string; resetLink?: string }, ApiError, string>({
     mutationFn: authApi.forgotPassword,
     onSuccess: (data) => {
       toast.success(data.message);
@@ -144,7 +156,7 @@ export function useForgotPassword() {
         toast.info("Check console for reset link (dev only)");
       }
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       console.error("Forgot password failed:", error);
       toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
     },
@@ -155,7 +167,11 @@ export function useForgotPassword() {
 export function useResetPassword() {
   const router = useRouter();
 
-  return useMutation({
+  return useMutation<{ message: string }, ApiError, {
+    token: string;
+    email: string;
+    password: string;
+  }>({
     mutationFn: authApi.resetPassword,
     onSuccess: (data) => {
       toast.success(data.message);
@@ -165,7 +181,7 @@ export function useResetPassword() {
         router.push("/login");
       }, 2000);
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       console.error("Reset password failed:", error);
       toast.error(error.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
     },
@@ -178,7 +194,7 @@ export function useLogout() {
   const queryClient = useQueryClient();
   const { logout } = useAuthStore();
 
-  return useMutation({
+  return useMutation<{ message: string }, ApiError>({
     mutationFn: authApi.logout,
     onSuccess: () => {
       // Clear Zustand store
@@ -193,7 +209,7 @@ export function useLogout() {
       // Navigate to login page
       router.push("/login");
     },
-    onError: (error) => {
+    onError: (error: ApiError) => {
       console.error("Logout failed:", error);
 
       // Still logout locally even if API call fails

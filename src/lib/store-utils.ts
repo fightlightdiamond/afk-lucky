@@ -1,4 +1,11 @@
-import { useAuthStore, useUserStore, useUIStore } from "@/store";
+import {
+  useAuthStore,
+  useUserStore,
+  useUIStore,
+  type AuthState,
+  type UserState,
+  type UIState,
+} from "@/store";
 
 // Store reset utilities
 export const resetAllStores = () => {
@@ -27,11 +34,18 @@ export const getStoreStates = () => {
 };
 
 // Store subscription utilities
-export const subscribeToAuthChanges = (callback: (state: any) => void) => {
-  return useAuthStore.subscribe((state) => state.isAuthenticated, callback);
+export const subscribeToAuthChanges = (
+  callback: (state: boolean, previousState: boolean) => void,
+) => {
+  return useAuthStore.subscribe(
+    (state) => state.isAuthenticated,
+    callback,
+  );
 };
 
-export const subscribeToThemeChanges = (callback: (theme: string) => void) => {
+export const subscribeToThemeChanges = (
+  callback: (theme: UIState["theme"], previous: UIState["theme"]) => void,
+) => {
   return useUIStore.subscribe((state) => state.theme, callback);
 };
 
@@ -85,20 +99,20 @@ export const checkSessionHealth = () => {
 
 // Export store selectors for better performance
 export const authSelectors = {
-  isAuthenticated: (state: any) => state.isAuthenticated,
-  user: (state: any) => state.user,
-  token: (state: any) => state.token,
-  isInitializing: (state: any) => state.isInitializing,
+  isAuthenticated: (state: AuthState) => state.isAuthenticated,
+  user: (state: AuthState) => state.user,
+  token: (state: AuthState) => state.token,
+  isInitializing: (state: AuthState) => state.isInitializing,
 };
 
 export const userSelectors = {
-  selectedCount: (state: any) => state.selectedUserIds.length,
-  hasFilters: (state: any) => state.hasActiveFilters(),
-  viewMode: (state: any) => state.viewMode,
+  selectedCount: (state: UserState) => state.selectedUserIds.length,
+  hasFilters: (state: UserState) => state.hasActiveFilters(),
+  viewMode: (state: UserState) => state.viewMode,
 };
 
 export const uiSelectors = {
-  theme: (state: any) => state.theme,
-  isLoading: (state: any) => state.globalLoading,
-  sidebarCollapsed: (state: any) => state.sidebarCollapsed,
+  theme: (state: UIState) => state.theme,
+  isLoading: (state: UIState) => state.globalLoading,
+  sidebarCollapsed: (state: UIState) => state.sidebarCollapsed,
 };

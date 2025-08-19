@@ -1,17 +1,8 @@
 import { create } from "zustand";
 import { persist, subscribeWithSelector } from "zustand/middleware";
+import { User } from "@/types";
 
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role?: string;
-  avatar?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-interface AuthState {
+export interface AuthState {
   // Auth state
   isAuthenticated: boolean;
   token: string | null;
