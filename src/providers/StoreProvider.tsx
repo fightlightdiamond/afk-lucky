@@ -9,16 +9,10 @@ interface StoreProviderProps {
 }
 
 export function StoreProvider({ children }: StoreProviderProps) {
-  const { setInitializing } = useAuthStore();
-
-  // Initialize auth store hydration
   useEffect(() => {
-    const unsubscribe = useAuthStore.persist.onFinishHydration(() => {
-      setInitializing(false);
-    });
-
-    return unsubscribe;
-  }, [setInitializing]);
+    // Hydrate auth store on mount
+    useAuthStore.persist.rehydrate();
+  }, []);
 
   // Session validation
   useSessionValidation();
