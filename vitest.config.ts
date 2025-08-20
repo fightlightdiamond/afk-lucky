@@ -12,6 +12,11 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(dirname, 'src'),
+    },
+  },
   test: {
     projects: [
       {
@@ -30,6 +35,14 @@ export default defineConfig({
             instances: [{ browser: "chromium" }],
           },
           setupFiles: [".storybook/vitest.setup.ts"],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "api",
+          include: ["src/__tests__/**/*.test.ts"],
+          environment: "node",
         },
       },
     ],
