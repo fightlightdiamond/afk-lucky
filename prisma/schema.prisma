@@ -1,10 +1,20 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  AUTHOR
+  EDITOR
+  MODERATOR
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  extensions = [pg_trgm, unaccent]
 }
 
 model Contact {
@@ -23,29 +33,41 @@ model Contact {
   @@map("contacts")
 }
 
+model Role {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         UserRole  @unique
+  description  String?
+  permissions  String[]  @default([])
+  users        User[]
+  created_at   DateTime  @default(now()) @map("createdAt")
+  updated_at   DateTime  @updatedAt @map("updated_at")
+
+  @@map("roles")
+}
+
 model User {
-  id                Int       @id @default(autoincrement())
-  first_name        String?
-  last_name         String?
-  code              String?   @unique
-  email             String    @unique
-  phone_number      String?   @unique
-  sex               Boolean   @default(true)
-  password          String
-  birthday          DateTime?
-  address           String?
-  avatar            String?
-  remember_token    String?
-  is_active         Boolean   @default(true)
-  last_login        DateTime?
-  last_logout       DateTime?
+  id              String    @id @default(cuid())
+  email           String    @unique
+  password        String
+  first_name      String
+  last_name       String
+  sex             Boolean   @default(true)
+  birthday        DateTime?
+  address         String?
+  avatar          String?
+  remember_token  String?
+  is_active       Boolean   @default(true)
+  last_login      DateTime?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  role_id         String?   @db.Uuid
+  role            Role?     @relation(fields: [role_id], references: [id])
+  last_logout     DateTime?
   slack_webhook_url String?
-  created_at        DateTime?
-  updated_at        DateTime?
-  deleted_at        DateTime?
-  coin              BigInt    @default(1000)
-  locale            String?   @default("en")
-  group_id          Int?      @default(1)
+  deleted_at      DateTime?
+  coin            BigInt    @default(1000)
+  locale          String?   @default("en")
+  group_id        Int?      @default(1)
 
   @@map("users")
 }
