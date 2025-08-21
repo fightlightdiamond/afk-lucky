@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useStories, useCreateStory } from "@/hooks/useStories";
+import type { Story } from "@/types/story";
 import { Loader2, RefreshCw } from "lucide-react";
 
 export default function StoryFormOptimized() {
@@ -28,7 +29,7 @@ export default function StoryFormOptimized() {
       } else {
         setCurrentStory("Không tạo được nội dung.");
       }
-    } catch (error) {
+    } catch {
       setCurrentStory("Đã xảy ra lỗi khi tạo truyện.");
     }
   }
@@ -106,7 +107,7 @@ export default function StoryFormOptimized() {
           </div>
         ) : (
           <ul className="space-y-4">
-            {stories.map((story: any) => (
+            {stories.map((story: Story) => (
               <li
                 key={story.id}
                 className="p-4 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
@@ -114,7 +115,7 @@ export default function StoryFormOptimized() {
                 <div className="flex justify-between items-start mb-2">
                   <p className="text-sm text-gray-600 font-medium">
                     Prompt:{" "}
-                    <span className="italic font-normal">"{story.prompt}"</span>
+                    <span className="italic font-normal">&quot;{story.prompt}&quot;</span>
                   </p>
                   <p className="text-xs text-gray-400 whitespace-nowrap ml-4">
                     {new Date(story.createdAt).toLocaleString("vi-VN")}

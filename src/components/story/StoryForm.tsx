@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useStories, useCreateStory } from "@/hooks/useStories";
 import StoryLoadingStages from "./StoryLoadingStages";
 import MagicalLoader from "./MagicalLoader";
 import SmartProgressLoader from "./SmartProgressLoader";
@@ -9,73 +10,28 @@ import InteractiveLoader from "./InteractiveLoader";
 export default function StoryForm() {
   const [prompt, setPrompt] = useState("Tạo giúp tôi 1 truyện chêm về IT");
   const [story, setStory] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState<any[]>([]);
   const [loadingStyle, setLoadingStyle] = useState<
     "stages" | "magical" | "smart" | "interactive"
   >("interactive");
+  const { data: stories = [], refetch } = useStories();
+  const createStoryMutation = useCreateStory();
+  const loading = createStoryMutation.isPending;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setStory("");
-
     try {
-      const res = await fetch("/api/story", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      });
-
-      const data = await res.json();
-      if (data.content) {
-        setStory(data.content);
-        fetchHistory();
+      const result = await createStoryMutation.mutateAsync(prompt);
+      if (result.content) {
+        setStory(result.content);
       } else {
         setStory("Không tạo được nội dung.");
       }
-    } catch (err) {
+    } catch {
       setStory("Đã xảy ra lỗi.");
-    } finally {
-      setLoading(false);
     }
   }
 
-  async function fetchHistory() {
-    try {
-      console.log("🔍 Fetching stories from /api/stories...");
-      const res = await fetch("/api/stories");
-      console.log("📡 Response status:", res.status);
-
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-      }
-
-      const data = await res.json();
-      console.log("📦 Fetched stories data:", data);
-      console.log(
-        "📦 Data type:",
-        typeof data,
-        "Is array:",
-        Array.isArray(data)
-      );
-
-      if (Array.isArray(data)) {
-        setHistory(data);
-        console.log("✅ History updated with", data.length, "stories");
-      } else {
-        console.error("❌ Expected array but got:", typeof data, data);
-        setHistory([]);
-      }
-    } catch (error) {
-      console.error("❌ Error fetching stories:", error);
-      setHistory([]);
-    }
-  }
-
-  useEffect(() => {
-    fetchHistory();
-  }, []);
 
   return (
     <>
@@ -248,21 +204,21 @@ export default function StoryForm() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold">📜 Lịch sử truyện</h2>
             <button
-              onClick={fetchHistory}
+              onClick={refetch}
               className="text-sm text-blue-600 hover:text-blue-800 px-3 py-1 rounded border border-blue-200 hover:bg-blue-50"
             >
               🔄 Làm mới
             </button>
           </div>
 
-          {history.length === 0 ? (
+          {stories.length === 0 ? (
             <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
               <p className="text-lg mb-2">📭 Chưa có truyện nào</p>
               <p className="text-sm">Hãy tạo truyện đầu tiên của bạn!</p>
             </div>
           ) : (
             <ul className="space-y-4">
-              {history.map((s) => (
+              {stories.map((s) => (
                 <li
                   key={s.id}
                   className="p-4 border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
@@ -270,7 +226,7 @@ export default function StoryForm() {
                   <div className="flex justify-between items-start mb-2">
                     <p className="text-sm text-gray-600 font-medium">
                       Prompt:{" "}
-                      <span className="italic font-normal">"{s.prompt}"</span>
+                      <span className="italic font-normal">&quot;{s.prompt}&quot;</span>
                     </p>
                     <p className="text-xs text-gray-400 whitespace-nowrap ml-4">
                       {new Date(s.createdAt).toLocaleString("vi-VN")}
