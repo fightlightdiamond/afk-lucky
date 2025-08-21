@@ -106,7 +106,8 @@ export const authApi = {
   },
 };
 
-// User API functions
+// User API functions are disabled until backend implementation
+/*
 export const userApi = {
   getUsers: async () => {
     return apiRequest<{ users: any[] }>("/api/users");
@@ -134,3 +135,4 @@ export const userApi = {
     return apiRequest(`/api/users/${id}`, { method: "DELETE" });
   },
 };
+*/
