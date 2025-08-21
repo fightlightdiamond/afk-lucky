@@ -16,8 +16,13 @@ export function middleware(request: NextRequest) {
   if (token) {
     try {
       const authData = JSON.parse(token);
-      isAuthenticated =
-        authData.state?.isAuthenticated && authData.state?.token;
+      const authData = JSON.parse(token) as {
+        state?: { isAuthenticated?: boolean; token?: string };
+      };
+      const hasToken =
+        typeof authData?.state?.token === "string" &&
+        authData.state.token.length > 0;
+      isAuthenticated = Boolean(authData?.state?.isAuthenticated && hasToken);
     } catch {
       // Invalid token format
       isAuthenticated = false;
