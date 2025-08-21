@@ -1,10 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import "dotenv/config";
 
 const prisma = new PrismaClient();
 
 export async function seedUsers() {
-  const password = await bcrypt.hash("123456", 10);
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    throw new Error("ADMIN_PASSWORD environment variable is not set");
+  }
+  const password = await bcrypt.hash(adminPassword, 10);
 
   const users = [
     {

@@ -1,12 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import "dotenv/config";
 
 const prisma = new PrismaClient();
 
 async function main() {
   // Tạo tài khoản admin mẫu
-  const password = "123456"; // Mật khẩu plaintext
-  const hashedPassword = await bcrypt.hash(password, 10); // Hash
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    throw new Error("ADMIN_PASSWORD environment variable is not set");
+  }
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
   // Kiểm tra user đã tồn tại chưa
   const email = "admin@example.com";
