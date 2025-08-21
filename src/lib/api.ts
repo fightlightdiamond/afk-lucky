@@ -14,19 +14,38 @@ export async function apiRequest<T>(
   url: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-    ...options,
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+      ...options,
+    });
+  } catch (error) {
+    throw new ApiError(`Network error: ${(error as Error).message}`, 500);
+  }
 
   if (!response.ok) {
     throw new ApiError(`API Error: ${response.statusText}`, response.status);
   }
 
-  return response.json();
+  const contentType = response.headers.get("content-type") ?? "";
+
+  if (contentType.includes("application/json")) {
+    try {
+      return await response.json();
+    } catch (error) {
+      throw new ApiError(
+        `Invalid JSON response: ${(error as Error).message}`,
+        response.status,
+      );
+    }
+  }
+
+  return (await response.text()) as unknown as T;
 }
 
 // Types
