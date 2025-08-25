@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lucky - Interactive Story Platform
 
-## Getting Started
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-First, run the development server:
+Lucky is a modern, interactive story platform built with Next.js, TypeScript, and Prisma. It features user authentication, story creation, and interactive storytelling capabilities.
+
+## ✨ Features
+
+- 🔐 User authentication (login/register)
+- 📝 Create and manage interactive stories
+- 🎨 Modern UI with dark/light mode support
+- 📱 Responsive design
+- 📊 Story analytics and usage tracking
+- 🔍 Advanced search and filtering
+- 📱 Mobile-friendly interface
+- 🚀 Built with Next.js 13+ App Router
+
+## 🚀 Tech Stack
+
+- **Frontend**: Next.js 13+, React 19, TypeScript
+- **Styling**: Tailwind CSS, Radix UI
+- **State Management**: Zustand
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: JWT
+- **Form Handling**: React Hook Form with Zod validation
+- **UI Components**: Radix UI, Lucide Icons
+- **Testing**: Vitest, Storybook
+- **Deployment**: Docker, Vercel
+
+## 🛠️ Prerequisites
+
+- Node.js 18+
+- PostgreSQL
+- pnpm (recommended)
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/lucky_.git
+   cd lucky_
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+
+3. **Set up environment variables**
+   Create a `.env` file in the root directory and add the following:
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/lucky?schema=public"
+   JWT_SECRET=your_jwt_secret
+   NEXTAUTH_URL=http://localhost:3000
+   NEXTAUTH_SECRET=your_nextauth_secret
+   ```
+
+4. **Set up the database**
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+
+5. **Run the development server**
+   ```bash
+   pnpm dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 🐳 Docker Setup
+
+You can also run the application using Docker:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker-compose up -d
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will start the Next.js application and PostgreSQL database in containers.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+- `pnpm storybook` - Start Storybook
+- `pnpm test` - Run tests
 
-## Learn More
+## 📂 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                    # App router pages
+│   ├── api/               # API routes
+│   ├── story/             # Story-related pages
+│   └── ...
+├── components/            # Reusable components
+├── hooks/                 # Custom React hooks
+├── lib/                   # Utility functions
+├── prisma/                # Database schema and migrations
+└── styles/                # Global styles
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## Deploy on Vercel
+## 📄 License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🙏 Acknowledgments
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Prisma Documentation](https://www.prisma.io/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+---
+
+Made with ❤️ by [Your Name]
