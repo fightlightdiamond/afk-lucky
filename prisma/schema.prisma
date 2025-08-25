@@ -69,6 +69,16 @@ model User {
   locale          String?   @default("en")
   group_id        Int?      @default(1)
 
+  // Indexes for optimal query performance
+  @@index([role_id])
+  @@index([is_active])
+  @@index([created_at])
+  @@index([last_login])
+  @@index([locale])
+  @@index([group_id])
+  @@index([first_name, last_name])
+  @@index([is_active, role_id])
+  @@index([created_at, is_active])
   @@map("users")
 }
 
