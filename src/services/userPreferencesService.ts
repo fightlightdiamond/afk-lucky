@@ -199,11 +199,21 @@ export async function trackStoryUsage(data: {
 // Get user analytics summary
 export async function getUserAnalytics(userId?: string, sessionId?: string) {
   try {
+    if (!userId && !sessionId) {
+      return null;
+    }
     const where = userId ? { user_id: userId } : { session_id: sessionId };
 
     const analytics = await prisma.storyUsageAnalytics.findMany({
       where,
       orderBy: { created_at: "desc" },
+      // …
+    });
+    // …
+  } catch (error) {
+    // …
+  }
+}
       take: 50, // Last 50 stories
     });
 
