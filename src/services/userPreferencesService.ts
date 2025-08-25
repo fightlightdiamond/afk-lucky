@@ -207,13 +207,6 @@ export async function getUserAnalytics(userId?: string, sessionId?: string) {
     const analytics = await prisma.storyUsageAnalytics.findMany({
       where,
       orderBy: { created_at: "desc" },
-      // …
-    });
-    // …
-  } catch (error) {
-    // …
-  }
-}
       take: 50, // Last 50 stories
     });
 

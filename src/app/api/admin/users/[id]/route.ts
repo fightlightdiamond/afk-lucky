@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
 import { createAbility } from "@/lib/ability";
 import bcrypt from "bcryptjs";
+import { UserManagementErrorCodes } from "@/types/user";
 
 // GET /api/admin/users/[id]
 export async function GET(
@@ -44,7 +45,14 @@ export async function GET(
     });
 
     if (!user) {
-      return new NextResponse("User not found", { status: 404 });
+      return new NextResponse(
+        JSON.stringify({
+          error: "User not found",
+          code: UserManagementErrorCodes.USER_NOT_FOUND,
+          timestamp: new Date().toISOString(),
+        }),
+        { status: 404, headers: { "Content-Type": "application/json" } }
+      );
     }
 
     return NextResponse.json(user);
@@ -123,7 +131,7 @@ export async function PUT(
     }
 
     // Prepare update data
-    const updateData: any = {
+    const updateData: unknown = {
       email,
       first_name,
       last_name,
