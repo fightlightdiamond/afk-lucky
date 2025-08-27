@@ -43,7 +43,9 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { PermissionGuard } from "@/components/auth/permission-guard";
 import { PermissionBadge } from "@/components/admin/PermissionBadge";
-import { User, UserFilters, SortableUserField } from "@/types/user";
+import { UserStatusBadge } from "@/components/admin/UserStatusBadge";
+import { UserStatusManager } from "@/components/admin/UserStatusManager";
+import { User, UserFilters, SortableUserField, UserStatus } from "@/types/user";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -54,10 +56,15 @@ interface UserTableProps {
   onEdit: (user: User) => void;
   onDelete: (userId: string) => void;
   onToggleStatus: (userId: string, currentStatus: boolean) => void;
+  onStatusChange?: (
+    userId: string,
+    newStatus: UserStatus,
+    reason?: string
+  ) => Promise<void>;
   isLoading?: boolean;
   // Selection props
-  selectedUsers?: string[];
-  onSelectUser?: (userId: string, selected: boolean) => void;
+  selectedUsers?: Set<string>;
+  onUserSelection?: (userId: string, selected: boolean) => void;
   onSelectAll?: (selected: boolean) => void;
   // Responsive props
   isMobile?: boolean;
@@ -187,9 +194,10 @@ export function UserTable({
   onEdit,
   onDelete,
   onToggleStatus,
+  onStatusChange,
   isLoading = false,
-  selectedUsers = [],
-  onSelectUser,
+  selectedUsers = new Set(),
+  onUserSelection,
   onSelectAll,
   isMobile: isMobileProp,
 }: UserTableProps) {
@@ -216,13 +224,13 @@ export function UserTable({
   // Selection logic
   const isAllSelected = useMemo(() => {
     if (users.length === 0) return false;
-    return users.every((user) => selectedUsers.includes(user.id));
+    return users.every((user) => selectedUsers.has(user.id));
   }, [users, selectedUsers]);
 
   const isIndeterminate = useMemo(() => {
     if (users.length === 0) return false;
     const selectedCount = users.filter((user) =>
-      selectedUsers.includes(user.id)
+      selectedUsers.has(user.id)
     ).length;
     return selectedCount > 0 && selectedCount < users.length;
   }, [users, selectedUsers]);
@@ -234,8 +242,8 @@ export function UserTable({
   };
 
   const handleSelectUser = (userId: string, checked: boolean) => {
-    if (onSelectUser) {
-      onSelectUser(userId, checked);
+    if (onUserSelection) {
+      onUserSelection(userId, checked);
     }
   };
 
@@ -271,7 +279,7 @@ export function UserTable({
         <Table>
           <TableHeader>
             <TableRow>
-              {onSelectUser && (
+              {onUserSelection && (
                 <TableHead className="w-[50px]">
                   <div className="w-4 h-4 bg-muted rounded animate-pulse" />
                 </TableHead>
@@ -293,7 +301,7 @@ export function UserTable({
           <TableBody>
             {[...Array(5)].map((_, i) => (
               <TableRow key={i}>
-                {onSelectUser && (
+                {onUserSelection && (
                   <TableCell>
                     <div className="w-4 h-4 bg-muted rounded animate-pulse" />
                   </TableCell>
@@ -335,7 +343,7 @@ export function UserTable({
       <Table>
         <TableHeader>
           <TableRow>
-            {onSelectUser && (
+            {onUserSelection && (
               <TableHead className="w-[50px]">
                 <TooltipProvider>
                   <Tooltip>
@@ -423,7 +431,7 @@ export function UserTable({
         <TableBody>
           {users.length > 0 ? (
             users.map((user) => {
-              const isSelected = selectedUsers.includes(user.id);
+              const isSelected = selectedUsers.has(user.id);
               return (
                 <TableRow
                   key={user.id}
@@ -432,7 +440,7 @@ export function UserTable({
                     isSelected && "bg-muted/30"
                   )}
                 >
-                  {onSelectUser && (
+                  {onUserSelection && (
                     <TableCell>
                       <div className="flex items-center justify-center">
                         <Checkbox
@@ -533,19 +541,15 @@ export function UserTable({
                     )}
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={
-                        user.status === "active" ? "default" : "secondary"
-                      }
-                      className="gap-1"
-                    >
-                      {user.status === "active" ? (
-                        <UserCheck className="w-3 h-3" />
-                      ) : (
-                        <UserX className="w-3 h-3" />
-                      )}
-                      {user.status === "active" ? "Active" : "Inactive"}
-                    </Badge>
+                    {onStatusChange ? (
+                      <UserStatusManager
+                        user={user}
+                        onStatusChange={onStatusChange}
+                        size="sm"
+                      />
+                    ) : (
+                      <UserStatusBadge user={user} size="sm" />
+                    )}
                   </TableCell>
                   <TableCell className={cn(isMobile && "hidden md:table-cell")}>
                     <ActivityStatusBadge user={user} />
@@ -619,7 +623,7 @@ export function UserTable({
           ) : (
             <TableRow>
               <TableCell
-                colSpan={onSelectUser ? 7 : 6}
+                colSpan={onUserSelection ? 7 : 6}
                 className="text-center py-8"
               >
                 <div className="flex flex-col items-center space-y-2">

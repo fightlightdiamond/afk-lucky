@@ -9,14 +9,16 @@ import { UserTable } from "@/components/admin/UserTable";
 import { UserFilters } from "@/components/admin/UserFilters";
 import { UserPagination } from "@/components/admin/UserPagination";
 import { UserDialog } from "@/components/admin/UserDialog";
+import { BulkOperations } from "@/components/admin/BulkOperations";
 import { useUsers } from "@/hooks/useUsers";
 import { useUserMutations } from "@/hooks/useUserMutations";
 import { useUserStore } from "@/store/userStore";
-import { User, UserFilters as UserFiltersType } from "@/types/user";
+import { User, UserFilters as UserFiltersType, UserStatus } from "@/types/user";
 
 export default function UsersPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const {
     userFilters,
     setUserFilters,
@@ -26,7 +28,8 @@ export default function UsersPage() {
   } = useUserStore();
 
   // User mutations
-  const { deleteUser, toggleStatus } = useUserMutations();
+  const { createUser, updateUser, deleteUser, toggleStatus, changeStatus } =
+    useUserMutations();
 
   // Use the enhanced useUsers hook with proper pagination
   const {
@@ -77,9 +80,57 @@ export default function UsersPage() {
     toggleStatus.mutate({ userId, isActive: newStatus });
   };
 
+  const handleStatusChange = async (
+    userId: string,
+    newStatus: UserStatus,
+    reason?: string
+  ) => {
+    const statusMap: Record<UserStatus, "active" | "inactive" | "banned"> = {
+      [UserStatus.ACTIVE]: "active",
+      [UserStatus.INACTIVE]: "inactive",
+      [UserStatus.BANNED]: "banned",
+      [UserStatus.SUSPENDED]: "inactive", // Treat suspended as inactive for now
+      [UserStatus.PENDING]: "inactive", // Treat pending as inactive for now
+    };
+
+    const mappedStatus = statusMap[newStatus];
+    return changeStatus.mutateAsync({
+      userId,
+      newStatus: mappedStatus,
+      reason,
+    });
+  };
+
   const handleCreateUser = () => {
     setSelectedUser(null);
     setIsDialogOpen(true);
+  };
+
+  const handleUserSelection = (userId: string, selected: boolean) => {
+    const newSelection = new Set(selectedUsers);
+    if (selected) {
+      newSelection.add(userId);
+    } else {
+      newSelection.delete(userId);
+    }
+    setSelectedUsers(newSelection);
+  };
+
+  const handleSelectAll = (selected: boolean) => {
+    if (selected && usersResponse?.users) {
+      setSelectedUsers(new Set(usersResponse.users.map((user) => user.id)));
+    } else {
+      setSelectedUsers(new Set());
+    }
+  };
+
+  const handleClearSelection = () => {
+    setSelectedUsers(new Set());
+  };
+
+  const getSelectedUserObjects = (): User[] => {
+    if (!usersResponse?.users) return [];
+    return usersResponse.users.filter((user) => selectedUsers.has(user.id));
   };
 
   if (error) {
@@ -144,7 +195,11 @@ export default function UsersPage() {
               onEdit={handleEdit}
               onDelete={handleDelete}
               onToggleStatus={handleToggleStatus}
+              onStatusChange={handleStatusChange}
               isLoading={isLoading}
+              selectedUsers={selectedUsers}
+              onUserSelection={handleUserSelection}
+              onSelectAll={handleSelectAll}
             />
           </CardContent>
         </Card>
@@ -165,8 +220,36 @@ export default function UsersPage() {
           user={selectedUser}
           roles={usersResponse?.metadata?.availableRoles || []}
           onSubmit={async (data) => {
-            console.log("Submit user data:", data);
-            // This will be handled by the UserDialog component internally
+            try {
+              if (selectedUser) {
+                // Update existing user
+                await updateUser.mutateAsync({
+                  id: selectedUser.id,
+                  ...data,
+                });
+              } else {
+                // Create new user
+                await createUser.mutateAsync(data);
+              }
+              setIsDialogOpen(false);
+              setSelectedUser(null);
+            } catch (error) {
+              // Error handling is done in the mutations
+              console.error("Error submitting user:", error);
+            }
+          }}
+          isLoading={createUser.isPending || updateUser.isPending}
+        />
+
+        {/* Bulk Operations */}
+        <BulkOperations
+          selectedUsers={getSelectedUserObjects()}
+          onClearSelection={handleClearSelection}
+          availableRoles={usersResponse?.metadata?.availableRoles || []}
+          disabled={isLoading}
+          onSuccess={() => {
+            // Clear selection after successful bulk operation
+            setSelectedUsers(new Set());
           }}
         />
       </div>

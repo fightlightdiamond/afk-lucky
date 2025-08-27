@@ -28,11 +28,11 @@ async function createUser(data: CreateUserData): Promise<User> {
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Failed to create user");
+    throw new Error(error.error || error.message || "Failed to create user");
   }
 
   const result = await response.json();
-  return result.data;
+  return result.user || result.data || result;
 }
 
 async function updateUser(data: UpdateUserData): Promise<User> {
@@ -47,11 +47,11 @@ async function updateUser(data: UpdateUserData): Promise<User> {
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Failed to update user");
+    throw new Error(error.error || error.message || "Failed to update user");
   }
 
   const result = await response.json();
-  return result.data;
+  return result.user || result.data || result;
 }
 
 async function deleteUser(userId: string): Promise<void> {
@@ -61,7 +61,7 @@ async function deleteUser(userId: string): Promise<void> {
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Failed to delete user");
+    throw new Error(error.error || error.message || "Failed to delete user");
   }
 }
 
@@ -81,11 +81,52 @@ async function toggleUserStatus(
 
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || "Failed to update user status");
+    throw new Error(
+      error.error || error.message || "Failed to update user status"
+    );
   }
 
   const result = await response.json();
   console.log("Toggle user status response:", result);
+  return result;
+}
+
+async function changeUserStatus(
+  userId: string,
+  newStatus: "active" | "inactive" | "banned",
+  reason?: string
+): Promise<User> {
+  console.log("Changing user status:", { userId, newStatus, reason });
+
+  const isActive = newStatus === "active";
+  const action =
+    newStatus === "banned"
+      ? "ban"
+      : newStatus === "active"
+      ? "activate"
+      : "deactivate";
+
+  const response = await fetch(`/api/admin/users/${userId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      is_active: isActive,
+      action,
+      reason: reason || `User ${action}d via admin interface`,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(
+      error.error || error.message || "Failed to update user status"
+    );
+  }
+
+  const result = await response.json();
+  console.log("Change user status response:", result);
   return result;
 }
 
@@ -147,10 +188,34 @@ export function useUserMutations() {
     },
   });
 
+  const changeStatusMutation = useMutation({
+    mutationFn: ({
+      userId,
+      newStatus,
+      reason,
+    }: {
+      userId: string;
+      newStatus: "active" | "inactive" | "banned";
+      reason?: string;
+    }) => changeUserStatus(userId, newStatus, reason),
+    onSuccess: (data) => {
+      // Invalidate all user queries to refresh the UI
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.refetchQueries({ queryKey: ["users"] });
+      const displayName = `${data.first_name} ${data.last_name}`;
+      const statusText = data.is_active ? "activated" : "deactivated";
+      toast.success(`User "${displayName}" ${statusText} successfully`);
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to change user status: ${error.message}`);
+    },
+  });
+
   return {
     createUser: createUserMutation,
     updateUser: updateUserMutation,
     deleteUser: deleteUserMutation,
     toggleStatus: toggleStatusMutation,
+    changeStatus: changeStatusMutation,
   };
 }
