@@ -68,7 +68,7 @@ async function deleteUser(userId: string): Promise<void> {
 async function toggleUserStatus(
   userId: string,
   isActive: boolean
-): Promise<User> {
+): Promise<{ user: User }> {
   console.log("Toggling user status:", { userId, isActive });
 
   const response = await fetch(`/api/admin/users/${userId}`, {
@@ -88,14 +88,21 @@ async function toggleUserStatus(
 
   const result = await response.json();
   console.log("Toggle user status response:", result);
-  return result;
+
+  // Ensure we return the expected format
+  if (result.user) {
+    return result;
+  } else {
+    // If the API returns the user directly, wrap it
+    return { user: result };
+  }
 }
 
 async function changeUserStatus(
   userId: string,
   newStatus: "active" | "inactive" | "banned",
   reason?: string
-): Promise<User> {
+): Promise<{ user: User }> {
   console.log("Changing user status:", { userId, newStatus, reason });
 
   const isActive = newStatus === "active";
@@ -127,7 +134,14 @@ async function changeUserStatus(
 
   const result = await response.json();
   console.log("Change user status response:", result);
-  return result;
+
+  // Ensure we return the expected format
+  if (result.user) {
+    return result;
+  } else {
+    // If the API returns the user directly, wrap it
+    return { user: result };
+  }
 }
 
 // Custom hooks
@@ -149,13 +163,60 @@ export function useUserMutations() {
 
   const updateUserMutation = useMutation({
     mutationFn: updateUser,
+    onMutate: async (data) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["users"] });
+
+      // Snapshot the previous value
+      const previousUsers = queryClient.getQueriesData({ queryKey: ["users"] });
+
+      // Optimistically update the cache
+      queryClient.setQueriesData({ queryKey: ["users"] }, (old: any) => {
+        if (!old?.users) return old;
+
+        return {
+          ...old,
+          users: old.users.map((user: any) =>
+            user.id === data.id
+              ? {
+                  ...user,
+                  ...data,
+                  full_name: `${data.first_name} ${data.last_name}`,
+                  display_name: `${data.first_name} ${data.last_name}`,
+                  updated_at: new Date().toISOString(),
+                }
+              : user
+          ),
+        };
+      });
+
+      return { previousUsers };
+    },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.refetchQueries({ queryKey: ["users"] });
-      const displayName = `${data.first_name} ${data.last_name}`;
+      // Update with real data from server
+      queryClient.setQueriesData({ queryKey: ["users"] }, (old: any) => {
+        if (!old?.users) return old;
+
+        const updatedUser = data.user || data;
+        return {
+          ...old,
+          users: old.users.map((user: any) =>
+            user.id === updatedUser.id ? updatedUser : user
+          ),
+        };
+      });
+
+      const updatedUser = data.user || data;
+      const displayName = `${updatedUser.first_name} ${updatedUser.last_name}`;
       toast.success(`User "${displayName}" updated successfully`);
     },
-    onError: (error: Error) => {
+    onError: (error: Error, variables, context) => {
+      // Rollback optimistic update
+      if (context?.previousUsers) {
+        context.previousUsers.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
       toast.error(`Failed to update user: ${error.message}`);
     },
   });
@@ -175,15 +236,60 @@ export function useUserMutations() {
   const toggleStatusMutation = useMutation({
     mutationFn: ({ userId, isActive }: { userId: string; isActive: boolean }) =>
       toggleUserStatus(userId, isActive),
+    onMutate: async ({ userId, isActive }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["users"] });
+
+      // Snapshot the previous value
+      const previousUsers = queryClient.getQueriesData({ queryKey: ["users"] });
+
+      // Optimistically update the cache
+      queryClient.setQueriesData({ queryKey: ["users"] }, (old: any) => {
+        if (!old?.users) return old;
+
+        return {
+          ...old,
+          users: old.users.map((user: any) =>
+            user.id === userId
+              ? {
+                  ...user,
+                  is_active: isActive,
+                  status: isActive ? "active" : "inactive",
+                  updated_at: new Date().toISOString(),
+                }
+              : user
+          ),
+        };
+      });
+
+      return { previousUsers };
+    },
     onSuccess: (data) => {
-      // Invalidate all user queries to refresh the UI
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.refetchQueries({ queryKey: ["users"] });
-      const displayName = `${data.first_name} ${data.last_name}`;
-      const status = data.is_active ? "activated" : "deactivated";
+      // Update with real data from server
+      queryClient.setQueriesData({ queryKey: ["users"] }, (old: any) => {
+        if (!old?.users) return old;
+
+        const updatedUser = data.user || data;
+        return {
+          ...old,
+          users: old.users.map((user: any) =>
+            user.id === updatedUser.id ? updatedUser : user
+          ),
+        };
+      });
+
+      const updatedUser = data.user || data;
+      const displayName = `${updatedUser.first_name} ${updatedUser.last_name}`;
+      const status = updatedUser.is_active ? "activated" : "deactivated";
       toast.success(`User "${displayName}" ${status} successfully`);
     },
-    onError: (error: Error) => {
+    onError: (error: Error, variables, context) => {
+      // Rollback optimistic update
+      if (context?.previousUsers) {
+        context.previousUsers.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
       toast.error(`Failed to update user status: ${error.message}`);
     },
   });
@@ -198,15 +304,61 @@ export function useUserMutations() {
       newStatus: "active" | "inactive" | "banned";
       reason?: string;
     }) => changeUserStatus(userId, newStatus, reason),
+    onMutate: async ({ userId, newStatus }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["users"] });
+
+      // Snapshot the previous value
+      const previousUsers = queryClient.getQueriesData({ queryKey: ["users"] });
+
+      // Optimistically update the cache
+      queryClient.setQueriesData({ queryKey: ["users"] }, (old: any) => {
+        if (!old?.users) return old;
+
+        const isActive = newStatus === "active";
+        return {
+          ...old,
+          users: old.users.map((user: any) =>
+            user.id === userId
+              ? {
+                  ...user,
+                  is_active: isActive,
+                  status: newStatus,
+                  updated_at: new Date().toISOString(),
+                }
+              : user
+          ),
+        };
+      });
+
+      return { previousUsers };
+    },
     onSuccess: (data) => {
-      // Invalidate all user queries to refresh the UI
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      queryClient.refetchQueries({ queryKey: ["users"] });
-      const displayName = `${data.first_name} ${data.last_name}`;
-      const statusText = data.is_active ? "activated" : "deactivated";
+      // Update with real data from server
+      queryClient.setQueriesData({ queryKey: ["users"] }, (old: any) => {
+        if (!old?.users) return old;
+
+        const updatedUser = data.user || data;
+        return {
+          ...old,
+          users: old.users.map((user: any) =>
+            user.id === updatedUser.id ? updatedUser : user
+          ),
+        };
+      });
+
+      const updatedUser = data.user || data;
+      const displayName = `${updatedUser.first_name} ${updatedUser.last_name}`;
+      const statusText = updatedUser.is_active ? "activated" : "deactivated";
       toast.success(`User "${displayName}" ${statusText} successfully`);
     },
-    onError: (error: Error) => {
+    onError: (error: Error, variables, context) => {
+      // Rollback optimistic update
+      if (context?.previousUsers) {
+        context.previousUsers.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
       toast.error(`Failed to change user status: ${error.message}`);
     },
   });
