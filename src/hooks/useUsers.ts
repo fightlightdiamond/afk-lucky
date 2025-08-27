@@ -28,33 +28,31 @@ export const userKeys = {
 
 // Enhanced get users with filters - now uses server-side filtering with optimizations
 export function useUsers(params?: Partial<GetUsersParams>) {
-  const { userFilters, pagination, tableSettings } = useUserStore();
-
-  // Merge store filters with provided params
+  // Use only the provided params, don't merge with store
   const queryParams: GetUsersParams = useMemo(
     () => ({
-      page: params?.page || pagination.currentPage || 1,
-      pageSize: params?.pageSize || pagination.pageSize || 20,
-      search: params?.search || userFilters.search || undefined,
-      role: params?.role || userFilters.role || undefined,
-      status: params?.status || userFilters.status || undefined,
-      sortBy: params?.sortBy || userFilters.sortBy || "created_at",
-      sortOrder: params?.sortOrder || userFilters.sortOrder || "desc",
+      page: params?.page || 1,
+      pageSize: params?.pageSize || 20,
+      search: params?.search || undefined,
+      role: params?.role || undefined,
+      status: params?.status || undefined,
+      sortBy: params?.sortBy || "created_at",
+      sortOrder: params?.sortOrder || "desc",
       dateFrom: params?.dateFrom,
       dateTo: params?.dateTo,
       activityDateFrom: params?.activityDateFrom,
       activityDateTo: params?.activityDateTo,
-      hasAvatar: params?.hasAvatar || userFilters.hasAvatar,
-      locale: params?.locale || userFilters.locale,
-      group_id: params?.group_id || userFilters.group_id,
-      activity_status: params?.activity_status || userFilters.activity_status,
+      hasAvatar: params?.hasAvatar,
+      locale: params?.locale,
+      group_id: params?.group_id,
+      activity_status: params?.activity_status,
       // Enhanced query options
       includeRole: true,
       includePermissions: false, // Only include when needed
       includeActivity: true,
       includeStats: false, // Only include when needed
     }),
-    [params, userFilters, pagination]
+    [params]
   );
 
   // Enhanced error handling function
@@ -80,13 +78,11 @@ export function useUsers(params?: Partial<GetUsersParams>) {
   return useQuery({
     queryKey: userKeys.list(queryParams),
     queryFn: () => userApi.getUsers(queryParams),
-    staleTime: tableSettings.autoRefresh ? 30 * 1000 : 2 * 60 * 1000, // 30s if auto-refresh, 2min otherwise
+    staleTime: 2 * 60 * 1000, // 2 minutes
     gcTime: 5 * 60 * 1000, // 5 minutes
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    refetchInterval: tableSettings.autoRefresh
-      ? tableSettings.refreshInterval * 1000
-      : false,
+    refetchInterval: false,
     retry: (failureCount, error: ApiErrorResponse) => {
       // Don't retry on client errors (4xx)
       if (
@@ -332,7 +328,7 @@ export function useBulkOperation() {
         );
       }
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       toast.error(error.message || "Bulk operation failed!");
     },
   });

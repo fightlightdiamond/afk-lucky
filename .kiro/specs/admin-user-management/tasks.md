@@ -92,7 +92,7 @@
   - Add audit logging for status change actions
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6_
 
-- [ ] 12. Add user activity tracking display
+- [x] 12. Add user activity tracking display
 
   - Enhance user list to show last login information
   - Add activity status indicators (online, offline, never)
@@ -100,9 +100,10 @@
   - Create user activity detail view
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [ ] 13. Create export functionality
+- [x] 13. Create export functionality
 
-  - Implement CSV export for filtered user data
+  - Implement CSV Export Options
+    Use the Export button in the filters section for more options for filtered user data
   - Add Excel export capability with proper formatting
   - Create export configuration dialog
   - Exclude sensitive data from exports (passwords, tokens)

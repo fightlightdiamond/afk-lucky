@@ -340,25 +340,45 @@ export async function GET(request: Request) {
       });
     }
 
-    // Role filter with validation
+    // Role filter with validation - support both ID and name
     if (params.role && params.role !== "all") {
-      // Validate role exists
-      const roleExists = await prisma.role.findUnique({
-        where: { id: params.role },
-        select: { id: true },
-      });
+      // Check if it's a UUID (role ID) or role name
+      const isUUID =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+          params.role
+        );
+
+      let roleExists;
+      if (isUUID) {
+        // Search by ID
+        roleExists = await prisma.role.findUnique({
+          where: { id: params.role },
+          select: { id: true },
+        });
+        if (roleExists) {
+          conditions.push({ role_id: params.role });
+        }
+      } else {
+        // Search by name - convert to uppercase to match enum
+        const roleName = params.role.toUpperCase() as any; // Cast to avoid TypeScript enum issues
+        roleExists = await prisma.role.findUnique({
+          where: { name: roleName },
+          select: { id: true },
+        });
+        if (roleExists) {
+          conditions.push({ role_id: roleExists.id });
+        }
+      }
 
       if (!roleExists) {
         return createErrorResponse(
           "Invalid role filter",
           UserManagementErrorCodes.INVALID_ROLE,
           400,
-          `Role with ID '${params.role}' does not exist`,
+          `Role '${params.role}' does not exist`,
           ErrorSeverity.MEDIUM
         );
       }
-
-      conditions.push({ role_id: params.role });
     }
 
     // Enhanced status filter

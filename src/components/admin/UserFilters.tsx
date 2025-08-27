@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Filter, X, Calendar, Activity } from "lucide-react";
+import { Search, Filter, X, Calendar, Activity, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,13 +21,16 @@ import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
-import { UserFilters as UserFiltersType } from "@/types/user";
+import { UserFilters as UserFiltersType, ExportFormat } from "@/types/user";
+import { ExportDialog } from "./ExportDialog";
 
 interface UserFiltersProps {
   filters: UserFiltersType;
   onFiltersChange: (filters: UserFiltersType) => void;
   roles: Array<{ id: string; name: string }>;
   isLoading?: boolean;
+  totalRecords?: number;
+  onExport?: (format: ExportFormat, fields?: string[]) => Promise<void>;
 }
 
 export function UserFilters({
@@ -35,10 +38,13 @@ export function UserFilters({
   onFiltersChange,
   roles,
   isLoading = false,
+  totalRecords = 0,
+  onExport,
 }: UserFiltersProps) {
   const [localFilters, setLocalFilters] = useState<UserFiltersType>(filters);
   const [isDateRangeOpen, setIsDateRangeOpen] = useState(false);
   const [isActivityDateRangeOpen, setIsActivityDateRangeOpen] = useState(false);
+  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
 
   // Update local filters when props change
   useEffect(() => {
@@ -137,281 +143,300 @@ export function UserFilters({
                 disabled={isLoading}
               />
             </div>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="relative">
-                  <Filter className="w-4 h-4 mr-2" />
-                  Filters
-                  {activeFiltersCount > 0 && (
-                    <Badge
-                      variant="secondary"
-                      className="ml-2 px-1.5 py-0.5 text-xs"
-                    >
-                      {activeFiltersCount}
-                    </Badge>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-80 max-h-[600px] overflow-y-auto"
-                align="end"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium">Filters</h4>
+            <div className="flex gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="relative">
+                    <Filter className="w-4 h-4 mr-2" />
+                    Filters
                     {activeFiltersCount > 0 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearFilters}
-                        className="h-auto p-1"
+                      <Badge
+                        variant="secondary"
+                        className="ml-2 px-1.5 py-0.5 text-xs"
                       >
-                        <X className="w-4 h-4" />
-                      </Button>
+                        {activeFiltersCount}
+                      </Badge>
                     )}
-                  </div>
-
-                  {/* Role Filter */}
-                  <div className="space-y-2">
-                    <Label>Role</Label>
-                    <Select
-                      value={localFilters.role || "all"}
-                      onValueChange={(value) =>
-                        handleFilterChange(
-                          "role",
-                          value === "all" ? null : value
-                        )
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="All roles" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All roles</SelectItem>
-                        {roles.map((role) => (
-                          <SelectItem key={role.id} value={role.id}>
-                            {role.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Status Filter */}
-                  <div className="space-y-2">
-                    <Label>Status</Label>
-                    <Select
-                      value={localFilters.status || "all"}
-                      onValueChange={(value) =>
-                        handleFilterChange(
-                          "status",
-                          value === "all"
-                            ? null
-                            : (value as "active" | "inactive")
-                        )
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="All statuses" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All statuses</SelectItem>
-                        <SelectItem value="active">Active</SelectItem>
-                        <SelectItem value="inactive">Inactive</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Activity Status Filter */}
-                  <div className="space-y-2">
-                    <Label>Activity Status</Label>
-                    <Select
-                      value={localFilters.activity_status || "all"}
-                      onValueChange={(value) =>
-                        handleFilterChange(
-                          "activity_status",
-                          value === "all"
-                            ? null
-                            : (value as "online" | "offline" | "never")
-                        )
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="All activity statuses" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">
-                          All activity statuses
-                        </SelectItem>
-                        <SelectItem value="online">Online</SelectItem>
-                        <SelectItem value="offline">Offline</SelectItem>
-                        <SelectItem value="never">Never logged in</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Avatar Filter */}
-                  <div className="space-y-2">
-                    <Label>Avatar</Label>
-                    <Select
-                      value={
-                        localFilters.hasAvatar === null
-                          ? "all"
-                          : localFilters.hasAvatar
-                          ? "yes"
-                          : "no"
-                      }
-                      onValueChange={(value) =>
-                        handleFilterChange(
-                          "hasAvatar",
-                          value === "all" ? null : value === "yes"
-                        )
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="All users" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All users</SelectItem>
-                        <SelectItem value="yes">Has avatar</SelectItem>
-                        <SelectItem value="no">No avatar</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Creation Date Range */}
-                  <div className="space-y-2">
-                    <Label>Creation Date Range</Label>
-                    <Popover
-                      open={isDateRangeOpen}
-                      onOpenChange={setIsDateRangeOpen}
-                    >
-                      <PopoverTrigger asChild>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-80 max-h-[600px] overflow-y-auto"
+                  align="end"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium">Filters</h4>
+                      {activeFiltersCount > 0 && (
                         <Button
-                          variant="outline"
-                          className="w-full justify-start text-left font-normal"
+                          variant="ghost"
+                          size="sm"
+                          onClick={clearFilters}
+                          className="h-auto p-1"
                         >
-                          <Calendar className="mr-2 h-4 w-4" />
-                          {localFilters.dateRange?.from ? (
-                            localFilters.dateRange.to ? (
-                              <>
-                                {format(
-                                  localFilters.dateRange.from,
-                                  "LLL dd, y"
-                                )}{" "}
-                                -{" "}
-                                {format(localFilters.dateRange.to, "LLL dd, y")}
-                              </>
-                            ) : (
-                              format(localFilters.dateRange.from, "LLL dd, y")
-                            )
-                          ) : (
-                            <span>Pick a date range</span>
-                          )}
+                          <X className="w-4 h-4" />
                         </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <CalendarComponent
-                          mode="range"
-                          defaultMonth={
-                            localFilters.dateRange?.from || undefined
-                          }
-                          selected={{
-                            from: localFilters.dateRange?.from || undefined,
-                            to: localFilters.dateRange?.to || undefined,
-                          }}
-                          onSelect={(range) => {
-                            handleDateRangeChange(
-                              "dateRange",
-                              "from",
-                              range?.from || null
-                            );
-                            handleDateRangeChange(
-                              "dateRange",
-                              "to",
-                              range?.to || null
-                            );
-                            if (range?.from && range?.to) {
-                              setIsDateRangeOpen(false);
-                            }
-                          }}
-                          numberOfMonths={2}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                      )}
+                    </div>
 
-                  {/* Activity Date Range */}
-                  <div className="space-y-2">
-                    <Label>Last Login Date Range</Label>
-                    <Popover
-                      open={isActivityDateRangeOpen}
-                      onOpenChange={setIsActivityDateRangeOpen}
-                    >
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start text-left font-normal"
-                        >
-                          <Activity className="mr-2 h-4 w-4" />
-                          {localFilters.activityDateRange?.from ? (
-                            localFilters.activityDateRange.to ? (
-                              <>
-                                {format(
+                    {/* Role Filter */}
+                    <div className="space-y-2">
+                      <Label>Role</Label>
+                      <Select
+                        value={localFilters.role || "all"}
+                        onValueChange={(value) =>
+                          handleFilterChange(
+                            "role",
+                            value === "all" ? null : value
+                          )
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="All roles" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All roles</SelectItem>
+                          {roles.map((role) => (
+                            <SelectItem key={role.id} value={role.id}>
+                              {role.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Status Filter */}
+                    <div className="space-y-2">
+                      <Label>Status</Label>
+                      <Select
+                        value={localFilters.status || "all"}
+                        onValueChange={(value) =>
+                          handleFilterChange(
+                            "status",
+                            value === "all"
+                              ? null
+                              : (value as "active" | "inactive")
+                          )
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="All statuses" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All statuses</SelectItem>
+                          <SelectItem value="active">Active</SelectItem>
+                          <SelectItem value="inactive">Inactive</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Activity Status Filter */}
+                    <div className="space-y-2">
+                      <Label>Activity Status</Label>
+                      <Select
+                        value={localFilters.activity_status || "all"}
+                        onValueChange={(value) =>
+                          handleFilterChange(
+                            "activity_status",
+                            value === "all"
+                              ? null
+                              : (value as "online" | "offline" | "never")
+                          )
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="All activity statuses" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">
+                            All activity statuses
+                          </SelectItem>
+                          <SelectItem value="online">Online</SelectItem>
+                          <SelectItem value="offline">Offline</SelectItem>
+                          <SelectItem value="never">Never logged in</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Avatar Filter */}
+                    <div className="space-y-2">
+                      <Label>Avatar</Label>
+                      <Select
+                        value={
+                          localFilters.hasAvatar === null
+                            ? "all"
+                            : localFilters.hasAvatar
+                            ? "yes"
+                            : "no"
+                        }
+                        onValueChange={(value) =>
+                          handleFilterChange(
+                            "hasAvatar",
+                            value === "all" ? null : value === "yes"
+                          )
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="All users" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All users</SelectItem>
+                          <SelectItem value="yes">Has avatar</SelectItem>
+                          <SelectItem value="no">No avatar</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Creation Date Range */}
+                    <div className="space-y-2">
+                      <Label>Creation Date Range</Label>
+                      <Popover
+                        open={isDateRangeOpen}
+                        onOpenChange={setIsDateRangeOpen}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left font-normal"
+                          >
+                            <Calendar className="mr-2 h-4 w-4" />
+                            {localFilters.dateRange?.from ? (
+                              localFilters.dateRange.to ? (
+                                <>
+                                  {format(
+                                    localFilters.dateRange.from,
+                                    "LLL dd, y"
+                                  )}{" "}
+                                  -{" "}
+                                  {format(
+                                    localFilters.dateRange.to,
+                                    "LLL dd, y"
+                                  )}
+                                </>
+                              ) : (
+                                format(localFilters.dateRange.from, "LLL dd, y")
+                              )
+                            ) : (
+                              <span>Pick a date range</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <CalendarComponent
+                            mode="range"
+                            defaultMonth={
+                              localFilters.dateRange?.from || undefined
+                            }
+                            selected={{
+                              from: localFilters.dateRange?.from || undefined,
+                              to: localFilters.dateRange?.to || undefined,
+                            }}
+                            onSelect={(range) => {
+                              handleDateRangeChange(
+                                "dateRange",
+                                "from",
+                                range?.from || null
+                              );
+                              handleDateRangeChange(
+                                "dateRange",
+                                "to",
+                                range?.to || null
+                              );
+                              if (range?.from && range?.to) {
+                                setIsDateRangeOpen(false);
+                              }
+                            }}
+                            numberOfMonths={2}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    {/* Activity Date Range */}
+                    <div className="space-y-2">
+                      <Label>Last Login Date Range</Label>
+                      <Popover
+                        open={isActivityDateRangeOpen}
+                        onOpenChange={setIsActivityDateRangeOpen}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="w-full justify-start text-left font-normal"
+                          >
+                            <Activity className="mr-2 h-4 w-4" />
+                            {localFilters.activityDateRange?.from ? (
+                              localFilters.activityDateRange.to ? (
+                                <>
+                                  {format(
+                                    localFilters.activityDateRange.from,
+                                    "LLL dd, y"
+                                  )}{" "}
+                                  -{" "}
+                                  {format(
+                                    localFilters.activityDateRange.to,
+                                    "LLL dd, y"
+                                  )}
+                                </>
+                              ) : (
+                                format(
                                   localFilters.activityDateRange.from,
                                   "LLL dd, y"
-                                )}{" "}
-                                -{" "}
-                                {format(
-                                  localFilters.activityDateRange.to,
-                                  "LLL dd, y"
-                                )}
-                              </>
-                            ) : (
-                              format(
-                                localFilters.activityDateRange.from,
-                                "LLL dd, y"
+                                )
                               )
-                            )
-                          ) : (
-                            <span>Pick a date range</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <CalendarComponent
-                          mode="range"
-                          defaultMonth={
-                            localFilters.activityDateRange?.from || undefined
-                          }
-                          selected={{
-                            from:
-                              localFilters.activityDateRange?.from || undefined,
-                            to: localFilters.activityDateRange?.to || undefined,
-                          }}
-                          onSelect={(range) => {
-                            handleDateRangeChange(
-                              "activityDateRange",
-                              "from",
-                              range?.from || null
-                            );
-                            handleDateRangeChange(
-                              "activityDateRange",
-                              "to",
-                              range?.to || null
-                            );
-                            if (range?.from && range?.to) {
-                              setIsActivityDateRangeOpen(false);
+                            ) : (
+                              <span>Pick a date range</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <CalendarComponent
+                            mode="range"
+                            defaultMonth={
+                              localFilters.activityDateRange?.from || undefined
                             }
-                          }}
-                          numberOfMonths={2}
-                        />
-                      </PopoverContent>
-                    </Popover>
+                            selected={{
+                              from:
+                                localFilters.activityDateRange?.from ||
+                                undefined,
+                              to:
+                                localFilters.activityDateRange?.to || undefined,
+                            }}
+                            onSelect={(range) => {
+                              handleDateRangeChange(
+                                "activityDateRange",
+                                "from",
+                                range?.from || null
+                              );
+                              handleDateRangeChange(
+                                "activityDateRange",
+                                "to",
+                                range?.to || null
+                              );
+                              if (range?.from && range?.to) {
+                                setIsActivityDateRangeOpen(false);
+                              }
+                            }}
+                            numberOfMonths={2}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
                   </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+                </PopoverContent>
+              </Popover>
+
+              {/* Export Button */}
+              {onExport && (
+                <Button
+                  variant="outline"
+                  onClick={() => setIsExportDialogOpen(true)}
+                  disabled={isLoading}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Export
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Active Filters Display */}
@@ -471,6 +496,17 @@ export function UserFilters({
           )}
         </div>
       </CardContent>
+
+      {/* Export Dialog */}
+      {onExport && (
+        <ExportDialog
+          open={isExportDialogOpen}
+          onClose={() => setIsExportDialogOpen(false)}
+          filters={localFilters}
+          totalRecords={totalRecords}
+          onExport={onExport}
+        />
+      )}
     </Card>
   );
 }

@@ -45,6 +45,7 @@ import { PermissionGuard } from "@/components/auth/permission-guard";
 import { PermissionBadge } from "@/components/admin/PermissionBadge";
 import { UserStatusBadge } from "@/components/admin/UserStatusBadge";
 import { UserStatusManager } from "@/components/admin/UserStatusManager";
+import { UserActivityDetail } from "@/components/admin/UserActivityDetail";
 import { User, UserFilters, SortableUserField, UserStatus } from "@/types/user";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -123,7 +124,20 @@ function ActivityStatusBadge({ user }: { user: User }) {
         return {
           variant: "default" as const,
           label: "Online",
-          icon: <div className="w-2 h-2 bg-green-500 rounded-full" />,
+          displayLabel: "Online",
+          icon: (
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+          ),
+          tooltipContent: (
+            <div className="space-y-1">
+              <p className="font-medium">Currently Online</p>
+              {user.last_login && (
+                <p className="text-xs">
+                  Last login: {new Date(user.last_login).toLocaleString()}
+                </p>
+              )}
+            </div>
+          ),
         };
       case "offline":
         return {
@@ -131,39 +145,67 @@ function ActivityStatusBadge({ user }: { user: User }) {
           label: user.last_login
             ? `Last seen ${formatDistanceToNow(new Date(user.last_login))} ago`
             : "Offline",
+          displayLabel: "Offline",
           icon: <div className="w-2 h-2 bg-gray-400 rounded-full" />,
+          tooltipContent: (
+            <div className="space-y-1">
+              <p className="font-medium">Offline</p>
+              {user.last_login ? (
+                <>
+                  <p className="text-xs">
+                    Last login: {new Date(user.last_login).toLocaleString()}
+                  </p>
+                  <p className="text-xs">
+                    {formatDistanceToNow(new Date(user.last_login))} ago
+                  </p>
+                </>
+              ) : (
+                <p className="text-xs">No recent activity</p>
+              )}
+            </div>
+          ),
         };
       case "never":
         return {
           variant: "outline" as const,
           label: "Never logged in",
+          displayLabel: "Never",
           icon: <div className="w-2 h-2 bg-red-400 rounded-full" />,
+          tooltipContent: (
+            <div className="space-y-1">
+              <p className="font-medium">Never logged in</p>
+              <p className="text-xs">
+                Account created: {new Date(user.created_at).toLocaleString()}
+              </p>
+              <p className="text-xs text-amber-600">
+                User has never accessed the system
+              </p>
+            </div>
+          ),
         };
       default:
         return {
           variant: "secondary" as const,
           label: "Unknown",
+          displayLabel: "Unknown",
           icon: <div className="w-2 h-2 bg-gray-400 rounded-full" />,
+          tooltipContent: <p>Activity status unknown</p>,
         };
     }
   };
 
-  const { variant, label, icon } = getActivityInfo();
+  const { variant, displayLabel, icon, tooltipContent } = getActivityInfo();
 
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant={variant} className="gap-1.5">
+          <Badge variant={variant} className="gap-1.5 cursor-help">
             {icon}
-            {user.activity_status === "offline" && user.last_login
-              ? "Offline"
-              : label}
+            {displayLabel}
           </Badge>
         </TooltipTrigger>
-        <TooltipContent>
-          <p>{label}</p>
-        </TooltipContent>
+        <TooltipContent className="max-w-xs">{tooltipContent}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
@@ -552,7 +594,21 @@ export function UserTable({
                     )}
                   </TableCell>
                   <TableCell className={cn(isMobile && "hidden md:table-cell")}>
-                    <ActivityStatusBadge user={user} />
+                    <div className="flex items-center gap-2">
+                      <ActivityStatusBadge user={user} />
+                      <UserActivityDetail
+                        user={user}
+                        trigger={
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                          >
+                            <Eye className="h-3 w-3" />
+                          </Button>
+                        }
+                      />
+                    </div>
                   </TableCell>
                   <TableCell className={cn(isMobile && "hidden lg:table-cell")}>
                     <TooltipProvider>
