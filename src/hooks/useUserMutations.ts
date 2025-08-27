@@ -69,8 +69,10 @@ async function toggleUserStatus(
   userId: string,
   isActive: boolean
 ): Promise<User> {
+  console.log("Toggling user status:", { userId, isActive });
+
   const response = await fetch(`/api/admin/users/${userId}`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
@@ -83,7 +85,8 @@ async function toggleUserStatus(
   }
 
   const result = await response.json();
-  return result.data;
+  console.log("Toggle user status response:", result);
+  return result;
 }
 
 // Custom hooks
@@ -94,7 +97,9 @@ export function useUserMutations() {
     mutationFn: createUser,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success(`User "${data.display_name}" created successfully`);
+      queryClient.refetchQueries({ queryKey: ["users"] });
+      const displayName = `${data.first_name} ${data.last_name}`;
+      toast.success(`User "${displayName}" created successfully`);
     },
     onError: (error: Error) => {
       toast.error(`Failed to create user: ${error.message}`);
@@ -105,7 +110,9 @@ export function useUserMutations() {
     mutationFn: updateUser,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success(`User "${data.display_name}" updated successfully`);
+      queryClient.refetchQueries({ queryKey: ["users"] });
+      const displayName = `${data.first_name} ${data.last_name}`;
+      toast.success(`User "${displayName}" updated successfully`);
     },
     onError: (error: Error) => {
       toast.error(`Failed to update user: ${error.message}`);
@@ -116,6 +123,7 @@ export function useUserMutations() {
     mutationFn: deleteUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.refetchQueries({ queryKey: ["users"] });
       toast.success("User deleted successfully");
     },
     onError: (error: Error) => {
@@ -127,9 +135,12 @@ export function useUserMutations() {
     mutationFn: ({ userId, isActive }: { userId: string; isActive: boolean }) =>
       toggleUserStatus(userId, isActive),
     onSuccess: (data) => {
+      // Invalidate all user queries to refresh the UI
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      const status = data.status === "active" ? "activated" : "deactivated";
-      toast.success(`User "${data.display_name}" ${status} successfully`);
+      queryClient.refetchQueries({ queryKey: ["users"] });
+      const displayName = `${data.first_name} ${data.last_name}`;
+      const status = data.is_active ? "activated" : "deactivated";
+      toast.success(`User "${displayName}" ${status} successfully`);
     },
     onError: (error: Error) => {
       toast.error(`Failed to update user status: ${error.message}`);

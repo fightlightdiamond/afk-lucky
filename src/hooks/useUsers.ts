@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userApi } from "@/lib/api";
 import { useUserStore } from "@/store";
 import { toast } from "sonner";
+import { useCallback, useMemo } from "react";
 import {
   User,
   UserFilters,
@@ -12,6 +13,8 @@ import {
   BulkOperationRequest,
   BulkOperationResult,
   UserMutationResponse,
+  UserManagementErrorCodes,
+  ApiErrorResponse,
 } from "@/types/user";
 
 // Query keys factory
@@ -23,44 +26,95 @@ export const userKeys = {
   detail: (id: string) => [...userKeys.details(), id] as const,
 };
 
-// Get users with filters - now uses server-side filtering
+// Enhanced get users with filters - now uses server-side filtering with optimizations
 export function useUsers(params?: Partial<GetUsersParams>) {
-  const { userFilters } = useUserStore();
+  const { userFilters, pagination, tableSettings } = useUserStore();
 
   // Merge store filters with provided params
-  const queryParams: GetUsersParams = {
-    page: params?.page || 1,
-    pageSize: params?.pageSize || 20,
-    search: params?.search || userFilters.search || undefined,
-    role: params?.role || userFilters.role || undefined,
-    status: params?.status || userFilters.status || undefined,
-    sortBy: params?.sortBy || userFilters.sortBy || "created_at",
-    sortOrder: params?.sortOrder || userFilters.sortOrder || "desc",
-    dateFrom: params?.dateFrom,
-    dateTo: params?.dateTo,
-    activityDateFrom: params?.activityDateFrom,
-    activityDateTo: params?.activityDateTo,
-    hasAvatar: params?.hasAvatar || userFilters.hasAvatar,
-    locale: params?.locale || userFilters.locale,
-    group_id: params?.group_id || userFilters.group_id,
-    activity_status: params?.activity_status || userFilters.activity_status,
-  };
+  const queryParams: GetUsersParams = useMemo(
+    () => ({
+      page: params?.page || pagination.currentPage || 1,
+      pageSize: params?.pageSize || pagination.pageSize || 20,
+      search: params?.search || userFilters.search || undefined,
+      role: params?.role || userFilters.role || undefined,
+      status: params?.status || userFilters.status || undefined,
+      sortBy: params?.sortBy || userFilters.sortBy || "created_at",
+      sortOrder: params?.sortOrder || userFilters.sortOrder || "desc",
+      dateFrom: params?.dateFrom,
+      dateTo: params?.dateTo,
+      activityDateFrom: params?.activityDateFrom,
+      activityDateTo: params?.activityDateTo,
+      hasAvatar: params?.hasAvatar || userFilters.hasAvatar,
+      locale: params?.locale || userFilters.locale,
+      group_id: params?.group_id || userFilters.group_id,
+      activity_status: params?.activity_status || userFilters.activity_status,
+      // Enhanced query options
+      includeRole: true,
+      includePermissions: false, // Only include when needed
+      includeActivity: true,
+      includeStats: false, // Only include when needed
+    }),
+    [params, userFilters, pagination]
+  );
+
+  // Enhanced error handling function
+  const handleQueryError = useCallback((error: ApiErrorResponse) => {
+    const errorCode = error.code as UserManagementErrorCodes;
+
+    switch (errorCode) {
+      case UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS:
+      case UserManagementErrorCodes.UNAUTHORIZED:
+        toast.error("You don't have permission to view users");
+        break;
+      case UserManagementErrorCodes.RATE_LIMIT_EXCEEDED:
+        toast.error("Too many requests. Please wait a moment and try again");
+        break;
+      case UserManagementErrorCodes.SERVICE_UNAVAILABLE:
+        toast.error("Service temporarily unavailable. Please try again later");
+        break;
+      default:
+        toast.error(error.userMessage || error.error || "Failed to load users");
+    }
+  }, []);
 
   return useQuery({
     queryKey: userKeys.list(queryParams),
     queryFn: () => userApi.getUsers(queryParams),
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 5 * 60 * 1000, // 5 minutes (formerly cacheTime)
-    refetchOnWindowFocus: false, // Don't refetch on window focus for better UX
-    refetchOnMount: false, // Don't refetch on mount if data is fresh
-    retry: (failureCount, error: any) => {
-      // Don't retry on 4xx errors
-      if (error?.status >= 400 && error?.status < 500) {
+    staleTime: tableSettings.autoRefresh ? 30 * 1000 : 2 * 60 * 1000, // 30s if auto-refresh, 2min otherwise
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: tableSettings.autoRefresh
+      ? tableSettings.refreshInterval * 1000
+      : false,
+    retry: (failureCount, error: ApiErrorResponse) => {
+      // Don't retry on client errors (4xx)
+      if (
+        error?.statusCode &&
+        error.statusCode >= 400 &&
+        error.statusCode < 500
+      ) {
+        return false;
+      }
+      // Don't retry on specific error codes
+      if (
+        error?.code &&
+        [
+          UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS,
+          UserManagementErrorCodes.UNAUTHORIZED,
+          UserManagementErrorCodes.USER_NOT_FOUND,
+        ].includes(error.code as UserManagementErrorCodes)
+      ) {
         return false;
       }
       return failureCount < 3;
     },
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    onError: handleQueryError,
+    // Enable background refetch for better UX
+    refetchIntervalInBackground: false,
+    // Keep previous data while fetching new data
+    keepPreviousData: true,
   });
 }
 
@@ -106,26 +160,94 @@ export function useUserStatistics() {
   });
 }
 
-// Create user mutation
+// Enhanced create user mutation with optimistic updates
 export function useCreateUser() {
   const queryClient = useQueryClient();
+  const { addOptimisticUpdate, removeOptimisticUpdate } = useUserStore();
 
   return useMutation({
     mutationFn: (data: CreateUserRequest) => userApi.createUser(data),
-    onSuccess: (response: UserMutationResponse) => {
-      // Invalidate users list
-      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    onMutate: async (newUser) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: userKeys.lists() });
 
-      // Add to cache
+      // Create optimistic user object
+      const optimisticUser: Partial<User> = {
+        id: `temp-${Date.now()}`,
+        email: newUser.email,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
+        full_name: `${newUser.first_name} ${newUser.last_name}`,
+        display_name: `${newUser.first_name} ${newUser.last_name}`,
+        is_active: newUser.is_active ?? true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        status: "active" as const,
+        activity_status: "never" as const,
+      };
+
+      // Add optimistic update
+      addOptimisticUpdate(optimisticUser.id!, optimisticUser);
+
+      return { optimisticUser };
+    },
+    onSuccess: (response: UserMutationResponse, variables, context) => {
+      // Remove optimistic update
+      if (context?.optimisticUser?.id) {
+        removeOptimisticUpdate(context.optimisticUser.id);
+      }
+
+      // Update cache with real data
       queryClient.setQueryData(userKeys.detail(response.user.id), {
         user: response.user,
       });
 
-      toast.success("User created successfully!");
+      // Invalidate and refetch users list
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+
+      toast.success(`User "${response.user.full_name}" created successfully!`);
     },
-    onError: (error: any) => {
-      toast.error(error.message || "Failed to create user!");
+    onError: (error: ApiErrorResponse, variables, context) => {
+      // Remove optimistic update on error
+      if (context?.optimisticUser?.id) {
+        removeOptimisticUpdate(context.optimisticUser.id);
+      }
+
+      const errorCode = error.code as UserManagementErrorCodes;
+      let errorMessage = "Failed to create user";
+
+      switch (errorCode) {
+        case UserManagementErrorCodes.EMAIL_ALREADY_EXISTS:
+          errorMessage = "Email address is already in use";
+          break;
+        case UserManagementErrorCodes.VALIDATION_ERROR:
+          errorMessage = "Please check the form data and try again";
+          break;
+        case UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS:
+          errorMessage = "You don't have permission to create users";
+          break;
+        default:
+          errorMessage = error.userMessage || error.error || errorMessage;
+      }
+
+      toast.error(errorMessage);
     },
+    // Enhanced retry logic
+    retry: (failureCount, error: ApiErrorResponse) => {
+      // Don't retry on validation or permission errors
+      if (
+        error?.code &&
+        [
+          UserManagementErrorCodes.EMAIL_ALREADY_EXISTS,
+          UserManagementErrorCodes.VALIDATION_ERROR,
+          UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS,
+        ].includes(error.code as UserManagementErrorCodes)
+      ) {
+        return false;
+      }
+      return failureCount < 2;
+    },
+    retryDelay: 1000,
   });
 }
 

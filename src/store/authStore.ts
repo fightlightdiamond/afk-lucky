@@ -1,21 +1,15 @@
 import { create } from "zustand";
 import { persist, subscribeWithSelector } from "zustand/middleware";
+import { AuthUser } from "@/types/user";
 
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role?: string;
-  avatar?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+// Re-export for backward compatibility
+export type { AuthUser as User };
 
 interface AuthState {
   // Auth state
   isAuthenticated: boolean;
   token: string | null;
-  user: User | null;
+  user: AuthUser | null;
 
   // Session management
   lastActivity: number;
@@ -26,9 +20,9 @@ interface AuthState {
   isRefreshing: boolean;
 
   // Actions
-  login: (token: string, user: User, expiresIn?: number) => void;
+  login: (token: string, user: AuthUser, expiresIn?: number) => void;
   logout: () => void;
-  setUser: (user: User) => void;
+  setUser: (user: AuthUser) => void;
   updateLastActivity: () => void;
   setInitializing: (initializing: boolean) => void;
   setRefreshing: (refreshing: boolean) => void;

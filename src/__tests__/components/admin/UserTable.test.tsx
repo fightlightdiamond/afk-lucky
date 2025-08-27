@@ -1,8 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { User } from "@/types/user";
+import {
+  User,
+  UserFilters,
+  UserRole,
+  UserStatus,
+  ActivityStatus,
+} from "@/types/user";
+import { UserTable } from "@/components/admin/UserTable";
 
 // Mock the admin users page component
 const mockUsers: User[] = [
@@ -15,17 +21,18 @@ const mockUsers: User[] = [
     created_at: "2024-01-01T00:00:00Z",
     updated_at: "2024-01-01T00:00:00Z",
     last_login: "2024-01-15T10:00:00Z",
-    last_logout: null,
-    avatar: null,
     role: {
       id: "role-1",
-      name: "USER",
+      name: UserRole.USER,
       permissions: ["read:profile", "update:profile"],
       description: "Regular user",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z",
     },
     full_name: "John Doe",
-    status: "active",
-    activity_status: "offline",
+    status: UserStatus.ACTIVE,
+    activity_status: ActivityStatus.OFFLINE,
+    display_name: "John Doe",
   },
   {
     id: "user-2",
@@ -35,13 +42,10 @@ const mockUsers: User[] = [
     is_active: false,
     created_at: "2024-01-02T00:00:00Z",
     updated_at: "2024-01-02T00:00:00Z",
-    last_login: null,
-    last_logout: null,
-    avatar: null,
-    role: null,
     full_name: "Jane Smith",
-    status: "inactive",
-    activity_status: "never",
+    status: UserStatus.INACTIVE,
+    activity_status: ActivityStatus.NEVER,
+    display_name: "Jane Smith",
   },
 ];
 
@@ -68,106 +72,22 @@ vi.mock("sonner", () => ({
 // Mock fetch
 global.fetch = vi.fn();
 
-const createWrapper = () => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
-    },
-  });
-
-  return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+// Mock filters for testing
+const mockFilters: UserFilters = {
+  search: "",
+  role: null,
+  status: null,
+  dateRange: null,
+  activityDateRange: null,
+  sortBy: "full_name",
+  sortOrder: "asc",
 };
-
-// Create a simplified UserTable component for testing
-const UserTable = ({
-  users,
-  onEdit,
-  onDelete,
-  onToggleStatus,
-}: {
-  users: User[];
-  onEdit: (user: User) => void;
-  onDelete: (userId: string) => void;
-  onToggleStatus: (userId: string, status: boolean) => void;
-}) => (
-  <table data-testid="user-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Status</th>
-        <th>Last Login</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {users.map((user) => (
-        <tr key={user.id} data-testid={`user-row-${user.id}`}>
-          <td>{user.full_name}</td>
-          <td>{user.email}</td>
-          <td>
-            {user.role ? (
-              <div>
-                <span data-testid="role-badge">{user.role.name}</span>
-                {user.role.permissions.slice(0, 2).map((permission) => (
-                  <span key={permission} data-testid="permission-badge">
-                    {permission}
-                  </span>
-                ))}
-                {user.role.permissions.length > 2 && (
-                  <span data-testid="more-permissions">
-                    +{user.role.permissions.length - 2}
-                  </span>
-                )}
-              </div>
-            ) : (
-              <span data-testid="no-role">No Role</span>
-            )}
-          </td>
-          <td>
-            <span data-testid={`status-${user.status}`}>
-              {user.is_active ? "Active" : "Inactive"}
-            </span>
-          </td>
-          <td>
-            {user.last_login
-              ? new Date(user.last_login).toLocaleDateString()
-              : "Never"}
-          </td>
-          <td>
-            <button
-              onClick={() => onEdit(user)}
-              data-testid={`edit-user-${user.id}`}
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => onToggleStatus(user.id, user.is_active)}
-              data-testid={`toggle-status-${user.id}`}
-            >
-              {user.is_active ? "Deactivate" : "Activate"}
-            </button>
-            <button
-              onClick={() => onDelete(user.id)}
-              data-testid={`delete-user-${user.id}`}
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-);
 
 describe("UserTable Component", () => {
   const mockOnEdit = vi.fn();
   const mockOnDelete = vi.fn();
   const mockOnToggleStatus = vi.fn();
+  const mockOnFiltersChange = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -177,17 +97,15 @@ describe("UserTable Component", () => {
     render(
       <UserTable
         users={mockUsers}
+        filters={mockFilters}
+        onFiltersChange={mockOnFiltersChange}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleStatus={mockOnToggleStatus}
       />
     );
 
-    expect(screen.getByTestId("user-table")).toBeInTheDocument();
-    expect(screen.getByTestId("user-row-user-1")).toBeInTheDocument();
-    expect(screen.getByTestId("user-row-user-2")).toBeInTheDocument();
-
-    // Check user data
+    // Check user data is displayed
     expect(screen.getByText("John Doe")).toBeInTheDocument();
     expect(screen.getByText("john@example.com")).toBeInTheDocument();
     expect(screen.getByText("Jane Smith")).toBeInTheDocument();
@@ -198,49 +116,52 @@ describe("UserTable Component", () => {
     render(
       <UserTable
         users={mockUsers}
+        filters={mockFilters}
+        onFiltersChange={mockOnFiltersChange}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleStatus={mockOnToggleStatus}
       />
     );
 
-    // User with role
-    expect(screen.getByTestId("role-badge")).toHaveTextContent("USER");
-    expect(screen.getAllByTestId("permission-badge")).toHaveLength(2);
+    // User with role should show role name
+    expect(screen.getByText("USER")).toBeInTheDocument();
 
-    // User without role
-    expect(screen.getByTestId("no-role")).toHaveTextContent("No Role");
+    // User without role should show "No Role"
+    expect(screen.getByText("No Role")).toBeInTheDocument();
   });
 
   it("displays user status correctly", () => {
     render(
       <UserTable
         users={mockUsers}
+        filters={mockFilters}
+        onFiltersChange={mockOnFiltersChange}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleStatus={mockOnToggleStatus}
       />
     );
 
-    expect(screen.getByTestId("status-active")).toHaveTextContent("Active");
-    expect(screen.getByTestId("status-inactive")).toHaveTextContent("Inactive");
+    expect(screen.getByText("Active")).toBeInTheDocument();
+    expect(screen.getByText("Inactive")).toBeInTheDocument();
   });
 
-  it("displays last login information", () => {
+  it("displays created date information", () => {
     render(
       <UserTable
         users={mockUsers}
+        filters={mockFilters}
+        onFiltersChange={mockOnFiltersChange}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleStatus={mockOnToggleStatus}
       />
     );
 
-    // User with last login
-    expect(screen.getByText("1/15/2024")).toBeInTheDocument();
-
-    // User without last login
-    expect(screen.getByText("Never")).toBeInTheDocument();
+    // Should show formatted created date
+    expect(screen.getByText(/Jan 1, 2024/)).toBeInTheDocument();
+    expect(screen.getByText(/Jan 2, 2024/)).toBeInTheDocument();
   });
 
   it("calls onEdit when edit button is clicked", async () => {
@@ -249,13 +170,23 @@ describe("UserTable Component", () => {
     render(
       <UserTable
         users={mockUsers}
+        filters={mockFilters}
+        onFiltersChange={mockOnFiltersChange}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleStatus={mockOnToggleStatus}
       />
     );
 
-    await user.click(screen.getByTestId("edit-user-user-1"));
+    // Click on the dropdown menu button first
+    const dropdownButtons = screen.getAllByRole("button", {
+      name: /open menu/i,
+    });
+    await user.click(dropdownButtons[0]);
+
+    // Then click on edit option
+    const editButton = screen.getByText("Edit user");
+    await user.click(editButton);
 
     expect(mockOnEdit).toHaveBeenCalledWith(mockUsers[0]);
   });
@@ -266,13 +197,23 @@ describe("UserTable Component", () => {
     render(
       <UserTable
         users={mockUsers}
+        filters={mockFilters}
+        onFiltersChange={mockOnFiltersChange}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleStatus={mockOnToggleStatus}
       />
     );
 
-    await user.click(screen.getByTestId("delete-user-user-1"));
+    // Click on the dropdown menu button first
+    const dropdownButtons = screen.getAllByRole("button", {
+      name: /open menu/i,
+    });
+    await user.click(dropdownButtons[0]);
+
+    // Then click on delete option
+    const deleteButton = screen.getByText("Delete user");
+    await user.click(deleteButton);
 
     expect(mockOnDelete).toHaveBeenCalledWith("user-1");
   });
@@ -283,13 +224,23 @@ describe("UserTable Component", () => {
     render(
       <UserTable
         users={mockUsers}
+        filters={mockFilters}
+        onFiltersChange={mockOnFiltersChange}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleStatus={mockOnToggleStatus}
       />
     );
 
-    await user.click(screen.getByTestId("toggle-status-user-1"));
+    // Click on the dropdown menu button first
+    const dropdownButtons = screen.getAllByRole("button", {
+      name: /open menu/i,
+    });
+    await user.click(dropdownButtons[0]);
+
+    // Then click on deactivate option (since user is active)
+    const toggleButton = screen.getByText("Deactivate");
+    await user.click(toggleButton);
 
     expect(mockOnToggleStatus).toHaveBeenCalledWith("user-1", true);
   });
@@ -298,14 +249,18 @@ describe("UserTable Component", () => {
     render(
       <UserTable
         users={[]}
+        filters={mockFilters}
+        onFiltersChange={mockOnFiltersChange}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleStatus={mockOnToggleStatus}
       />
     );
 
-    expect(screen.getByTestId("user-table")).toBeInTheDocument();
-    expect(screen.queryByTestId("user-row-user-1")).not.toBeInTheDocument();
+    expect(screen.getByText("No users found")).toBeInTheDocument();
+    expect(
+      screen.getByText("Try adjusting your search or filter criteria")
+    ).toBeInTheDocument();
   });
 
   it("handles users with many permissions correctly", () => {
@@ -313,7 +268,7 @@ describe("UserTable Component", () => {
       ...mockUsers[0],
       role: {
         id: "role-admin",
-        name: "ADMIN",
+        name: UserRole.ADMIN,
         permissions: [
           "read:users",
           "write:users",
@@ -322,19 +277,127 @@ describe("UserTable Component", () => {
           "system:admin",
         ],
         description: "Administrator",
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-01T00:00:00Z",
       },
     };
 
     render(
       <UserTable
         users={[userWithManyPermissions]}
+        filters={mockFilters}
+        onFiltersChange={mockOnFiltersChange}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onToggleStatus={mockOnToggleStatus}
       />
     );
 
-    expect(screen.getAllByTestId("permission-badge")).toHaveLength(2);
-    expect(screen.getByTestId("more-permissions")).toHaveTextContent("+3");
+    // Should show ADMIN role
+    expect(screen.getByText("ADMIN")).toBeInTheDocument();
+
+    // Should show +3 for additional permissions beyond the first 2
+    expect(screen.getByText("+3")).toBeInTheDocument();
+  });
+
+  describe("Selection functionality", () => {
+    const mockOnSelectUser = vi.fn();
+    const mockOnSelectAll = vi.fn();
+
+    beforeEach(() => {
+      mockOnSelectUser.mockClear();
+      mockOnSelectAll.mockClear();
+    });
+
+    it("renders selection checkboxes when selection handlers are provided", () => {
+      render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+          onSelectUser={mockOnSelectUser}
+          onSelectAll={mockOnSelectAll}
+          selectedUsers={[]}
+        />
+      );
+
+      // Should have select all checkbox in header
+      const checkboxes = screen.getAllByRole("checkbox");
+      expect(checkboxes).toHaveLength(mockUsers.length + 1); // +1 for select all
+    });
+
+    it("calls onSelectUser when individual checkbox is clicked", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+          onSelectUser={mockOnSelectUser}
+          onSelectAll={mockOnSelectAll}
+          selectedUsers={[]}
+        />
+      );
+
+      const checkboxes = screen.getAllByRole("checkbox");
+      const firstUserCheckbox = checkboxes[1]; // Skip select all checkbox
+
+      await user.click(firstUserCheckbox);
+
+      expect(mockOnSelectUser).toHaveBeenCalledWith(mockUsers[0].id, true);
+    });
+
+    it("calls onSelectAll when select all checkbox is clicked", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+          onSelectUser={mockOnSelectUser}
+          onSelectAll={mockOnSelectAll}
+          selectedUsers={[]}
+        />
+      );
+
+      const selectAllCheckbox = screen.getAllByRole("checkbox")[0];
+
+      await user.click(selectAllCheckbox);
+
+      expect(mockOnSelectAll).toHaveBeenCalledWith(true);
+    });
+
+    it("shows selected rows with different styling", () => {
+      render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+          onSelectUser={mockOnSelectUser}
+          onSelectAll={mockOnSelectAll}
+          selectedUsers={[mockUsers[0].id]}
+        />
+      );
+
+      const rows = screen.getAllByRole("row");
+      const selectedRow = rows.find((row) =>
+        row.textContent?.includes("John Doe")
+      );
+      expect(selectedRow).toHaveClass("bg-muted/30");
+    });
   });
 });
