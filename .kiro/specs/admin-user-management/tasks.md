@@ -60,7 +60,7 @@
   - Add visual sort indicators and loading states
   - _Requirements: 3.1, 3.2, 3.3, 6.1, 6.6, 9.1, 9.4_
 
-- [-] 8. Implement pagination component
+- [x] 8. Implement pagination component
 
   - Create Pagination component with page size selection
   - Add navigation controls (first, previous, next, last)
@@ -68,7 +68,7 @@
   - Add total count and current range display
   - _Requirements: 3.4, 3.5, 10.1_
 
-- [ ] 9. Build bulk operations interface
+- [-] 9. Build bulk operations interface
 
   - Create BulkActionBar component that appears when users are selected
   - Implement BulkConfirmDialog for operation confirmation
