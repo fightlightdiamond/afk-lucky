@@ -2,13 +2,15 @@
 
 import { useUsers } from "@/hooks/useUsers";
 import { useUserMutations } from "@/hooks/useUserMutations";
+import { useExport } from "@/hooks/useExport";
 import { useUserManagement } from "./UserManagementProvider";
 import { UserActions } from "./UserActions";
 import { UserFilters } from "./UserFilters";
 import { UserTable } from "./UserTable";
 import { UserPagination } from "./UserPagination";
 import { UserDialog } from "./UserDialog";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
+import { ExportFormat } from "@/types/user";
 
 interface UserManagementPageProps {
   roles: Array<{ id: string; name: string }>;
@@ -46,6 +48,10 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
   // User mutations
   const { createUser, updateUser, deleteUser, toggleStatus } =
     useUserMutations();
+
+  // Export functionality
+  const { exportUsers } = useExport();
+  const { toast } = useToast();
 
   // Handle user creation/update
   const handleUserSubmit = async (data: unknown) => {
@@ -95,9 +101,16 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
         );
         await Promise.all(promises);
         clearSelection();
-        toast.success(`${selectedUsers.size} users deleted successfully`);
+        toast({
+          title: "Users Deleted",
+          description: `${selectedUsers.size} users deleted successfully`,
+        });
       } catch (error) {
-        toast.error("Some users could not be deleted");
+        toast({
+          title: "Delete Failed",
+          description: "Some users could not be deleted",
+          variant: "destructive",
+        });
       }
     }
   };
@@ -111,9 +124,16 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
       );
       await Promise.all(promises);
       clearSelection();
-      toast.success(`${selectedUsers.size} users activated successfully`);
+      toast({
+        title: "Users Activated",
+        description: `${selectedUsers.size} users activated successfully`,
+      });
     } catch (error) {
-      toast.error("Some users could not be activated");
+      toast({
+        title: "Activation Failed",
+        description: "Some users could not be activated",
+        variant: "destructive",
+      });
     }
   };
 
@@ -126,19 +146,51 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
       );
       await Promise.all(promises);
       clearSelection();
-      toast.success(`${selectedUsers.size} users deactivated successfully`);
+      toast({
+        title: "Users Deactivated",
+        description: `${selectedUsers.size} users deactivated successfully`,
+      });
     } catch (error) {
-      toast.error("Some users could not be deactivated");
+      toast({
+        title: "Deactivation Failed",
+        description: "Some users could not be deactivated",
+        variant: "destructive",
+      });
     }
   };
 
-  // Handle export/import (placeholder functions)
-  const handleExport = () => {
-    toast.info("Export functionality coming soon");
+  // Handle export
+  const handleExport = async (format: ExportFormat, fields?: string[]) => {
+    try {
+      await exportUsers(filters, format, fields);
+      toast({
+        title: "Export Successful",
+        description: `Users exported successfully as ${format.toUpperCase()}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Export Failed",
+        description:
+          error instanceof Error ? error.message : "Failed to export users",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleImport = () => {
-    toast.info("Import functionality coming soon");
+    toast({
+      title: "Import Coming Soon",
+      description: "Import functionality will be available in the next update",
+    });
+  };
+
+  // Handle export from UserActions (simple export without dialog)
+  const handleSimpleExport = () => {
+    toast({
+      title: "Export Options",
+      description:
+        "Use the Export button in the filters section for more options",
+    });
   };
 
   // Handle pagination changes
@@ -165,21 +217,61 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
               ? error.message
               : "An unexpected error occurred"}
           </p>
+          <details className="mt-4 text-left">
+            <summary className="cursor-pointer">Debug Info</summary>
+            <pre className="text-xs bg-gray-100 p-2 rounded mt-2">
+              {JSON.stringify(error, null, 2)}
+            </pre>
+          </details>
         </div>
       </div>
     );
   }
 
-  const users = usersData?.data || [];
+  const users = usersData?.users || [];
   const totalUsers = usersData?.pagination?.total || 0;
   const userIds = users.map((user) => user.id);
 
+  // Debug info
+  console.log("UserManagementPage Debug:", {
+    usersData,
+    users,
+    totalUsers,
+    isLoading,
+    error,
+    filters,
+  });
+
   return (
     <div className="space-y-6">
+      {/* Debug Panel - Remove in production */}
+      {process.env.NODE_ENV === "development" && (
+        <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-md">
+          <h4 className="font-semibold text-yellow-800">Debug Info:</h4>
+          <div className="text-sm text-yellow-700 mt-2 grid grid-cols-2 gap-4">
+            <div>
+              <p>Loading: {isLoading ? "Yes" : "No"}</p>
+              <p>Users Data: {usersData ? "Present" : "Null"}</p>
+              <p>Users Count: {users.length}</p>
+              <p>Total Users: {totalUsers}</p>
+              <p>Error: {error ? "Yes" : "No"}</p>
+            </div>
+            <div>
+              <p>Current Page: {currentPage}</p>
+              <p>Page Size: {pageSize}</p>
+              <p>Pagination: {usersData?.pagination ? "Present" : "Null"}</p>
+              <p>Total Pages: {usersData?.pagination?.totalPages || "N/A"}</p>
+              <p>
+                Has Next: {usersData?.pagination?.hasNextPage ? "Yes" : "No"}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Header with actions */}
       <UserActions
         totalUsers={totalUsers}
-        onExport={handleExport}
+        onExport={handleSimpleExport}
         onImport={handleImport}
         onBulkDelete={handleBulkDelete}
         onBulkActivate={handleBulkActivate}
@@ -192,6 +284,8 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
         onFiltersChange={setFilters}
         roles={roles}
         isLoading={isLoading}
+        totalRecords={totalUsers}
+        onExport={handleExport}
       />
 
       {/* Users table */}
@@ -209,16 +303,27 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
       />
 
       {/* Pagination */}
-      {usersData?.pagination && (
-        <UserPagination
-          currentPage={currentPage}
-          pageSize={pageSize}
-          totalItems={totalUsers}
-          totalPages={usersData.pagination.totalPages}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
-        />
-      )}
+      <UserPagination
+        pagination={
+          usersData?.pagination || {
+            page: currentPage,
+            pageSize: pageSize,
+            total: totalUsers,
+            totalPages: Math.ceil(totalUsers / pageSize) || 1,
+            hasNextPage: currentPage < Math.ceil(totalUsers / pageSize),
+            hasPreviousPage: currentPage > 1,
+            startIndex: totalUsers > 0 ? (currentPage - 1) * pageSize + 1 : 0,
+            endIndex: Math.min(currentPage * pageSize, totalUsers),
+            offset: (currentPage - 1) * pageSize,
+            limit: pageSize,
+            isFirstPage: currentPage === 1,
+            isLastPage: currentPage >= Math.ceil(totalUsers / pageSize),
+          }
+        }
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
+        isLoading={isLoading}
+      />
 
       {/* Create/Edit User Dialog */}
       <UserDialog
