@@ -764,7 +764,7 @@ export async function PATCH(
     const transformedUser = transformUser(updatedUser);
 
     return NextResponse.json({
-      ...transformedUser,
+      user: transformedUser,
       auditInfo: {
         action: action || "update",
         reason: reason || "User updated",
