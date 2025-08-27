@@ -10,15 +10,23 @@ import { UserFilters } from "@/components/admin/UserFilters";
 import { UserPagination } from "@/components/admin/UserPagination";
 import { UserDialog } from "@/components/admin/UserDialog";
 import { useUsers } from "@/hooks/useUsers";
+import { useUserMutations } from "@/hooks/useUserMutations";
 import { useUserStore } from "@/store/userStore";
 import { User, UserFilters as UserFiltersType } from "@/types/user";
 
 export default function UsersPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const { userFilters, setUserFilters } = useUserStore();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const {
+    userFilters,
+    setUserFilters,
+    pagination,
+    setCurrentPage,
+    setPageSize,
+  } = useUserStore();
+
+  // User mutations
+  const { deleteUser, toggleStatus } = useUserMutations();
 
   // Use the enhanced useUsers hook with proper pagination
   const {
@@ -26,8 +34,8 @@ export default function UsersPage() {
     isLoading,
     error,
   } = useUsers({
-    page: currentPage,
-    pageSize: pageSize,
+    page: pagination.currentPage,
+    pageSize: pagination.pageSize,
     search: userFilters.search || undefined,
     role: userFilters.role || undefined,
     status: userFilters.status || undefined,
@@ -40,8 +48,7 @@ export default function UsersPage() {
 
   const handleFiltersChange = (newFilters: UserFiltersType) => {
     setUserFilters(newFilters);
-    // Reset to first page when filters change
-    setCurrentPage(1);
+    // The store automatically resets to first page when filters change
   };
 
   const handlePageChange = (page: number) => {
@@ -50,7 +57,7 @@ export default function UsersPage() {
 
   const handlePageSizeChange = (newPageSize: number) => {
     setPageSize(newPageSize);
-    setCurrentPage(1);
+    // The store automatically resets to first page when page size changes
   };
 
   const handleEdit = (user: User) => {
@@ -59,13 +66,15 @@ export default function UsersPage() {
   };
 
   const handleDelete = (userId: string) => {
-    // This will be handled by the UserTable component
-    console.log("Delete user:", userId);
+    if (confirm("Are you sure you want to delete this user?")) {
+      deleteUser.mutate(userId);
+    }
   };
 
   const handleToggleStatus = (userId: string, currentStatus: boolean) => {
-    // This will be handled by the UserTable component
-    console.log("Toggle status:", userId, currentStatus);
+    // Toggle the status - if currently active, make inactive and vice versa
+    const newStatus = !currentStatus;
+    toggleStatus.mutate({ userId, isActive: newStatus });
   };
 
   const handleCreateUser = () => {

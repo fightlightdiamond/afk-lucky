@@ -5,6 +5,7 @@ import {
   GetUsersParams,
   UsersResponse,
   User as AdminUser,
+  AuthUser,
   CreateUserRequest,
   UpdateUserRequest,
   BulkOperationRequest,
@@ -69,16 +70,10 @@ export async function apiRequest<T>(
   }
 }
 
-// Types for auth
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-}
-
+// Types for auth (using consolidated types)
 export interface LoginResponse {
   token: string;
-  user: User;
+  user: AuthUser;
 }
 
 // Registration types
@@ -92,7 +87,7 @@ export interface RegisterRequest {
 
 export interface RegisterResponse {
   token: string;
-  user: User;
+  user: AuthUser;
   message: string;
 }
 
@@ -138,7 +133,7 @@ export const authApi = {
   },
 
   getProfile: async (token: string) => {
-    return apiRequest<{ user: User }>("/api/profile", {
+    return apiRequest<{ user: AuthUser }>("/api/profile", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
