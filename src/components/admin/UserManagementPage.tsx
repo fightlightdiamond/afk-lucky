@@ -9,8 +9,11 @@ import { UserFilters } from "./UserFilters";
 import { UserTable } from "./UserTable";
 import { UserPagination } from "./UserPagination";
 import { UserDialog } from "./UserDialog";
+import { BulkActionBar } from "./BulkActionBar";
 import { useToast } from "@/hooks/use-toast";
-import { ExportFormat } from "@/types/user";
+import { useErrorHandler } from "@/lib/error-handling";
+import { LoadingOverlay } from "@/components/ui/loading";
+import { ExportFormat, BulkOperationType } from "@/types/user";
 
 interface UserManagementPageProps {
   roles: Array<{ id: string; name: string }>;
@@ -52,21 +55,32 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
   // Export functionality
   const { exportUsers } = useExport();
   const { toast } = useToast();
+  const { handleError, handleSuccess, handleWarning } = useErrorHandler();
 
-  // Handle user creation/update
+  // Handle user creation/update with enhanced error handling
   const handleUserSubmit = async (data: unknown) => {
     try {
       if (selectedUser) {
         // Update existing user
         await updateUser.mutateAsync({ ...data, id: selectedUser.id });
+        handleSuccess("USER_UPDATED");
       } else {
         // Create new user
         await createUser.mutateAsync(data);
+        handleSuccess("USER_CREATED");
       }
       closeDialogs();
     } catch (error) {
-      // Error handling is done in the mutation hooks
-      console.error("Error submitting user:", error);
+      handleError(error, selectedUser ? "user-update" : "user-create", [
+        {
+          label: "Try Again",
+          action: () => handleUserSubmit(data),
+        },
+        {
+          label: "Close Dialog",
+          action: () => closeDialogs(),
+        },
+      ]);
     }
   };
 
@@ -86,102 +100,104 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
     });
   };
 
-  // Handle bulk operations
-  const handleBulkDelete = async () => {
+  // Handle bulk operations with enhanced error handling
+  const handleBulkOperation = async (
+    operation: BulkOperationType,
+    roleId?: string
+  ) => {
     if (selectedUsers.size === 0) return;
 
+    const operationLabels = {
+      ban: "ban",
+      unban: "unban",
+      activate: "activate",
+      deactivate: "deactivate",
+      delete: "delete",
+      assign_role: "assign role to",
+    };
+
+    const operationLabel = operationLabels[operation];
     const confirmed = confirm(
-      `Are you sure you want to delete ${selectedUsers.size} users?`
+      `Are you sure you want to ${operationLabel} ${selectedUsers.size} user${
+        selectedUsers.size === 1 ? "" : "s"
+      }?`
     );
 
-    if (confirmed) {
-      try {
-        const promises = Array.from(selectedUsers).map((userId) =>
-          deleteUser.mutateAsync(userId)
-        );
-        await Promise.all(promises);
-        clearSelection();
-        toast({
-          title: "Users Deleted",
-          description: `${selectedUsers.size} users deleted successfully`,
-        });
-      } catch (error) {
-        toast({
-          title: "Delete Failed",
-          description: "Some users could not be deleted",
-          variant: "destructive",
-        });
+    if (!confirmed) return;
+
+    try {
+      let promises: Promise<any>[] = [];
+
+      switch (operation) {
+        case "ban":
+        case "deactivate":
+          promises = Array.from(selectedUsers).map((userId) =>
+            toggleStatus.mutateAsync({ userId, isActive: false })
+          );
+          break;
+        case "unban":
+        case "activate":
+          promises = Array.from(selectedUsers).map((userId) =>
+            toggleStatus.mutateAsync({ userId, isActive: true })
+          );
+          break;
+        case "delete":
+          promises = Array.from(selectedUsers).map((userId) =>
+            deleteUser.mutateAsync(userId)
+          );
+          break;
+        case "assign_role":
+          if (roleId) {
+            promises = Array.from(selectedUsers).map((userId) =>
+              updateUser.mutateAsync({ id: userId, role_id: roleId })
+            );
+          }
+          break;
       }
-    }
-  };
 
-  const handleBulkActivate = async () => {
-    if (selectedUsers.size === 0) return;
-
-    try {
-      const promises = Array.from(selectedUsers).map((userId) =>
-        toggleStatus.mutateAsync({ userId, isActive: true })
-      );
       await Promise.all(promises);
       clearSelection();
-      toast({
-        title: "Users Activated",
-        description: `${selectedUsers.size} users activated successfully`,
-      });
-    } catch (error) {
-      toast({
-        title: "Activation Failed",
-        description: "Some users could not be activated",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleBulkDeactivate = async () => {
-    if (selectedUsers.size === 0) return;
-
-    try {
-      const promises = Array.from(selectedUsers).map((userId) =>
-        toggleStatus.mutateAsync({ userId, isActive: false })
+      handleSuccess(
+        "BULK_OPERATION_SUCCESS",
+        `${selectedUsers.size} user${
+          selectedUsers.size === 1 ? "" : "s"
+        } ${operationLabel}d successfully`
       );
-      await Promise.all(promises);
-      clearSelection();
-      toast({
-        title: "Users Deactivated",
-        description: `${selectedUsers.size} users deactivated successfully`,
-      });
     } catch (error) {
-      toast({
-        title: "Deactivation Failed",
-        description: "Some users could not be deactivated",
-        variant: "destructive",
-      });
+      handleError(error, `bulk-${operation}`, [
+        {
+          label: "Retry",
+          action: () => handleBulkOperation(operation, roleId),
+        },
+        {
+          label: "Clear Selection",
+          action: () => clearSelection(),
+        },
+      ]);
     }
   };
 
-  // Handle export
+  // Handle export with enhanced error handling
   const handleExport = async (format: ExportFormat, fields?: string[]) => {
     try {
       await exportUsers(filters, format, fields);
-      toast({
-        title: "Export Successful",
-        description: `Users exported successfully as ${format.toUpperCase()}`,
-      });
+      handleSuccess(
+        "EXPORT_SUCCESS",
+        `Users exported successfully as ${format.toUpperCase()}`
+      );
     } catch (error) {
-      toast({
-        title: "Export Failed",
-        description:
-          error instanceof Error ? error.message : "Failed to export users",
-        variant: "destructive",
-      });
+      handleError(error, "export", [
+        {
+          label: "Retry Export",
+          action: () => handleExport(format, fields),
+        },
+      ]);
     }
   };
 
   const handleImport = () => {
-    toast({
-      title: "Import Coming Soon",
-      description: "Import functionality will be available in the next update",
-    });
+    // Import functionality is now handled by the ImportDialog in UserFilters
+    // This is kept for backward compatibility with UserActions
   };
 
   // Handle export from UserActions (simple export without dialog)
@@ -217,12 +233,28 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
               ? error.message
               : "An unexpected error occurred"}
           </p>
-          <details className="mt-4 text-left">
-            <summary className="cursor-pointer">Debug Info</summary>
-            <pre className="text-xs bg-gray-100 p-2 rounded mt-2">
-              {JSON.stringify(error, null, 2)}
-            </pre>
-          </details>
+          <div className="mt-4 space-x-2">
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+            >
+              Retry
+            </button>
+            <button
+              onClick={() => (window.location.href = "/admin")}
+              className="px-4 py-2 text-sm border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md"
+            >
+              Back to Admin
+            </button>
+          </div>
+          {process.env.NODE_ENV === "development" && (
+            <details className="mt-4 text-left">
+              <summary className="cursor-pointer">Debug Info</summary>
+              <pre className="text-xs bg-gray-100 p-2 rounded mt-2">
+                {JSON.stringify(error, null, 2)}
+              </pre>
+            </details>
+          )}
         </div>
       </div>
     );
@@ -243,7 +275,11 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
   });
 
   return (
-    <div className="space-y-6">
+    <LoadingOverlay
+      isLoading={isLoading}
+      message="Loading users..."
+      className="space-y-6"
+    >
       {/* Debug Panel - Remove in production */}
       {process.env.NODE_ENV === "development" && (
         <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-md">
@@ -273,9 +309,9 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
         totalUsers={totalUsers}
         onExport={handleSimpleExport}
         onImport={handleImport}
-        onBulkDelete={handleBulkDelete}
-        onBulkActivate={handleBulkActivate}
-        onBulkDeactivate={handleBulkDeactivate}
+        onBulkDelete={() => handleBulkOperation("delete")}
+        onBulkActivate={() => handleBulkOperation("activate")}
+        onBulkDeactivate={() => handleBulkOperation("deactivate")}
       />
 
       {/* Filters */}
@@ -286,6 +322,7 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
         isLoading={isLoading}
         totalRecords={totalUsers}
         onExport={handleExport}
+        onImport={handleImport}
       />
 
       {/* Users table */}
@@ -325,6 +362,15 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
         isLoading={isLoading}
       />
 
+      {/* Bulk Action Bar */}
+      <BulkActionBar
+        selectedCount={selectedUsers.size}
+        onClearSelection={clearSelection}
+        onBulkOperation={handleBulkOperation}
+        availableRoles={roles}
+        disabled={isLoading}
+      />
+
       {/* Create/Edit User Dialog */}
       <UserDialog
         open={isCreateDialogOpen || isEditDialogOpen}
@@ -334,6 +380,6 @@ export function UserManagementPage({ roles }: UserManagementPageProps) {
         onSubmit={handleUserSubmit}
         isLoading={createUser.isPending || updateUser.isPending}
       />
-    </div>
+    </LoadingOverlay>
   );
 }

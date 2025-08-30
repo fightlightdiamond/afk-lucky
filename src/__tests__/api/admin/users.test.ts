@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import prisma from "@/lib/prisma";
 import { createAbility } from "@/lib/ability";
 import bcrypt from "bcryptjs";
+import { UserManagementErrorCodes } from "@/types/user";
 
 // Mock dependencies
 vi.mock("next-auth");
@@ -527,6 +528,299 @@ describe("/api/admin/users", () => {
       expect(data.metadata.availableRoles).toHaveLength(1);
       expect(data.metadata.queryPerformance).toBeDefined();
     });
+
+    it("should handle empty search results gracefully", async () => {
+      (prisma.user.findMany as any).mockResolvedValue([]);
+      (prisma.user.count as any).mockResolvedValue(0);
+      (prisma.user.groupBy as any).mockResolvedValue([]);
+      (prisma.role.findMany as any).mockResolvedValue([]);
+
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/users?search=nonexistent"
+      );
+      const response = await GET(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.users).toHaveLength(0);
+      expect(data.pagination.total).toBe(0);
+      expect(data.metadata.totalActiveUsers).toBe(0);
+      expect(data.metadata.totalInactiveUsers).toBe(0);
+    });
+
+    it("should handle very large page numbers", async () => {
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/users?page=999999&pageSize=10"
+      );
+      const response = await GET(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.users).toHaveLength(0);
+      expect(data.pagination.page).toBe(999999);
+    });
+
+    it("should handle invalid date formats gracefully", async () => {
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/users?dateFrom=invalid-date&dateTo=also-invalid"
+      );
+      const response = await GET(request);
+
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.code).toBe(
+        UserManagementErrorCodes.INVALID_PAGINATION_PARAMS
+      );
+      expect(data.details.errors).toEqual(
+        expect.arrayContaining([
+          "Invalid dateFrom format",
+          "Invalid dateTo format",
+        ])
+      );
+    });
+
+    it("should handle role filter by name", async () => {
+      const filteredUsers = [
+        {
+          ...mockUsers[0],
+          sex: true,
+          birthday: null,
+          address: null,
+          remember_token: null,
+          slack_webhook_url: null,
+          deleted_at: null,
+          coin: BigInt(1000),
+          locale: "en",
+          group_id: 1,
+          role_id: "role-1",
+        },
+      ];
+      (prisma.user.findMany as any).mockResolvedValue(filteredUsers);
+      (prisma.user.count as any).mockResolvedValue(1);
+      (prisma.user.groupBy as any).mockResolvedValue([
+        { role_id: "role-1", is_active: true, _count: { id: 1 } },
+      ]);
+      (prisma.role.findMany as any).mockResolvedValue([
+        {
+          id: "role-1",
+          name: "USER",
+          description: "Regular user",
+          _count: { users: 1 },
+        },
+      ]);
+      (prisma.role.findUnique as any).mockResolvedValue({
+        id: "role-1",
+        name: "USER",
+      });
+
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/users?role=USER"
+      );
+      const response = await GET(request);
+
+      expect(response.status).toBe(200);
+      expect(prisma.role.findUnique).toHaveBeenCalledWith({
+        where: { name: "USER" },
+        select: { id: true },
+      });
+    });
+
+    it("should handle invalid role filter", async () => {
+      (prisma.role.findUnique as any).mockResolvedValue(null);
+
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/users?role=INVALID_ROLE"
+      );
+      const response = await GET(request);
+
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.code).toBe(UserManagementErrorCodes.INVALID_ROLE);
+    });
+
+    it("should handle complex search with multiple words", async () => {
+      const filteredUsers = [
+        {
+          ...mockUsers[0],
+          sex: true,
+          birthday: null,
+          address: null,
+          remember_token: null,
+          slack_webhook_url: null,
+          deleted_at: null,
+          coin: BigInt(1000),
+          locale: "en",
+          group_id: 1,
+          role_id: "role-1",
+        },
+      ];
+      (prisma.user.findMany as any).mockResolvedValue(filteredUsers);
+      (prisma.user.count as any).mockResolvedValue(1);
+      (prisma.user.groupBy as any).mockResolvedValue([
+        { role_id: "role-1", is_active: true, _count: { id: 1 } },
+      ]);
+      (prisma.role.findMany as any).mockResolvedValue([
+        {
+          id: "role-1",
+          name: "USER",
+          description: "Regular user",
+          _count: { users: 1 },
+        },
+      ]);
+
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/users?search=John Doe"
+      );
+      const response = await GET(request);
+
+      expect(response.status).toBe(200);
+      expect(prisma.user.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            AND: expect.arrayContaining([
+              expect.objectContaining({
+                OR: expect.arrayContaining([
+                  { first_name: { contains: "John Doe", mode: "insensitive" } },
+                  { last_name: { contains: "John Doe", mode: "insensitive" } },
+                  { email: { contains: "John Doe", mode: "insensitive" } },
+                  expect.objectContaining({
+                    AND: [
+                      { first_name: { contains: "John", mode: "insensitive" } },
+                      { last_name: { contains: "Doe", mode: "insensitive" } },
+                    ],
+                  }),
+                ]),
+              }),
+            ]),
+          }),
+        })
+      );
+    });
+
+    it("should handle locale and group filters", async () => {
+      const filteredUsers = [
+        {
+          ...mockUsers[0],
+          sex: true,
+          birthday: null,
+          address: null,
+          remember_token: null,
+          slack_webhook_url: null,
+          deleted_at: null,
+          coin: BigInt(1000),
+          locale: "en",
+          group_id: 1,
+          role_id: "role-1",
+        },
+      ];
+      (prisma.user.findMany as any).mockResolvedValue(filteredUsers);
+      (prisma.user.count as any).mockResolvedValue(1);
+      (prisma.user.groupBy as any).mockResolvedValue([
+        { role_id: "role-1", is_active: true, _count: { id: 1 } },
+      ]);
+      (prisma.role.findMany as any).mockResolvedValue([
+        {
+          id: "role-1",
+          name: "USER",
+          description: "Regular user",
+          _count: { users: 1 },
+        },
+      ]);
+
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/users?locale=en&group_id=1"
+      );
+      const response = await GET(request);
+
+      expect(response.status).toBe(200);
+      expect(prisma.user.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            AND: expect.arrayContaining([
+              expect.objectContaining({ locale: "en" }),
+              expect.objectContaining({ group_id: 1 }),
+            ]),
+          }),
+        })
+      );
+    });
+
+    it("should handle avatar filter", async () => {
+      const filteredUsers = [
+        {
+          ...mockUsers[0],
+          sex: true,
+          birthday: null,
+          address: null,
+          remember_token: null,
+          slack_webhook_url: null,
+          deleted_at: null,
+          coin: BigInt(1000),
+          locale: "en",
+          group_id: 1,
+          role_id: "role-1",
+          avatar: "avatar-url.jpg",
+        },
+      ];
+      (prisma.user.findMany as any).mockResolvedValue(filteredUsers);
+      (prisma.user.count as any).mockResolvedValue(1);
+      (prisma.user.groupBy as any).mockResolvedValue([
+        { role_id: "role-1", is_active: true, _count: { id: 1 } },
+      ]);
+      (prisma.role.findMany as any).mockResolvedValue([
+        {
+          id: "role-1",
+          name: "USER",
+          description: "Regular user",
+          _count: { users: 1 },
+        },
+      ]);
+
+      const request = new NextRequest(
+        "http://localhost:3000/api/admin/users?hasAvatar=true"
+      );
+      const response = await GET(request);
+
+      expect(response.status).toBe(200);
+      expect(prisma.user.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            AND: expect.arrayContaining([
+              expect.objectContaining({ avatar: { not: null } }),
+            ]),
+          }),
+        })
+      );
+    });
+
+    it("should handle Prisma validation errors", async () => {
+      const prismaValidationError = new Error("Validation error");
+      prismaValidationError.name = "PrismaClientValidationError";
+      (prisma.user.findMany as any).mockRejectedValue(prismaValidationError);
+
+      const request = new NextRequest("http://localhost:3000/api/admin/users");
+      const response = await GET(request);
+
+      expect(response.status).toBe(400);
+      const data = await response.json();
+      expect(data.code).toBe(UserManagementErrorCodes.VALIDATION_ERROR);
+    });
+
+    it("should handle Prisma known request errors", async () => {
+      const prismaKnownError = {
+        name: "PrismaClientKnownRequestError",
+        code: "P2002",
+        message: "Unique constraint failed",
+      };
+      (prisma.user.findMany as any).mockRejectedValue(prismaKnownError);
+
+      const request = new NextRequest("http://localhost:3000/api/admin/users");
+      const response = await GET(request);
+
+      expect(response.status).toBe(500);
+      const data = await response.json();
+      expect(data.code).toBe(UserManagementErrorCodes.DATABASE_ERROR);
+    });
   });
 
   describe("POST /api/admin/users", () => {
@@ -783,6 +1077,146 @@ describe("/api/admin/users", () => {
       expect(response.status).toBe(201);
       expect(data.validation?.warnings).toBeDefined();
       expect(data.validation?.warnings?.length).toBeGreaterThan(0);
+    });
+
+    it("should handle database connection errors", async () => {
+      (prisma.user.findUnique as any).mockRejectedValue(
+        new Error("Connection timeout")
+      );
+
+      const request = new NextRequest("http://localhost:3000/api/admin/users", {
+        method: "POST",
+        body: JSON.stringify(validUserData),
+      });
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(500);
+      expect(data.code).toBe(UserManagementErrorCodes.INTERNAL_SERVER_ERROR);
+    });
+
+    it("should validate email uniqueness case-insensitively", async () => {
+      const upperCaseEmailData = {
+        ...validUserData,
+        email: "NEWUSER@EXAMPLE.COM",
+      };
+
+      (prisma.user.findUnique as any).mockResolvedValue({
+        id: "existing-user",
+        email: "newuser@example.com",
+      });
+
+      const request = new NextRequest("http://localhost:3000/api/admin/users", {
+        method: "POST",
+        body: JSON.stringify(upperCaseEmailData),
+      });
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(data.code).toBe(UserManagementErrorCodes.EMAIL_ALREADY_EXISTS);
+    });
+
+    it("should handle very long field values", async () => {
+      const longFieldData = {
+        ...validUserData,
+        first_name: "A".repeat(256), // Assuming max length is 255
+        address: "B".repeat(1001), // Assuming max length is 1000
+      };
+
+      const request = new NextRequest("http://localhost:3000/api/admin/users", {
+        method: "POST",
+        body: JSON.stringify(longFieldData),
+      });
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(data.code).toBe(UserManagementErrorCodes.VALIDATION_ERROR);
+      expect(data.details.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ field: "first_name" }),
+          expect.objectContaining({ field: "address" }),
+        ])
+      );
+    });
+
+    it("should validate birthday is not in the future", async () => {
+      const futureBirthdayData = {
+        ...validUserData,
+        birthday: new Date(Date.now() + 86400000).toISOString(), // Tomorrow
+      };
+
+      const request = new NextRequest("http://localhost:3000/api/admin/users", {
+        method: "POST",
+        body: JSON.stringify(futureBirthdayData),
+      });
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(data.code).toBe(UserManagementErrorCodes.VALIDATION_ERROR);
+      expect(data.details.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            field: "birthday",
+            message: "Birthday cannot be in the future",
+          }),
+        ])
+      );
+    });
+
+    it("should handle special characters in names", async () => {
+      const specialCharData = {
+        ...validUserData,
+        first_name: "José",
+        last_name: "García-López",
+      };
+
+      const createdUser = {
+        id: "new-user-id",
+        ...specialCharData,
+        password: "hashed-password",
+        created_at: new Date(),
+        updated_at: new Date(),
+        sex: true,
+        birthday: null,
+        address: null,
+        remember_token: null,
+        slack_webhook_url: null,
+        deleted_at: null,
+        coin: BigInt(1000),
+        locale: "en",
+        group_id: 1,
+        last_login: null,
+        last_logout: null,
+        avatar: null,
+        role: {
+          id: "role-1",
+          name: "USER",
+          permissions: ["read:profile"],
+          description: "Regular user",
+        },
+      };
+
+      (prisma.user.create as any).mockResolvedValue(createdUser);
+
+      const request = new NextRequest("http://localhost:3000/api/admin/users", {
+        method: "POST",
+        body: JSON.stringify(specialCharData),
+      });
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(201);
+      expect(data.user.first_name).toBe("José");
+      expect(data.user.last_name).toBe("García-López");
+      expect(data.user.full_name).toBe("José García-López");
     });
   });
 

@@ -760,6 +760,8 @@ export interface ImportOptions {
   defaultRole?: string;
   defaultStatus?: boolean;
   fieldMapping?: Record<string, string>;
+  sendWelcomeEmail?: boolean;
+  requirePasswordReset?: boolean;
 }
 
 export interface ImportResponse {
@@ -776,6 +778,7 @@ export interface ImportResponse {
   errors: ImportError[];
   warnings: ImportWarning[];
   previewData?: User[];
+  operationId?: string; // For tracking async operations
 }
 
 export interface ImportError {
@@ -791,6 +794,39 @@ export interface ImportWarning {
   field?: string;
   message: string;
   value?: unknown;
+}
+
+export interface ImportPreviewRequest {
+  file: File;
+  fieldMapping?: Record<string, string>;
+}
+
+export interface ImportPreviewResponse {
+  success: boolean;
+  preview: {
+    headers: string[];
+    rows: Record<string, unknown>[];
+    totalRows: number;
+    previewRows: number;
+  };
+  validation: {
+    validRows: number;
+    invalidRows: number;
+    errors: ImportError[];
+    warnings: ImportWarning[];
+  };
+  suggestedMapping: Record<string, string>;
+}
+
+export interface ImportProgressResponse {
+  operationId: string;
+  status: "pending" | "processing" | "completed" | "failed";
+  progress: number; // 0-100
+  processed: number;
+  total: number;
+  startedAt: string;
+  estimatedCompletion?: string;
+  result?: ImportResponse;
 }
 
 // User activity tracking interfaces

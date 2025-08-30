@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import { fn } from "storybook/test";
 import { UserPagination } from "@/components/admin/UserPagination";
 import { PaginationParams } from "@/types/user";
 
@@ -10,187 +10,219 @@ const meta: Meta<typeof UserPagination> = {
     layout: "centered",
     docs: {
       description: {
-        component: `
-The UserPagination component provides comprehensive pagination controls for the admin user management interface.
-
-## Features
-- **Page size selection**: Dropdown to change number of items per page
-- **Navigation controls**: First, Previous, Next, Last buttons
-- **Direct page navigation**: Input field to jump to specific page
-- **Results display**: Shows current range and total count
-- **Responsive design**: Adapts to different screen sizes
-- **Loading states**: Disables controls during data loading
-
-## Usage
-This component is designed to work with the enhanced user management API and provides all necessary pagination functionality.
-        `,
+        component:
+          "A comprehensive pagination component for the user management table. Features page navigation, page size selection, quick jump functionality, and responsive design.",
       },
     },
   },
   argTypes: {
     pagination: {
-      description: "Pagination parameters including current page, total, etc.",
+      description: "Pagination state object with current page, total, etc.",
+      control: { type: "object" },
     },
     onPageChange: {
-      description: "Callback when page is changed",
+      description: "Callback when page changes",
+      action: "pageChange",
     },
     onPageSizeChange: {
-      description: "Callback when page size is changed",
+      description: "Callback when page size changes",
+      action: "pageSizeChange",
     },
-    isLoading: {
-      description: "Whether the component is in loading state",
-      control: "boolean",
+    disabled: {
+      description: "Whether pagination is disabled",
+      control: { type: "boolean" },
+    },
+    showSizeChanger: {
+      description: "Whether to show page size selector",
+      control: { type: "boolean" },
+    },
+    showQuickJumper: {
+      description: "Whether to show quick page jump input",
+      control: { type: "boolean" },
+    },
+    showTotal: {
+      description: "Whether to show total count information",
+      control: { type: "boolean" },
     },
   },
-  args: {
-    onPageChange: action("onPageChange"),
-    onPageSizeChange: action("onPageSizeChange"),
-  },
+  tags: ["autodocs"],
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof UserPagination>;
 
+// Sample pagination data
 const createPagination = (
-  overrides: Partial<PaginationParams> = {}
+  page: number,
+  pageSize: number,
+  total: number
 ): PaginationParams => ({
-  page: 1,
-  pageSize: 20,
-  total: 100,
-  totalPages: 5,
-  hasNextPage: true,
-  hasPreviousPage: false,
-  startIndex: 1,
-  endIndex: 20,
-  offset: 0,
-  limit: 20,
-  isFirstPage: true,
-  isLastPage: false,
-  ...overrides,
+  page,
+  pageSize,
+  total,
+  totalPages: Math.ceil(total / pageSize),
+  hasNextPage: page < Math.ceil(total / pageSize),
+  hasPreviousPage: page > 1,
+  startIndex: (page - 1) * pageSize + 1,
+  endIndex: Math.min(page * pageSize, total),
+  offset: (page - 1) * pageSize,
+  limit: pageSize,
+  isFirstPage: page === 1,
+  isLastPage: page === Math.ceil(total / pageSize),
 });
-// Default story - First page
+
 export const Default: Story = {
   args: {
-    pagination: createPagination(),
-    isLoading: false,
+    pagination: createPagination(1, 20, 150),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
   },
 };
 
-// Middle page
 export const MiddlePage: Story = {
   args: {
-    pagination: createPagination({
-      page: 3,
-      hasPreviousPage: true,
-      hasNextPage: true,
-      startIndex: 41,
-      endIndex: 60,
-      isFirstPage: false,
-      isLastPage: false,
-    }),
-    isLoading: false,
+    pagination: createPagination(5, 20, 150),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
   },
 };
 
-// Last page
 export const LastPage: Story = {
   args: {
-    pagination: createPagination({
-      page: 5,
-      hasPreviousPage: true,
-      hasNextPage: false,
-      startIndex: 81,
-      endIndex: 100,
-      isFirstPage: false,
-      isLastPage: true,
-    }),
-    isLoading: false,
+    pagination: createPagination(8, 20, 150),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
   },
 };
 
-// Large dataset with jump to page
-export const LargeDataset: Story = {
-  args: {
-    pagination: createPagination({
-      page: 25,
-      total: 1000,
-      totalPages: 50,
-      hasPreviousPage: true,
-      hasNextPage: true,
-      startIndex: 481,
-      endIndex: 500,
-      isFirstPage: false,
-      isLastPage: false,
-    }),
-    isLoading: false,
-  },
-};
-
-// Loading state
-export const Loading: Story = {
-  args: {
-    pagination: createPagination(),
-    isLoading: true,
-  },
-};
-
-// Small dataset (single page)
 export const SinglePage: Story = {
   args: {
-    pagination: createPagination({
-      page: 1,
-      total: 15,
-      totalPages: 1,
-      hasNextPage: false,
-      hasPreviousPage: false,
-      startIndex: 1,
-      endIndex: 15,
-      isFirstPage: true,
-      isLastPage: true,
-    }),
-    isLoading: false,
+    pagination: createPagination(1, 20, 15),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
   },
 };
 
-// Empty state (no results)
-export const EmptyState: Story = {
+export const LargeDataset: Story = {
   args: {
-    pagination: createPagination({
-      page: 1,
-      total: 0,
-      totalPages: 0,
-      hasNextPage: false,
-      hasPreviousPage: false,
-      startIndex: 0,
-      endIndex: 0,
-      isFirstPage: true,
-      isLastPage: true,
-    }),
-    isLoading: false,
-  },
-};
-
-// Different page sizes
-export const LargePageSize: Story = {
-  args: {
-    pagination: createPagination({
-      pageSize: 100,
-      total: 500,
-      totalPages: 5,
-      endIndex: 100,
-    }),
-    isLoading: false,
+    pagination: createPagination(25, 50, 5000),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
   },
 };
 
 export const SmallPageSize: Story = {
   args: {
-    pagination: createPagination({
-      pageSize: 10,
-      total: 100,
-      totalPages: 10,
-      endIndex: 10,
-    }),
-    isLoading: false,
+    pagination: createPagination(3, 10, 150),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
+  },
+};
+
+export const LargePageSize: Story = {
+  args: {
+    pagination: createPagination(2, 100, 150),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
+  },
+};
+
+export const DisabledState: Story = {
+  args: {
+    pagination: createPagination(3, 20, 150),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: true,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
+  },
+};
+
+export const MinimalView: Story = {
+  args: {
+    pagination: createPagination(3, 20, 150),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: false,
+    showQuickJumper: false,
+    showTotal: false,
+  },
+};
+
+export const WithoutSizeChanger: Story = {
+  args: {
+    pagination: createPagination(3, 20, 150),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: false,
+    showQuickJumper: true,
+    showTotal: true,
+  },
+};
+
+export const WithoutQuickJumper: Story = {
+  args: {
+    pagination: createPagination(3, 20, 150),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: false,
+    showTotal: true,
+  },
+};
+
+export const EmptyDataset: Story = {
+  args: {
+    pagination: createPagination(1, 20, 0),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
+  },
+};
+
+export const ManyPages: Story = {
+  args: {
+    pagination: createPagination(150, 20, 10000),
+    onPageChange: fn(),
+    onPageSizeChange: fn(),
+    disabled: false,
+    showSizeChanger: true,
+    showQuickJumper: true,
+    showTotal: true,
   },
 };

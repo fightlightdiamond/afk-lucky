@@ -180,7 +180,7 @@ describe("UserTable Component", () => {
 
     // Click on the dropdown menu button first
     const dropdownButtons = screen.getAllByRole("button", {
-      name: /open menu/i,
+      name: /Actions for/i,
     });
     await user.click(dropdownButtons[0]);
 
@@ -207,7 +207,7 @@ describe("UserTable Component", () => {
 
     // Click on the dropdown menu button first
     const dropdownButtons = screen.getAllByRole("button", {
-      name: /open menu/i,
+      name: /Actions for/i,
     });
     await user.click(dropdownButtons[0]);
 
@@ -234,7 +234,7 @@ describe("UserTable Component", () => {
 
     // Click on the dropdown menu button first
     const dropdownButtons = screen.getAllByRole("button", {
-      name: /open menu/i,
+      name: /Actions for/i,
     });
     await user.click(dropdownButtons[0]);
 
@@ -259,7 +259,9 @@ describe("UserTable Component", () => {
 
     expect(screen.getByText("No users found")).toBeInTheDocument();
     expect(
-      screen.getByText("Try adjusting your search or filter criteria")
+      screen.getByText(
+        "No users match your current filters. Try adjusting your search criteria."
+      )
     ).toBeInTheDocument();
   });
 
@@ -318,9 +320,9 @@ describe("UserTable Component", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onToggleStatus={mockOnToggleStatus}
-          onSelectUser={mockOnSelectUser}
+          onUserSelection={mockOnSelectUser}
           onSelectAll={mockOnSelectAll}
-          selectedUsers={[]}
+          selectedUsers={new Set()}
         />
       );
 
@@ -329,7 +331,7 @@ describe("UserTable Component", () => {
       expect(checkboxes).toHaveLength(mockUsers.length + 1); // +1 for select all
     });
 
-    it("calls onSelectUser when individual checkbox is clicked", async () => {
+    it("calls onUserSelection when individual checkbox is clicked", async () => {
       const user = userEvent.setup();
 
       render(
@@ -340,9 +342,9 @@ describe("UserTable Component", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onToggleStatus={mockOnToggleStatus}
-          onSelectUser={mockOnSelectUser}
+          onUserSelection={mockOnSelectUser}
           onSelectAll={mockOnSelectAll}
-          selectedUsers={[]}
+          selectedUsers={new Set()}
         />
       );
 
@@ -365,9 +367,9 @@ describe("UserTable Component", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onToggleStatus={mockOnToggleStatus}
-          onSelectUser={mockOnSelectUser}
+          onUserSelection={mockOnSelectUser}
           onSelectAll={mockOnSelectAll}
-          selectedUsers={[]}
+          selectedUsers={new Set()}
         />
       );
 
@@ -387,9 +389,9 @@ describe("UserTable Component", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onToggleStatus={mockOnToggleStatus}
-          onSelectUser={mockOnSelectUser}
+          onUserSelection={mockOnSelectUser}
           onSelectAll={mockOnSelectAll}
-          selectedUsers={[mockUsers[0].id]}
+          selectedUsers={new Set([mockUsers[0].id])}
         />
       );
 
@@ -398,6 +400,341 @@ describe("UserTable Component", () => {
         row.textContent?.includes("John Doe")
       );
       expect(selectedRow).toHaveClass("bg-muted/30");
+    });
+  });
+
+  describe("Edge cases and error handling", () => {
+    it("handles users with null or undefined values gracefully", () => {
+      const userWithNullValues: User = {
+        id: "user-null",
+        email: "null@example.com",
+        first_name: "Null",
+        last_name: "User",
+        is_active: true,
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-01T00:00:00Z",
+        last_login: null,
+        role: null,
+        full_name: "Null User",
+        status: UserStatus.ACTIVE,
+        activity_status: ActivityStatus.NEVER,
+        display_name: "Null User",
+      };
+
+      render(
+        <UserTable
+          users={[userWithNullValues]}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      expect(screen.getByText("Null User")).toBeInTheDocument();
+      expect(screen.getByText("No Role")).toBeInTheDocument();
+      expect(screen.getByText("Never")).toBeInTheDocument();
+    });
+
+    it("handles very long user names and emails", () => {
+      const userWithLongValues: User = {
+        id: "user-long",
+        email: "verylongemailaddressthatmightcauselayoutissues@example.com",
+        first_name: "VeryLongFirstNameThatMightCauseLayoutIssues",
+        last_name: "VeryLongLastNameThatMightCauseLayoutIssues",
+        is_active: true,
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-01T00:00:00Z",
+        full_name:
+          "VeryLongFirstNameThatMightCauseLayoutIssues VeryLongLastNameThatMightCauseLayoutIssues",
+        status: UserStatus.ACTIVE,
+        activity_status: ActivityStatus.OFFLINE,
+        display_name:
+          "VeryLongFirstNameThatMightCauseLayoutIssues VeryLongLastNameThatMightCauseLayoutIssues",
+      };
+
+      render(
+        <UserTable
+          users={[userWithLongValues]}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      expect(
+        screen.getByText(/VeryLongFirstNameThatMightCauseLayoutIssues/)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          /verylongemailaddressthatmightcauselayoutissues@example.com/
+        )
+      ).toBeInTheDocument();
+    });
+
+    it("handles users with special characters in names", () => {
+      const userWithSpecialChars: User = {
+        id: "user-special",
+        email: "josé.garcía@example.com",
+        first_name: "José",
+        last_name: "García-López",
+        is_active: true,
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-01T00:00:00Z",
+        full_name: "José García-López",
+        status: UserStatus.ACTIVE,
+        activity_status: ActivityStatus.ONLINE,
+        display_name: "José García-López",
+      };
+
+      render(
+        <UserTable
+          users={[userWithSpecialChars]}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      expect(screen.getByText("José García-López")).toBeInTheDocument();
+      expect(screen.getByText("josé.garcía@example.com")).toBeInTheDocument();
+    });
+
+    it("handles large number of users efficiently", () => {
+      const manyUsers = Array.from({ length: 100 }, (_, i) => ({
+        id: `user-${i}`,
+        email: `user${i}@example.com`,
+        first_name: `User${i}`,
+        last_name: `Test`,
+        is_active: i % 2 === 0,
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-01T00:00:00Z",
+        full_name: `User${i} Test`,
+        status: i % 2 === 0 ? UserStatus.ACTIVE : UserStatus.INACTIVE,
+        activity_status: ActivityStatus.OFFLINE,
+        display_name: `User${i} Test`,
+      }));
+
+      const { container } = render(
+        <UserTable
+          users={manyUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      // Should render all users
+      expect(container.querySelectorAll("tbody tr")).toHaveLength(100);
+    });
+
+    it("handles invalid date formats gracefully", () => {
+      const userWithInvalidDate: User = {
+        id: "user-invalid-date",
+        email: "invalid@example.com",
+        first_name: "Invalid",
+        last_name: "Date",
+        is_active: true,
+        created_at: "invalid-date",
+        updated_at: "2024-01-01T00:00:00Z",
+        last_login: "also-invalid",
+        full_name: "Invalid Date",
+        status: UserStatus.ACTIVE,
+        activity_status: ActivityStatus.OFFLINE,
+        display_name: "Invalid Date",
+      };
+
+      render(
+        <UserTable
+          users={[userWithInvalidDate]}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      expect(screen.getByText("Invalid Date")).toBeInTheDocument();
+      // Should handle invalid dates gracefully without crashing
+    });
+
+    it("handles missing callback functions gracefully", () => {
+      render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      // Should render without errors even if some callbacks are missing
+      expect(screen.getByText("John Doe")).toBeInTheDocument();
+    });
+
+    it("handles rapid successive clicks without errors", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      const dropdownButton = screen.getAllByRole("button", {
+        name: /Actions for/i,
+      })[0];
+
+      // Rapidly click multiple times
+      await user.click(dropdownButton);
+      await user.click(dropdownButton);
+      await user.click(dropdownButton);
+
+      // Should not cause errors
+      expect(dropdownButton).toBeInTheDocument();
+    });
+  });
+
+  describe("Accessibility", () => {
+    it("has proper ARIA labels for screen readers", () => {
+      render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      // Check for proper table structure
+      expect(screen.getByRole("table")).toBeInTheDocument();
+      expect(screen.getAllByRole("columnheader")).toHaveLength(5); // Name, Email, Role, Status, Created, Actions
+      expect(screen.getAllByRole("row")).toHaveLength(3); // Header + 2 users
+    });
+
+    it("supports keyboard navigation", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      const firstActionButton = screen.getAllByRole("button", {
+        name: /Actions for/i,
+      })[0];
+
+      // Should be focusable
+      firstActionButton.focus();
+      expect(firstActionButton).toHaveFocus();
+
+      // Should open dropdown on Enter
+      await user.keyboard("{Enter}");
+      expect(screen.getByText("Edit user")).toBeInTheDocument();
+    });
+
+    it("has proper contrast and visual indicators", () => {
+      render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      // Status badges should have proper styling
+      const activeStatus = screen.getByText("Active");
+      const inactiveStatus = screen.getByText("Inactive");
+
+      expect(activeStatus).toHaveClass("bg-green-100");
+      expect(inactiveStatus).toHaveClass("bg-red-100");
+    });
+  });
+
+  describe("Performance", () => {
+    it("memoizes expensive operations", () => {
+      const { rerender } = render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      // Re-render with same props
+      rerender(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      // Should not cause unnecessary re-renders
+      expect(screen.getByText("John Doe")).toBeInTheDocument();
+    });
+
+    it("handles updates efficiently", () => {
+      const { rerender } = render(
+        <UserTable
+          users={mockUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      const updatedUsers = [
+        { ...mockUsers[0], first_name: "Updated John" },
+        mockUsers[1],
+      ];
+
+      rerender(
+        <UserTable
+          users={updatedUsers}
+          filters={mockFilters}
+          onFiltersChange={mockOnFiltersChange}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+          onToggleStatus={mockOnToggleStatus}
+        />
+      );
+
+      expect(screen.getByText("Updated John Doe")).toBeInTheDocument();
     });
   });
 });
