@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Download, FileText, Table, Code } from "lucide-react";
 import {
   Dialog,
@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { ExportFormat, UserFilters, EXPORT_LIMITS } from "@/types/user";
+import { focusManagement } from "@/lib/accessibility";
 
 interface ExportDialogProps {
   open: boolean;
@@ -137,6 +138,10 @@ export function ExportDialog({
   const [isExporting, setIsExporting] = useState(false);
   const { toast } = useToast();
 
+  // Accessibility refs
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<Element | null>(null);
+
   // Update selected fields when format changes
   const handleFormatChange = (newFormat: ExportFormat) => {
     setFormat(newFormat);
@@ -225,17 +230,40 @@ export function ExportDialog({
   const activeFiltersCount = getActiveFiltersCount();
   const isOverLimit = totalRecords > EXPORT_LIMITS.MAX_RECORDS;
 
+  // Handle dialog focus management
+  useEffect(() => {
+    if (open) {
+      previousFocusRef.current = focusManagement.storeFocus();
+    }
+  }, [open]);
+
+  const handleClose = () => {
+    onClose();
+    // Restore focus after a brief delay to ensure dialog is closed
+    setTimeout(() => {
+      focusManagement.restoreFocus(previousFocusRef.current);
+    }, 100);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent
+        className="max-w-2xl max-h-[80vh] overflow-y-auto"
+        ref={dialogRef}
+        aria-describedby="export-dialog-description"
+      >
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Download className="w-5 h-5" />
+          <DialogTitle
+            className="flex items-center gap-2"
+            id="export-dialog-title"
+          >
+            <Download className="w-5 h-5" aria-hidden="true" />
             Export Users
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription id="export-dialog-description">
             Export user data with your current filters applied. Choose format
-            and fields to include.
+            and fields to include. {totalRecords} record
+            {totalRecords === 1 ? "" : "s"} will be exported.
           </DialogDescription>
         </DialogHeader>
 
@@ -269,15 +297,18 @@ export function ExportDialog({
 
           {/* Format Selection */}
           <div className="space-y-3">
-            <Label>Export Format</Label>
+            <Label htmlFor="format-select">Export Format</Label>
             <Select value={format} onValueChange={handleFormatChange}>
-              <SelectTrigger>
+              <SelectTrigger
+                id="format-select"
+                aria-label={`Export format, currently ${format.toUpperCase()}`}
+              >
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="csv">
+              <SelectContent role="listbox" aria-label="Export format options">
+                <SelectItem value="csv" role="option">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4" />
+                    <FileText className="w-4 h-4" aria-hidden="true" />
                     <div>
                       <div>CSV</div>
                       <div className="text-xs text-muted-foreground">
@@ -348,13 +379,17 @@ export function ExportDialog({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-60 overflow-y-auto border rounded-md p-3">
+              <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-60 overflow-y-auto border rounded-md p-3">
+                <legend className="sr-only">
+                  Select fields to include in export
+                </legend>
                 {EXPORT_FIELDS.map((field) => (
                   <div key={field.key} className="flex items-start space-x-2">
                     <Checkbox
                       id={field.key}
                       checked={selectedFields.includes(field.key)}
                       onCheckedChange={() => toggleField(field.key)}
+                      aria-describedby={`${field.key}-description`}
                     />
                     <div className="grid gap-1.5 leading-none">
                       <label
@@ -363,16 +398,23 @@ export function ExportDialog({
                       >
                         {field.label}
                       </label>
-                      <p className="text-xs text-muted-foreground">
+                      <p
+                        id={`${field.key}-description`}
+                        className="text-xs text-muted-foreground"
+                      >
                         {field.description}
                       </p>
                     </div>
                   </div>
                 ))}
-              </div>
+              </fieldset>
 
               {selectedFields.length > 0 && (
-                <div className="text-sm text-muted-foreground">
+                <div
+                  className="text-sm text-muted-foreground"
+                  role="status"
+                  aria-live="polite"
+                >
                   Selected {selectedFields.length} of {EXPORT_FIELDS.length}{" "}
                   fields
                 </div>
@@ -400,7 +442,12 @@ export function ExportDialog({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose} disabled={isExporting}>
+          <Button
+            variant="outline"
+            onClick={handleClose}
+            disabled={isExporting}
+            aria-label="Cancel export and close dialog"
+          >
             Cancel
           </Button>
           <Button
@@ -410,19 +457,41 @@ export function ExportDialog({
               isOverLimit ||
               (format !== "json" && selectedFields.length === 0)
             }
+            aria-label={
+              isExporting
+                ? "Export in progress"
+                : `Export ${totalRecords} record${
+                    totalRecords === 1 ? "" : "s"
+                  } as ${format.toUpperCase()}`
+            }
+            aria-describedby="export-button-description"
           >
             {isExporting ? (
               <>
-                <Download className="w-4 h-4 mr-2 animate-spin" />
+                <Download
+                  className="w-4 h-4 mr-2 animate-spin"
+                  aria-hidden="true"
+                />
                 Exporting...
               </>
             ) : (
               <>
-                <Download className="w-4 h-4 mr-2" />
+                <Download className="w-4 h-4 mr-2" aria-hidden="true" />
                 Export {format.toUpperCase()}
               </>
             )}
           </Button>
+          <div id="export-button-description" className="sr-only">
+            {isExporting
+              ? "Export is currently in progress, please wait"
+              : isOverLimit
+              ? `Cannot export: ${totalRecords} records exceeds the limit of ${EXPORT_LIMITS.MAX_RECORDS}`
+              : format !== "json" && selectedFields.length === 0
+              ? "Cannot export: no fields selected"
+              : `Ready to export ${totalRecords} record${
+                  totalRecords === 1 ? "" : "s"
+                } in ${format.toUpperCase()} format`}
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

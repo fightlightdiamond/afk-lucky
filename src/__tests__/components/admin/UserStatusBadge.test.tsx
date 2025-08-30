@@ -42,35 +42,35 @@ describe("UserStatusBadge", () => {
     const user = createMockUser(UserStatus.ACTIVE);
     render(<UserStatusBadge user={user} />);
 
-    expect(screen.getByText("Active")).toBeInTheDocument();
+    expect(screen.getAllByText("Active")).toHaveLength(2); // Badge and tooltip
   });
 
   it("renders inactive status correctly", () => {
     const user = createMockUser(UserStatus.INACTIVE, false);
     render(<UserStatusBadge user={user} />);
 
-    expect(screen.getByText("Inactive")).toBeInTheDocument();
+    expect(screen.getAllByText("Inactive")).toHaveLength(2); // Badge and tooltip
   });
 
   it("renders banned status correctly", () => {
     const user = createMockUser(UserStatus.BANNED, false);
     render(<UserStatusBadge user={user} />);
 
-    expect(screen.getByText("Banned")).toBeInTheDocument();
+    expect(screen.getAllByText("Banned")).toHaveLength(2); // Badge and tooltip
   });
 
   it("renders suspended status correctly", () => {
     const user = createMockUser(UserStatus.SUSPENDED, false);
     render(<UserStatusBadge user={user} />);
 
-    expect(screen.getByText("Suspended")).toBeInTheDocument();
+    expect(screen.getAllByText("Suspended")).toHaveLength(2); // Badge and tooltip
   });
 
   it("renders pending status correctly", () => {
     const user = createMockUser(UserStatus.PENDING, false);
     render(<UserStatusBadge user={user} />);
 
-    expect(screen.getByText("Pending")).toBeInTheDocument();
+    expect(screen.getAllByText("Pending")).toHaveLength(2); // Badge and tooltip
   });
 
   it("renders without tooltip when showTooltip is false", () => {
@@ -85,7 +85,7 @@ describe("UserStatusBadge", () => {
     const user = createMockUser(UserStatus.ACTIVE);
     render(<UserStatusBadge user={user} showIcon={false} />);
 
-    expect(screen.getByText("Active")).toBeInTheDocument();
+    expect(screen.getAllByText("Active")).toHaveLength(2); // Badge and tooltip
     // Icon should not be rendered
   });
 
@@ -93,7 +93,8 @@ describe("UserStatusBadge", () => {
     const user = createMockUser(UserStatus.ACTIVE);
     render(<UserStatusBadge user={user} showLabel={false} />);
 
-    expect(screen.queryByText("Active")).not.toBeInTheDocument();
+    // Should only have text in tooltip, not in badge
+    expect(screen.getAllByText("Active")).toHaveLength(1); // Only tooltip
   });
 
   it("applies custom className", () => {
@@ -109,13 +110,13 @@ describe("UserStatusBadge", () => {
     const user = createMockUser(UserStatus.ACTIVE);
 
     const { rerender } = render(<UserStatusBadge user={user} size="sm" />);
-    expect(screen.getByText("Active")).toBeInTheDocument();
+    expect(screen.getAllByText("Active")).toHaveLength(2); // Badge and tooltip
 
     rerender(<UserStatusBadge user={user} size="md" />);
-    expect(screen.getByText("Active")).toBeInTheDocument();
+    expect(screen.getAllByText("Active")).toHaveLength(2); // Badge and tooltip
 
     rerender(<UserStatusBadge user={user} size="lg" />);
-    expect(screen.getByText("Active")).toBeInTheDocument();
+    expect(screen.getAllByText("Active")).toHaveLength(2); // Badge and tooltip
   });
 });
 

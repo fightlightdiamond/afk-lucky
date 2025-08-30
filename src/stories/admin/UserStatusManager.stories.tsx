@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 import { UserStatusManager } from "@/components/admin/UserStatusManager";
 import { UserStatusBadge } from "@/components/admin/UserStatusBadge";
 import { User, UserStatus } from "@/types/user";

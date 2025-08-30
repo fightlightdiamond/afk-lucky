@@ -1,367 +1,64 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { action } from "@storybook/addon-actions";
+import { fn } from "storybook/test";
 import { useState } from "react";
-import { User } from "@/types/user";
+import { UserDialog } from "@/components/admin/UserDialog";
+import { User, Role, UserRole, UserStatus, ActivityStatus } from "@/types/user";
 
-// Mock UserDialog component
-const UserDialog = ({
-  user,
-  roles,
-  open,
-  onClose,
-  onSave,
-}: {
-  user?: User;
-  roles: Array<{ id: string; name: string; description?: string }>;
-  open: boolean;
-  onClose: () => void;
-  onSave: (userData: any) => void;
-}) => {
-  const [formData, setFormData] = useState({
-    email: user?.email || "",
-    first_name: user?.first_name || "",
-    last_name: user?.last_name || "",
-    password: "",
-    role_id: user?.role?.id || "",
-    is_active: user?.is_active ?? true,
-  });
-
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value === "no-role" ? "" : value,
-    }));
-  };
-
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    if (!formData.first_name) {
-      newErrors.first_name = "First name is required";
-    }
-
-    if (!formData.last_name) {
-      newErrors.last_name = "Last name is required";
-    }
-
-    if (!user && !formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password && formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      const submitData = { ...formData };
-      if (user && !submitData.password) {
-        delete (submitData as any).password;
-      }
-
-      onSave(submitData);
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  if (!open) return null;
-
-  const selectedRole = roles.find((role) => role.id === formData.role_id);
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold">
-            {user ? "Edit User" : "Create New User"}
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
-          >
-            ✕
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name Fields */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                First Name *
-              </label>
-              <input
-                type="text"
-                name="first_name"
-                value={formData.first_name}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.first_name ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="Enter first name"
-              />
-              {errors.first_name && (
-                <p className="text-red-500 text-xs mt-1">{errors.first_name}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Last Name *
-              </label>
-              <input
-                type="text"
-                name="last_name"
-                value={formData.last_name}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.last_name ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="Enter last name"
-              />
-              {errors.last_name && (
-                <p className="text-red-500 text-xs mt-1">{errors.last_name}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email *
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Enter email address"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-            )}
-          </div>
-
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password {user && "(leave blank to keep current)"}
-              {!user && " *"}
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder={user ? "Enter new password" : "Enter password"}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-            )}
-            {formData.password && (
-              <div className="mt-1">
-                <div className="text-xs text-gray-500">Password strength:</div>
-                <div className="flex space-x-1 mt-1">
-                  {[1, 2, 3, 4].map((level) => (
-                    <div
-                      key={level}
-                      className={`h-1 flex-1 rounded ${
-                        formData.password.length >= level * 2
-                          ? formData.password.length >= 8
-                            ? "bg-green-500"
-                            : "bg-yellow-500"
-                          : "bg-gray-200"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Role */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Role
-            </label>
-            <select
-              value={formData.role_id || "no-role"}
-              onChange={(e) => handleSelectChange("role_id", e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="no-role">No Role</option>
-              {roles.map((role) => (
-                <option key={role.id} value={role.id}>
-                  {role.name}
-                </option>
-              ))}
-            </select>
-
-            {/* Role Preview */}
-            {selectedRole && (
-              <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                <div className="text-sm font-medium text-blue-900">
-                  {selectedRole.name}
-                </div>
-                {selectedRole.description && (
-                  <div className="text-xs text-blue-700 mt-1">
-                    {selectedRole.description}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Active Status */}
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              name="is_active"
-              id="is_active"
-              checked={formData.is_active}
-              onChange={handleInputChange}
-              className="rounded"
-            />
-            <label
-              htmlFor="is_active"
-              className="text-sm font-medium text-gray-700"
-            >
-              Active User
-            </label>
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end space-x-3 pt-6 border-t">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
-              disabled={isLoading}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center"
-            >
-              {isLoading && (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              )}
-              {isLoading
-                ? user
-                  ? "Updating..."
-                  : "Creating..."
-                : user
-                ? "Update User"
-                : "Create User"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-const meta: Meta<typeof UserDialog> = {
-  title: "Admin/UserDialog",
-  component: UserDialog,
-  parameters: {
-    layout: "fullscreen",
-    docs: {
-      description: {
-        component:
-          "A modal dialog for creating and editing users with form validation, role selection, and password strength indicator.",
-      },
-    },
-  },
-  argTypes: {
-    user: {
-      description: "User object for editing (undefined for creating new user)",
-    },
-    roles: {
-      description: "Available roles for selection",
-    },
-    open: {
-      description: "Whether the dialog is open",
-      control: "boolean",
-    },
-    onClose: {
-      description: "Callback when dialog is closed",
-      action: "close",
-    },
-    onSave: {
-      description: "Callback when form is submitted",
-      action: "save",
-    },
-  },
-};
-
-export default meta;
-type Story = StoryObj<typeof UserDialog>;
-
-const sampleRoles = [
+// Sample roles for the dialog
+const sampleRoles: Role[] = [
   {
     id: "role-admin",
-    name: "ADMIN",
-    description: "Full system access with all permissions",
+    name: UserRole.ADMIN,
+    description: "System Administrator with full access",
+    permissions: [
+      "user:read",
+      "user:write",
+      "user:delete",
+      "role:manage",
+      "system:admin",
+      "content:manage",
+      "analytics:view",
+    ],
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
   },
   {
     id: "role-editor",
-    name: "EDITOR",
-    description: "Can create and edit content",
+    name: UserRole.EDITOR,
+    description: "Content Editor with content management permissions",
+    permissions: [
+      "content:read",
+      "content:write",
+      "content:publish",
+      "user:read",
+    ],
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
   },
   {
     id: "role-moderator",
-    name: "MODERATOR",
-    description: "Can moderate content and users",
+    name: UserRole.MODERATOR,
+    description: "Content Moderator with moderation permissions",
+    permissions: [
+      "content:moderate",
+      "user:moderate",
+      "user:read",
+      "content:read",
+    ],
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
   },
   {
     id: "role-user",
-    name: "USER",
-    description: "Basic user with limited permissions",
+    name: UserRole.USER,
+    description: "Regular User with basic permissions",
+    permissions: ["user:read", "content:read"],
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
   },
 ];
 
+// Sample user for editing
 const sampleUser: User = {
   id: "user-1",
   email: "john.doe@example.com",
@@ -369,115 +66,305 @@ const sampleUser: User = {
   last_name: "Doe",
   is_active: true,
   created_at: "2024-01-01T00:00:00Z",
-  updated_at: "2024-01-01T00:00:00Z",
+  updated_at: "2024-01-15T10:00:00Z",
   last_login: "2024-01-15T10:00:00Z",
-  last_logout: null,
-  avatar: null,
-  role: {
-    id: "role-editor",
-    name: "EDITOR",
-    permissions: ["content:read", "content:write"],
-    description: "Content Editor",
-  },
+  last_logout: "2024-01-15T18:00:00Z",
+  avatar:
+    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+  role_id: "role-admin",
+  role: sampleRoles[0],
   full_name: "John Doe",
-  status: "active",
-  activity_status: "offline",
+  display_name: "John Doe",
+  status: UserStatus.ACTIVE,
+  activity_status: ActivityStatus.OFFLINE,
+  age: 32,
+  locale: "en",
+  birthday: "1992-03-15",
+  address: "123 Main St, New York, NY 10001",
+  sex: true,
+  slack_webhook_url:
+    "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX",
 };
 
-export const Closed: Story = {
-  args: {
-    user: undefined,
-    roles: sampleRoles,
-    open: false,
-    onClose: action("close"),
-    onSave: action("save"),
-  },
+// Interactive wrapper for Storybook
+const InteractiveUserDialog = (props: any) => {
+  const [open, setOpen] = useState(props.open || false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (data: any) => {
+    setIsLoading(true);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsLoading(false);
+    setOpen(false);
+    props.onSubmit(data);
+  };
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    props.onOpenChange(newOpen);
+  };
+
+  return (
+    <div>
+      <button
+        onClick={() => setOpen(true)}
+        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+      >
+        {props.user ? "Edit User" : "Create User"}
+      </button>
+      <UserDialog
+        {...props}
+        open={open}
+        onOpenChange={handleOpenChange}
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+      />
+    </div>
+  );
 };
+
+const meta: Meta<typeof UserDialog> = {
+  title: "Admin/UserDialog",
+  component: InteractiveUserDialog,
+  parameters: {
+    layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A comprehensive dialog for creating and editing users. Features form validation, password strength checking, email availability verification, role selection with permission preview, and accessibility support.",
+      },
+    },
+  },
+  argTypes: {
+    open: {
+      description: "Whether the dialog is open",
+      control: { type: "boolean" },
+    },
+    user: {
+      description: "User object for editing (null for creating new user)",
+      control: { type: "object" },
+    },
+    roles: {
+      description: "Available roles for selection",
+      control: { type: "object" },
+    },
+    isLoading: {
+      description: "Whether the form is in loading/submitting state",
+      control: { type: "boolean" },
+    },
+    onOpenChange: {
+      description: "Callback when dialog open state changes",
+      action: "openChange",
+    },
+    onSubmit: {
+      description: "Callback when form is submitted",
+      action: "submit",
+    },
+  },
+  tags: ["autodocs"],
+};
+
+export default meta;
+type Story = StoryObj<typeof UserDialog>;
 
 export const CreateUser: Story = {
   args: {
-    user: undefined,
+    open: false,
+    user: null,
     roles: sampleRoles,
-    open: true,
-    onClose: action("close"),
-    onSave: action("save"),
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
   },
 };
 
 export const EditUser: Story = {
   args: {
+    open: false,
     user: sampleUser,
     roles: sampleRoles,
-    open: true,
-    onClose: action("close"),
-    onSave: action("save"),
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
   },
 };
 
 export const EditUserWithoutRole: Story = {
   args: {
+    open: false,
     user: {
       ...sampleUser,
       role: null,
+      role_id: null,
     },
     roles: sampleRoles,
-    open: true,
-    onClose: action("close"),
-    onSave: action("save"),
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
   },
 };
 
 export const EditInactiveUser: Story = {
   args: {
+    open: false,
     user: {
       ...sampleUser,
       is_active: false,
-      status: "inactive",
+      status: UserStatus.INACTIVE,
     },
     roles: sampleRoles,
-    open: true,
-    onClose: action("close"),
-    onSave: action("save"),
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
   },
 };
 
-export const NoRoles: Story = {
+export const CreateUserWithLimitedRoles: Story = {
   args: {
-    user: undefined,
+    open: false,
+    user: null,
+    roles: sampleRoles.slice(2), // Only moderator and user roles
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
+  },
+};
+
+export const NoRolesAvailable: Story = {
+  args: {
+    open: false,
+    user: null,
     roles: [],
-    open: true,
-    onClose: action("close"),
-    onSave: action("save"),
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
   },
 };
 
-export const WithBackgroundContent: Story = {
+export const LoadingState: Story = {
   args: {
-    user: undefined,
+    open: false,
+    user: sampleUser,
     roles: sampleRoles,
-    open: true,
-    onClose: action("close"),
-    onSave: action("save"),
+    isLoading: true,
+    onOpenChange: fn(),
+    onSubmit: fn(),
   },
-  decorators: [
-    (Story) => (
-      <div className="min-h-screen bg-gray-100 p-8">
-        <div className="bg-white rounded-lg p-6">
-          <h1 className="text-2xl font-bold mb-4">User Management</h1>
-          <p className="text-gray-600 mb-4">
-            This story shows how the user dialog appears over page content.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.from({ length: 6 }, (_, i) => (
-              <div key={i} className="p-4 bg-gray-50 rounded-lg">
-                <h3 className="font-medium">User {i + 1}</h3>
-                <p className="text-sm text-gray-600">user{i + 1}@example.com</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <Story />
-      </div>
-    ),
-  ],
+};
+
+export const UserWithAllFields: Story = {
+  args: {
+    open: false,
+    user: {
+      ...sampleUser,
+      sex: false,
+      birthday: "1990-12-25",
+      address: "456 Oak Avenue, Apartment 3B, San Francisco, CA 94102",
+      locale: "fr",
+      group_id: 5,
+      coin: "1500000",
+      slack_webhook_url:
+        "https://hooks.slack.com/services/T12345678/B87654321/abcdefghijklmnopqrstuvwx",
+    },
+    roles: sampleRoles,
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
+  },
+};
+
+export const UserWithMinimalData: Story = {
+  args: {
+    open: false,
+    user: {
+      id: "user-minimal",
+      email: "minimal@example.com",
+      first_name: "Min",
+      last_name: "User",
+      is_active: true,
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z",
+      role_id: null,
+      role: null,
+      full_name: "Min User",
+      display_name: "Min User",
+      status: UserStatus.ACTIVE,
+      activity_status: ActivityStatus.NEVER,
+    },
+    roles: sampleRoles,
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
+  },
+};
+
+export const CreateUserOpenByDefault: Story = {
+  args: {
+    open: true,
+    user: null,
+    roles: sampleRoles,
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
+  },
+};
+
+export const EditUserOpenByDefault: Story = {
+  args: {
+    open: true,
+    user: sampleUser,
+    roles: sampleRoles,
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
+  },
+};
+
+export const UserWithLongData: Story = {
+  args: {
+    open: false,
+    user: {
+      ...sampleUser,
+      first_name: "Christopher Alexander",
+      last_name: "Montgomery-Richardson",
+      email:
+        "christopher.alexander.montgomery.richardson@very-long-domain-name-example.com",
+      full_name: "Christopher Alexander Montgomery-Richardson",
+      display_name: "Christopher Alexander Montgomery-Richardson",
+      address:
+        "1234 Very Long Street Name That Goes On And On, Apartment 567B, Some Very Long City Name, State With Long Name 12345-6789",
+      role: {
+        ...sampleRoles[0],
+        description:
+          "System Administrator with comprehensive access to all system functions, user management, content management, analytics, reporting, and advanced configuration options",
+        permissions: [
+          "user:read",
+          "user:write",
+          "user:delete",
+          "user:impersonate",
+          "role:read",
+          "role:write",
+          "role:delete",
+          "role:assign",
+          "content:read",
+          "content:write",
+          "content:delete",
+          "content:publish",
+          "analytics:read",
+          "analytics:export",
+          "system:admin",
+          "system:config",
+          "billing:read",
+          "billing:write",
+          "support:read",
+          "support:write",
+        ],
+      },
+    },
+    roles: sampleRoles,
+    isLoading: false,
+    onOpenChange: fn(),
+    onSubmit: fn(),
+  },
 };

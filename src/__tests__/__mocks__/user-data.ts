@@ -1,0 +1,101 @@
+import { User, Role, UserFilters, PaginationParams } from "@/types/user";
+
+export const mockRoles: Role[] = [
+  {
+    id: "1",
+    name: "Admin",
+    permissions: ["user:create", "user:read", "user:update", "user:delete"],
+    description: "Full system access",
+  },
+  {
+    id: "2",
+    name: "Editor",
+    permissions: ["user:read", "user:update"],
+    description: "Can view and edit users",
+  },
+  {
+    id: "3",
+    name: "Viewer",
+    permissions: ["user:read"],
+    description: "Can only view users",
+  },
+];
+
+export const mockUsers: User[] = [
+  {
+    id: "1",
+    email: "john.doe@example.com",
+    first_name: "John",
+    last_name: "Doe",
+    full_name: "John Doe",
+    is_active: true,
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
+    last_login: "2024-01-15T10:30:00Z",
+    role_id: "1",
+    role: mockRoles[0],
+    status: "active",
+    activity_status: "online",
+    avatar: null,
+    locale: "en",
+  },
+  {
+    id: "2",
+    email: "jane.smith@example.com",
+    first_name: "Jane",
+    last_name: "Smith",
+    full_name: "Jane Smith",
+    is_active: true,
+    created_at: "2024-01-02T00:00:00Z",
+    updated_at: "2024-01-02T00:00:00Z",
+    last_login: "2024-01-14T15:45:00Z",
+    role_id: "2",
+    role: mockRoles[1],
+    status: "active",
+    activity_status: "offline",
+    avatar: "https://example.com/avatar2.jpg",
+    locale: "en",
+  },
+  {
+    id: "3",
+    email: "bob.wilson@example.com",
+    first_name: "Bob",
+    last_name: "Wilson",
+    full_name: "Bob Wilson",
+    is_active: false,
+    created_at: "2024-01-03T00:00:00Z",
+    updated_at: "2024-01-03T00:00:00Z",
+    last_login: null,
+    role_id: "3",
+    role: mockRoles[2],
+    status: "inactive",
+    activity_status: "never",
+    avatar: null,
+    locale: "en",
+  },
+];
+
+export const mockFilters: UserFilters = {
+  search: "",
+  role: null,
+  status: null,
+  dateRange: null,
+  activityDateRange: null,
+  sortBy: "created_at",
+  sortOrder: "desc",
+  hasAvatar: null,
+  locale: null,
+  group_id: null,
+  activity_status: null,
+};
+
+export const mockPagination: PaginationParams = {
+  page: 1,
+  pageSize: 10,
+  total: 100,
+  totalPages: 10,
+  hasNextPage: true,
+  hasPreviousPage: false,
+  startIndex: 1,
+  endIndex: 10,
+};

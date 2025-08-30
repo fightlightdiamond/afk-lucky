@@ -209,7 +209,7 @@ describe("UserStatusManager", () => {
     );
 
     // Should only show the status badge, no action buttons
-    const buttons = screen.getAllByRole("button");
+    const buttons = screen.queryAllByRole("button");
     expect(buttons.length).toBe(0); // No action buttons when disabled
   });
 

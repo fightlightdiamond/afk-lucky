@@ -37,6 +37,8 @@ export function PermissionBadge({
 
   const formatPermission = (permission: string) => {
     const [category, action] = permission.split(":");
+    if (!category) return permission;
+    if (!action) return category.charAt(0).toUpperCase() + category.slice(1);
     return `${category.charAt(0).toUpperCase() + category.slice(1)}: ${
       action.charAt(0).toUpperCase() + action.slice(1)
     }`;
