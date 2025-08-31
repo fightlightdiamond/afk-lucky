@@ -2,35 +2,90 @@
 
 ## Overview
 
-This design outlines a systematic approach to fix all 103 failing unit tests in the admin user management system. The solution focuses on three main areas: mock consistency, component accessibility, and API test reliability. The approach will be incremental, fixing issues by category to minimize regression risks.
+This design outlines a comprehensive, systematic approach to fix all 103 failing unit tests and establish a robust, maintainable testing infrastructure for the admin user management system. The solution addresses six critical areas: package version standardization, mock consistency, component accessibility, API test reliability, code structure optimization, and automated quality gates. The approach follows a dependency-first strategy to prevent infinite error loops and ensure sustainable development practices.
 
 ## Architecture
 
 ### Test Fix Strategy
 
-The fix strategy follows a layered approach:
+The fix strategy follows a dependency-first, layered approach to prevent cascading failures:
 
-1. **Foundation Layer**: Fix core mock mismatches and import errors
-2. **Component Layer**: Resolve component accessibility and selector issues
-3. **API Layer**: Fix API endpoint test failures
-4. **Integration Layer**: Ensure all tests work together
+1. **Dependency Layer**: Standardize package versions and resolve conflicts
+2. **Foundation Layer**: Fix core mock mismatches and import errors
+3. **Structure Layer**: Establish consistent code organization and patterns
+4. **Component Layer**: Resolve component accessibility and selector issues
+5. **API Layer**: Fix API endpoint test failures
+6. **Integration Layer**: Ensure all tests work together
+7. **Quality Layer**: Implement automated quality gates and monitoring
 
-### Mock Management System
+### Comprehensive Testing Architecture
 
 ```mermaid
 graph TD
-    A[Test Files] --> B[Centralized Mock Setup]
-    B --> C[Ability Mocks]
-    B --> D[Prisma Mocks]
-    B --> E[Auth Mocks]
-    C --> F[Consistent Exports]
-    D --> G[Database Simulation]
-    E --> H[Session Management]
+    A[Package Dependencies] --> B[Version Compatibility Check]
+    B --> C[Centralized Mock Setup]
+    C --> D[Ability Mocks]
+    C --> E[Prisma Mocks]
+    C --> F[Auth Mocks]
+    D --> G[Consistent Exports]
+    E --> H[Database Simulation]
+    F --> I[Session Management]
+    G --> J[Component Tests]
+    H --> K[API Tests]
+    I --> L[Integration Tests]
+    J --> M[Quality Gates]
+    K --> M
+    L --> M
+    M --> N[Automated Validation]
+```
+
+### Package Version Management
+
+```mermaid
+graph LR
+    A[React 19.1.0] --> B[Testing Library 16.3.0]
+    B --> C[Vitest 3.2.4]
+    C --> D[Storybook 9.0.18]
+    D --> E[TypeScript 5.9.2]
+    E --> F[Next.js 15.4.2]
+    F --> G[Compatibility Matrix]
 ```
 
 ## Components and Interfaces
 
-### 1. Mock Standardization Module
+### 1. Package Version Management Module
+
+**Purpose**: Ensure all dependencies are compatible and properly configured
+
+**Key Components**:
+
+- `package.json` validation and optimization
+- Peer dependency resolution
+- Version compatibility matrix
+- Dependency conflict detection
+
+**Interface**:
+
+```typescript
+// Package Compatibility Interface
+export interface PackageCompatibility {
+  react: "19.1.0";
+  "@testing-library/react": "16.3.0";
+  vitest: "3.2.4";
+  storybook: "9.0.18";
+  typescript: "5.9.2";
+  nextjs: "15.4.2";
+}
+
+// Dependency Validation
+export interface DependencyValidator {
+  validateCompatibility: () => ValidationResult;
+  resolveConflicts: () => ResolutionPlan;
+  updateDependencies: (plan: ResolutionPlan) => Promise<void>;
+}
+```
+
+### 2. Mock Standardization Module
 
 **Purpose**: Ensure all mocks match actual exports and provide consistent interfaces
 
@@ -86,7 +141,7 @@ export interface ComponentTestUtils {
 }
 ```
 
-### 3. API Test Framework
+### 4. API Test Framework
 
 **Purpose**: Standardize API endpoint testing with proper mocks and error handling
 
@@ -103,6 +158,62 @@ export interface APITestFramework {
   createMockRequest: (data: any, options?: RequestOptions) => NextRequest;
   mockAuthSession: (user: User, permissions: string[]) => void;
   validateResponse: (response: Response, expected: any) => void;
+}
+```
+
+### 5. Code Structure Management
+
+**Purpose**: Establish consistent patterns and organization across the codebase
+
+**Key Components**:
+
+- Component organization standards
+- Test file co-location patterns
+- Storybook story conventions
+- Import/export consistency
+
+**Interface**:
+
+```typescript
+export interface CodeStructureStandards {
+  componentPattern: {
+    location: "src/components/{domain}/{ComponentName}.tsx";
+    test: "src/components/{domain}/{ComponentName}.test.tsx";
+    story: "src/stories/{domain}/{ComponentName}.stories.tsx";
+  };
+  importPattern: {
+    internal: "@/components/...";
+    external: "package-name";
+    types: "@/types/...";
+  };
+}
+```
+
+### 6. Quality Gate System
+
+**Purpose**: Automated validation and regression prevention
+
+**Key Components**:
+
+- Pre-commit hooks for test validation
+- Build-time quality checks
+- Performance monitoring
+- Coverage tracking
+
+**Interface**:
+
+```typescript
+export interface QualityGates {
+  preCommit: {
+    runTests: boolean;
+    checkLinting: boolean;
+    validateTypes: boolean;
+  };
+  buildTime: {
+    testCoverage: number; // minimum 80%
+    performanceThreshold: number; // max 30s test execution
+    accessibilityScore: number; // minimum 95%
+  };
 }
 ```
 
@@ -217,18 +328,21 @@ interface ErrorResolution {
 
 ### Test Validation Approach
 
-1. **Incremental Testing**: Fix and validate one category at a time
-2. **Regression Prevention**: Run full test suite after each fix batch
-3. **Coverage Maintenance**: Ensure fixes don't reduce test coverage
-4. **Performance Monitoring**: Track test execution time improvements
+1. **Dependency Validation**: Verify package compatibility before any fixes
+2. **Incremental Testing**: Fix and validate one category at a time
+3. **Regression Prevention**: Run full test suite after each fix batch
+4. **Coverage Maintenance**: Ensure fixes don't reduce test coverage
+5. **Performance Monitoring**: Track test execution time improvements
+6. **Quality Gates**: Automated validation at each stage
 
 ### Success Metrics
 
-- All 289 tests pass (currently 186 pass, 103 fail)
-- Test execution time under 30 seconds
-- No mock-related errors
-- All components accessible via proper selectors
-- API tests cover all error scenarios
+- **Test Success Rate**: All 289 tests pass (currently 186 pass, 103 fail)
+- **Performance**: Test execution time under 30 seconds
+- **Quality**: No mock-related errors, proper accessibility, full API coverage
+- **Maintainability**: Consistent patterns, clear documentation
+- **Reliability**: No version conflicts, stable dependencies
+- **Automation**: Quality gates prevent regressions
 
 ## Implementation Considerations
 
@@ -252,3 +366,6 @@ interface ErrorResolution {
 2. **Shared Utilities**: Create reusable test helper functions
 3. **Clear Documentation**: Document test setup and common patterns
 4. **Type Safety**: Use TypeScript for all test utilities and mocks
+5. **Version Management**: Automated dependency updates and compatibility checks
+6. **Code Organization**: Standardized folder structure and naming conventions
+7. **Quality Monitoring**: Continuous tracking of test health and performance

@@ -92,7 +92,7 @@ export function DateRangeFilter({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <Label>{label}</Label>
+        <Label htmlFor="date-range-filter">{label}</Label>
         {hasValue && (
           <Button
             variant="ghost"
@@ -100,6 +100,7 @@ export function DateRangeFilter({
             onClick={handleClear}
             className="h-auto p-1"
             disabled={disabled}
+            aria-label="Clear date range"
           >
             <X className="w-4 h-4" />
           </Button>
@@ -109,9 +110,13 @@ export function DateRangeFilter({
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <Button
+            id="date-range-filter"
             variant="outline"
             className="w-full justify-start text-left font-normal"
             disabled={disabled}
+            aria-label="Select date range"
+            aria-expanded={isOpen}
+            aria-haspopup="dialog"
           >
             {icon}
             <span className="truncate">{getDisplayText()}</span>
@@ -133,6 +138,7 @@ export function DateRangeFilter({
                       size="sm"
                       onClick={() => handlePresetSelect(preset.value)}
                       className="text-xs"
+                      aria-label={`Select ${preset.label} date range`}
                     >
                       {preset.label}
                     </Button>

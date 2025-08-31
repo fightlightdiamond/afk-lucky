@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
+import { vi, describe, it, beforeEach, expect } from "vitest";
 import { StatusFilter } from "@/components/admin/filters/StatusFilter";
 
 describe("StatusFilter", () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   beforeEach(() => {
     mockOnChange.mockClear();
@@ -17,7 +18,9 @@ describe("StatusFilter", () => {
   it("displays active status correctly", () => {
     render(<StatusFilter value="active" onChange={mockOnChange} />);
 
-    expect(screen.getByText("Active")).toBeInTheDocument();
+    // Use getAllByText since there are multiple "Active" elements (in select and badge)
+    const activeElements = screen.getAllByText("Active");
+    expect(activeElements.length).toBeGreaterThan(0);
   });
 
   it("shows status badge when not 'all'", () => {
@@ -40,7 +43,7 @@ describe("StatusFilter", () => {
     );
 
     const trigger = screen.getByRole("combobox");
-    expect(trigger).toHaveAttribute("aria-disabled", "true");
+    expect(trigger).toBeDisabled();
   });
 
   it("shows counts when provided", () => {

@@ -89,13 +89,18 @@ export function StatusFilter({
 
   return (
     <div className="space-y-2">
-      <Label>Status</Label>
+      <Label htmlFor="status-filter">Status</Label>
       <Select
         value={value}
         onValueChange={(newValue) => onChange(newValue as StatusFilterValue)}
         disabled={disabled}
       >
-        <SelectTrigger>
+        <SelectTrigger
+          id="status-filter"
+          role="combobox"
+          aria-label="Filter by user status"
+          aria-expanded="false"
+        >
           <SelectValue placeholder="Select status">
             <div className="flex items-center gap-2">
               {getStatusIcon(value)}
@@ -103,38 +108,38 @@ export function StatusFilter({
             </div>
           </SelectValue>
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">
+        <SelectContent role="listbox">
+          <SelectItem value="all" role="option">
             <div className="flex items-center gap-2">
               {getStatusIcon("all")}
               <span>{getStatusWithCount("all")}</span>
             </div>
           </SelectItem>
-          <SelectItem value="active">
+          <SelectItem value="active" role="option">
             <div className="flex items-center gap-2">
               {getStatusIcon("active")}
               <span>{getStatusWithCount("active")}</span>
             </div>
           </SelectItem>
-          <SelectItem value="inactive">
+          <SelectItem value="inactive" role="option">
             <div className="flex items-center gap-2">
               {getStatusIcon("inactive")}
               <span>{getStatusWithCount("inactive")}</span>
             </div>
           </SelectItem>
-          <SelectItem value="banned">
+          <SelectItem value="banned" role="option">
             <div className="flex items-center gap-2">
               {getStatusIcon("banned")}
               <span>{getStatusWithCount("banned")}</span>
             </div>
           </SelectItem>
-          <SelectItem value="suspended">
+          <SelectItem value="suspended" role="option">
             <div className="flex items-center gap-2">
               {getStatusIcon("suspended")}
               <span>{getStatusWithCount("suspended")}</span>
             </div>
           </SelectItem>
-          <SelectItem value="pending">
+          <SelectItem value="pending" role="option">
             <div className="flex items-center gap-2">
               {getStatusIcon("pending")}
               <span>{getStatusWithCount("pending")}</span>

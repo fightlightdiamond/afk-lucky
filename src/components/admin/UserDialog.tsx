@@ -387,9 +387,16 @@ export function UserDialog({
                       name="first_name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>First Name *</FormLabel>
+                          <FormLabel htmlFor="first_name">
+                            First Name *
+                          </FormLabel>
                           <FormControl>
-                            <Input placeholder="John" {...field} />
+                            <Input
+                              id="first_name"
+                              placeholder="John"
+                              aria-label="First name"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -401,9 +408,14 @@ export function UserDialog({
                       name="last_name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Last Name *</FormLabel>
+                          <FormLabel htmlFor="last_name">Last Name *</FormLabel>
                           <FormControl>
-                            <Input placeholder="Doe" {...field} />
+                            <Input
+                              id="last_name"
+                              placeholder="Doe"
+                              aria-label="Last name"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -416,15 +428,20 @@ export function UserDialog({
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="flex items-center gap-2">
+                        <FormLabel
+                          htmlFor="email"
+                          className="flex items-center gap-2"
+                        >
                           <Mail className="h-4 w-4" />
                           Email Address *
                         </FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input
+                              id="email"
                               type="email"
                               placeholder="john.doe@example.com"
+                              aria-label="Email"
                               {...field}
                               className={
                                 emailAvailability.available === false
@@ -483,7 +500,7 @@ export function UserDialog({
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
+                        <FormLabel htmlFor="password">
                           {isEditing
                             ? "New Password (leave blank to keep current)"
                             : "Password *"}
@@ -491,12 +508,14 @@ export function UserDialog({
                         <FormControl>
                           <div className="relative">
                             <Input
+                              id="password"
                               type={showPassword ? "text" : "password"}
                               placeholder={
                                 isEditing
                                   ? "Leave blank to keep current"
                                   : "Enter secure password"
                               }
+                              aria-label="Password"
                               {...field}
                             />
                             <Button
@@ -505,6 +524,9 @@ export function UserDialog({
                               size="sm"
                               className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                               onClick={() => setShowPassword(!showPassword)}
+                              aria-label={
+                                showPassword ? "Hide password" : "Show password"
+                              }
                             >
                               {showPassword ? (
                                 <EyeOff className="h-4 w-4 text-gray-400" />
@@ -555,12 +577,16 @@ export function UserDialog({
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Confirm Password *</FormLabel>
+                          <FormLabel htmlFor="confirmPassword">
+                            Confirm Password *
+                          </FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
+                                id="confirmPassword"
                                 type={showConfirmPassword ? "text" : "password"}
                                 placeholder="Confirm your password"
+                                aria-label="Confirm password"
                                 {...field}
                               />
                               <Button
@@ -570,6 +596,11 @@ export function UserDialog({
                                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                                 onClick={() =>
                                   setShowConfirmPassword(!showConfirmPassword)
+                                }
+                                aria-label={
+                                  showConfirmPassword
+                                    ? "Hide confirm password"
+                                    : "Show confirm password"
                                 }
                               >
                                 {showConfirmPassword ? (
@@ -602,20 +633,32 @@ export function UserDialog({
                     name="role_id"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Role</FormLabel>
+                        <FormLabel htmlFor="role_id">Role</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger
+                              id="role_id"
+                              role="combobox"
+                              name="role_id"
+                              aria-label="Role selection"
+                              aria-expanded="false"
+                            >
                               <SelectValue placeholder="Select a role" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="none">No Role</SelectItem>
+                          <SelectContent role="listbox">
+                            <SelectItem value="none" role="option">
+                              No Role
+                            </SelectItem>
                             {roles.map((role) => (
-                              <SelectItem key={role.id} value={role.id}>
+                              <SelectItem
+                                key={role.id}
+                                value={role.id}
+                                role="option"
+                              >
                                 <div className="flex items-center justify-between w-full">
                                   <span>{role.name}</span>
                                   <Badge variant="secondary" className="ml-2">
@@ -730,25 +773,47 @@ export function UserDialog({
                       name="locale"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Language</FormLabel>
+                          <FormLabel htmlFor="locale">Language</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             value={field.value}
                           >
                             <FormControl>
-                              <SelectTrigger>
+                              <SelectTrigger
+                                id="locale"
+                                role="combobox"
+                                name="locale"
+                                aria-label="Language selection"
+                                aria-expanded="false"
+                              >
                                 <SelectValue placeholder="Select language" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="en">🇺🇸 English</SelectItem>
-                              <SelectItem value="vi">🇻🇳 Tiếng Việt</SelectItem>
-                              <SelectItem value="ja">🇯🇵 日本語</SelectItem>
-                              <SelectItem value="ko">🇰🇷 한국어</SelectItem>
-                              <SelectItem value="zh">🇨🇳 中文</SelectItem>
-                              <SelectItem value="fr">🇫🇷 Français</SelectItem>
-                              <SelectItem value="de">🇩🇪 Deutsch</SelectItem>
-                              <SelectItem value="es">🇪🇸 Español</SelectItem>
+                            <SelectContent role="listbox">
+                              <SelectItem value="en" role="option">
+                                🇺🇸 English
+                              </SelectItem>
+                              <SelectItem value="vi" role="option">
+                                🇻🇳 Tiếng Việt
+                              </SelectItem>
+                              <SelectItem value="ja" role="option">
+                                🇯🇵 日本語
+                              </SelectItem>
+                              <SelectItem value="ko" role="option">
+                                🇰🇷 한국어
+                              </SelectItem>
+                              <SelectItem value="zh" role="option">
+                                🇨🇳 中文
+                              </SelectItem>
+                              <SelectItem value="fr" role="option">
+                                🇫🇷 Français
+                              </SelectItem>
+                              <SelectItem value="de" role="option">
+                                🇩🇪 Deutsch
+                              </SelectItem>
+                              <SelectItem value="es" role="option">
+                                🇪🇸 Español
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -762,15 +827,23 @@ export function UserDialog({
                       render={({ field }) => (
                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                           <div className="space-y-0.5">
-                            <FormLabel>Active Status</FormLabel>
-                            <FormDescription className="text-xs">
+                            <FormLabel htmlFor="is_active">
+                              Active Status
+                            </FormLabel>
+                            <FormDescription
+                              id="is_active_description"
+                              className="text-xs"
+                            >
                               Inactive users cannot log in
                             </FormDescription>
                           </div>
                           <FormControl>
                             <Switch
+                              id="is_active"
                               checked={field.value}
                               onCheckedChange={field.onChange}
+                              aria-label="User active status"
+                              aria-describedby="is_active_description"
                             />
                           </FormControl>
                         </FormItem>
@@ -787,6 +860,7 @@ export function UserDialog({
                   variant="outline"
                   onClick={() => onOpenChange(false)}
                   disabled={isLoading}
+                  aria-label="Cancel user dialog"
                 >
                   Cancel
                 </Button>
@@ -801,6 +875,7 @@ export function UserDialog({
                     (watchedPassword &&
                       watchedPassword !== form.watch("confirmPassword")) // Passwords must match
                   }
+                  aria-label={isEditing ? "Update user" : "Create user"}
                 >
                   {isLoading ? (
                     <>

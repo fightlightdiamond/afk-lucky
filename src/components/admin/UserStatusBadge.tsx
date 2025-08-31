@@ -12,6 +12,18 @@ import { User, UserStatus } from "@/types/user";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 
+// Helper function to safely format dates
+const safeFormatDistanceToNow = (dateString: string | null | undefined) => {
+  if (!dateString) return "Never";
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Invalid date";
+    return formatDistanceToNow(date, { addSuffix: true });
+  } catch {
+    return "Invalid date";
+  }
+};
+
 interface UserStatusBadgeProps {
   user: User;
   showTooltip?: boolean;
@@ -156,18 +168,14 @@ export function UserStatusBadge({
               {user.updated_at && (
                 <div>
                   <span className="font-medium">Last updated:</span>{" "}
-                  {formatDistanceToNow(new Date(user.updated_at), {
-                    addSuffix: true,
-                  })}
+                  {safeFormatDistanceToNow(user.updated_at)}
                 </div>
               )}
 
               {user.last_login && user.status === UserStatus.ACTIVE && (
                 <div>
                   <span className="font-medium">Last login:</span>{" "}
-                  {formatDistanceToNow(new Date(user.last_login), {
-                    addSuffix: true,
-                  })}
+                  {safeFormatDistanceToNow(user.last_login)}
                 </div>
               )}
 

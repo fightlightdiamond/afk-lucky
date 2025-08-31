@@ -1,7 +1,7 @@
-// Export all filter components
-export { SearchInput } from "./SearchInput";
-export { RoleFilter } from "./RoleFilter";
-export { StatusFilter, type StatusFilterValue } from "./StatusFilter";
-export { DateRangeFilter, type DateRange } from "./DateRangeFilter";
-export { FilterPresets, type FilterPreset } from "./FilterPresets";
+// Admin Filter Components Barrel Export
 export { AdvancedUserFilters } from "./AdvancedUserFilters";
+export { DateRangeFilter } from "./DateRangeFilter";
+export { FilterPresets } from "./FilterPresets";
+export { RoleFilter } from "./RoleFilter";
+export { SearchInput } from "./SearchInput";
+export { StatusFilter } from "./StatusFilter";

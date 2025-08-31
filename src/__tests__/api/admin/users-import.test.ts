@@ -3,31 +3,19 @@ import { POST } from "@/app/api/admin/users/import/route";
 import { NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
-import { createAbilityForUser } from "@/lib/ability";
+import { createAbility } from "@/lib/ability";
 import * as XLSX from "xlsx";
 
 // Mock dependencies
-vi.mock("next-auth", () => ({
-  getServerSession: vi.fn(),
+vi.mock("next-auth", () => import("../../__mocks__/auth"));
+vi.mock("@/lib/prisma", () => import("../../__mocks__/prisma"));
+vi.mock("@/lib/ability", () => import("../../__mocks__/ability"));
+vi.mock("@/lib/auth", () => ({
+  authOptions: {},
 }));
 
-vi.mock("@/lib/prisma", () => ({
-  prisma: {
-    user: {
-      findMany: vi.fn(),
-      create: vi.fn(),
-      update: vi.fn(),
-      count: vi.fn(),
-    },
-    role: {
-      findMany: vi.fn(),
-    },
-  },
-}));
-
-vi.mock("@/lib/ability", () => ({
-  createAbilityForUser: vi.fn(),
-}));
+// Import mocks after mocking
+import { mockAbility } from "../../__mocks__/ability";
 
 vi.mock("xlsx", () => ({
   read: vi.fn(),
@@ -44,12 +32,16 @@ const mockSession = {
   user: {
     id: "user-1",
     email: "admin@example.com",
-    name: "Admin User",
+    firstName: "Admin",
+    lastName: "User",
+    role: {
+      id: "role-2",
+      name: "ADMIN",
+      permissions: ["user:create", "user:read", "user:update", "user:delete"],
+    },
+    isActive: true,
   },
-};
-
-const mockAbility = {
-  can: vi.fn(),
+  expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
 };
 
 const mockRoles = [
@@ -57,12 +49,35 @@ const mockRoles = [
   { id: "role-2", name: "ADMIN" },
 ];
 
+// Helper function to create mock request
+const createMockRequest = (file: any, options?: any) => {
+  const mockFormData = new Map();
+  if (file) {
+    mockFormData.set("file", file);
+  }
+  if (options) {
+    mockFormData.set("options", JSON.stringify(options));
+  }
+
+  return {
+    formData: vi.fn().mockResolvedValue(mockFormData),
+  } as any;
+};
+
+// Helper function to create mock file
+const createMockFile = (name: string, type: string, size: number = 1000) => ({
+  name,
+  type,
+  size,
+  arrayBuffer: vi.fn().mockResolvedValue(new ArrayBuffer(100)),
+});
+
 describe("/api/admin/users/import", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (getServerSession as any).mockResolvedValue(mockSession);
     (mockAbility.can as any).mockReturnValue(true);
-    (createAbilityForUser as any).mockResolvedValue(mockAbility);
+    (createAbility as any).mockReturnValue(mockAbility);
     (prisma.role.findMany as any).mockResolvedValue(mockRoles);
     (prisma.user.findMany as any).mockResolvedValue([]);
   });
@@ -75,18 +90,10 @@ describe("/api/admin/users/import", () => {
     it("should require authentication", async () => {
       (getServerSession as any).mockResolvedValue(null);
 
-      const formData = new FormData();
-      formData.append("file", new File([""], "test.csv", { type: "text/csv" }));
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile);
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(401);
@@ -97,18 +104,10 @@ describe("/api/admin/users/import", () => {
     it("should require proper permissions", async () => {
       (mockAbility.can as any).mockReturnValue(false);
 
-      const formData = new FormData();
-      formData.append("file", new File([""], "test.csv", { type: "text/csv" }));
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile);
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(403);
@@ -117,17 +116,9 @@ describe("/api/admin/users/import", () => {
     });
 
     it("should require a file", async () => {
-      const formData = new FormData();
+      const mockRequest = createMockRequest(null);
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -136,22 +127,10 @@ describe("/api/admin/users/import", () => {
     });
 
     it("should validate file size", async () => {
-      const largeContent = "x".repeat(11 * 1024 * 1024); // 11MB
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File([largeContent], "test.csv", { type: "text/csv" })
-      );
+      const mockFile = createMockFile("test.csv", "text/csv", 11 * 1024 * 1024);
+      const mockRequest = createMockRequest(mockFile);
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -160,21 +139,10 @@ describe("/api/admin/users/import", () => {
     });
 
     it("should validate file type", async () => {
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File(["content"], "test.txt", { type: "text/plain" })
-      );
+      const mockFile = createMockFile("test.txt", "text/plain");
+      const mockRequest = createMockRequest(mockFile);
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(400);
@@ -198,22 +166,10 @@ describe("/api/admin/users/import", () => {
       });
       (XLSX.utils.sheet_to_json as any).mockReturnValue(csvData);
 
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File(["csv content"], "test.csv", { type: "text/csv" })
-      );
-      formData.append("options", JSON.stringify({ validateOnly: true }));
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile, { validateOnly: true });
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -246,22 +202,12 @@ describe("/api/admin/users/import", () => {
       (XLSX.utils.sheet_to_json as any).mockReturnValue(csvData);
       (prisma.user.create as any).mockResolvedValue({});
 
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File(["csv content"], "test.csv", { type: "text/csv" })
-      );
-      formData.append("options", JSON.stringify({ skipDuplicates: false }));
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile, {
+        skipDuplicates: false,
+      });
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -290,22 +236,10 @@ describe("/api/admin/users/import", () => {
         { email: "existing@example.com" },
       ]);
 
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File(["csv content"], "test.csv", { type: "text/csv" })
-      );
-      formData.append("options", JSON.stringify({ skipDuplicates: true }));
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile, { skipDuplicates: true });
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -334,22 +268,10 @@ describe("/api/admin/users/import", () => {
       ]);
       (prisma.user.update as any).mockResolvedValue({});
 
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File(["csv content"], "test.csv", { type: "text/csv" })
-      );
-      formData.append("options", JSON.stringify({ updateExisting: true }));
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile, { updateExisting: true });
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -373,22 +295,12 @@ describe("/api/admin/users/import", () => {
       });
       (XLSX.utils.sheet_to_json as any).mockReturnValue(csvData);
 
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File(["csv content"], "test.csv", { type: "text/csv" })
-      );
-      formData.append("options", JSON.stringify({ skipInvalidRows: true }));
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile, {
+        skipInvalidRows: true,
+      });
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -419,22 +331,10 @@ describe("/api/admin/users/import", () => {
         "Last Name": "last_name",
       };
 
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File(["csv content"], "test.csv", { type: "text/csv" })
-      );
-      formData.append("options", JSON.stringify({ fieldMapping }));
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile, { fieldMapping });
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -459,21 +359,10 @@ describe("/api/admin/users/import", () => {
       (XLSX.utils.sheet_to_json as any).mockReturnValue(csvData);
       (prisma.user.create as any).mockResolvedValue({});
 
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File(["csv content"], "test.csv", { type: "text/csv" })
-      );
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile);
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -499,24 +388,13 @@ describe("/api/admin/users/import", () => {
         SheetNames: ["Sheet1"],
         Sheets: { Sheet1: {} },
       });
-      (XLSX.utils.sheet_to_json as any).mockReturnValue(csvData);
-      (prisma.user.create as any).mockResolvedValue({});
+      (XLSX.utils.sheet_to_json as unknown).mockReturnValue(csvData);
+      (prisma.user.create as unknown).mockResolvedValue({});
 
-      const formData = new FormData();
-      formData.append(
-        "file",
-        new File(["csv content"], "test.csv", { type: "text/csv" })
-      );
+      const mockFile = createMockFile("test.csv", "text/csv");
+      const mockRequest = createMockRequest(mockFile);
 
-      const request = new NextRequest(
-        "http://localhost/api/admin/users/import",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const response = await POST(request);
+      const response = await POST(mockRequest);
       const data = await response.json();
 
       expect(response.status).toBe(200);

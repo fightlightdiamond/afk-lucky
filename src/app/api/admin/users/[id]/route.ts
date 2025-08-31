@@ -237,13 +237,10 @@ export async function GET(
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return createErrorResponse(
-        "Authentication required",
-        UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS,
-        401,
-        "No valid session found",
-        ErrorSeverity.HIGH
-      );
+      return new NextResponse(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     const ability = createAbility(session);
@@ -296,35 +293,15 @@ export async function GET(
 
     const transformedUser = transformUser(user);
 
-    return NextResponse.json({
-      user: transformedUser,
-      metadata: {
-        permissions: user.role?.permissions || [],
-        canEdit: ability.can("update", "User"),
-        canDelete: ability.can("delete", "User") && user.id !== session.user.id,
-        canToggleStatus:
-          ability.can("update", "User") && user.id !== session.user.id,
-      },
-    });
+    return NextResponse.json(transformedUser);
   } catch (error) {
     console.error("Error fetching user:", error);
-
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      return createErrorResponse(
-        "Database query failed",
-        UserManagementErrorCodes.DATABASE_ERROR,
-        500,
-        `Prisma error: ${error.code} - ${error.message}`,
-        ErrorSeverity.HIGH
-      );
-    }
-
-    return createErrorResponse(
-      "Failed to fetch user",
-      UserManagementErrorCodes.INTERNAL_SERVER_ERROR,
-      500,
-      error instanceof Error ? error.message : "Unknown error occurred",
-      ErrorSeverity.CRITICAL
+    return new NextResponse(
+      JSON.stringify({ error: "Internal server error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 }
@@ -391,55 +368,52 @@ export async function PUT(
     });
 
     if (!existingUser) {
-      return createErrorResponse(
-        "User not found",
-        UserManagementErrorCodes.USER_NOT_FOUND,
-        404,
-        `User with ID '${userId}' does not exist`,
-        ErrorSeverity.MEDIUM
-      );
+      return new NextResponse(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     const isCurrentUser = existingUser.id === session.user.id;
 
+    // Check if at least one field is provided
+    const hasFields = Object.keys(requestData).some(
+      (key) => requestData[key as keyof UpdateUserRequest] !== undefined
+    );
+
+    if (!hasFields) {
+      return new NextResponse(
+        JSON.stringify({
+          error: "At least one field must be provided for update",
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     // Validate request data
     const validation = validateUserUpdateData(requestData, isCurrentUser);
     if (!validation.isValid) {
-      return createErrorResponse(
-        "Validation failed",
-        UserManagementErrorCodes.VALIDATION_ERROR,
-        400,
-        {
-          errors: validation.errors,
-          warnings: validation.warnings,
-        },
-        ErrorSeverity.MEDIUM
-      );
+      const firstError = validation.errors[0];
+      return new NextResponse(JSON.stringify({ error: firstError.message }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     // Check for email conflicts if email is being changed
     if (requestData.email && requestData.email !== existingUser.email) {
       const emailConflict = await prisma.user.findFirst({
         where: {
-          email: {
-            equals: requestData.email.toLowerCase().trim(),
-            mode: "insensitive",
-          },
+          email: requestData.email.toLowerCase().trim(),
           id: { not: userId },
         },
         select: { id: true, email: true },
       });
 
       if (emailConflict) {
-        return createErrorResponse(
-          "Email address is already in use",
-          UserManagementErrorCodes.EMAIL_ALREADY_EXISTS,
-          400,
-          {
-            conflictingUserId: emailConflict.id,
-            conflictingEmail: emailConflict.email,
-          },
-          ErrorSeverity.MEDIUM
+        return new NextResponse(
+          JSON.stringify({ error: "Email already exists" }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
         );
       }
     }
@@ -544,43 +518,23 @@ export async function PUT(
 
     const transformedUser = transformUser(updatedUser);
 
-    const response: UserMutationResponse = {
-      user: transformedUser,
-      validation: {
-        isValid: true,
-        errors: [],
-        warnings: validation.warnings,
-      },
-      metadata: {
-        wasEmailChanged:
-          !!requestData.email && requestData.email !== existingUser.email,
-        wasRoleChanged:
-          !!requestData.role_id && requestData.role_id !== existingUser.role_id,
-        wasStatusChanged: requestData.is_active !== undefined,
-        previousValues,
-      },
-    };
-
-    return NextResponse.json(response);
+    return NextResponse.json(transformedUser);
   } catch (error) {
     console.error("Error updating user:", error);
 
+    // Handle Prisma unique constraint violations (like duplicate email)
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      return createErrorResponse(
-        "Database update failed",
-        UserManagementErrorCodes.DATABASE_ERROR,
-        500,
-        `Prisma error: ${error.code} - ${error.message}`,
-        ErrorSeverity.HIGH
-      );
+      if (error.code === "P2002") {
+        return new NextResponse(
+          JSON.stringify({ error: "Email already exists" }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
     }
 
-    return createErrorResponse(
-      "Failed to update user",
-      UserManagementErrorCodes.INTERNAL_SERVER_ERROR,
-      500,
-      error instanceof Error ? error.message : "Unknown error occurred",
-      ErrorSeverity.CRITICAL
+    return new NextResponse(
+      JSON.stringify({ error: "Internal server error" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }
@@ -838,12 +792,9 @@ export async function DELETE(
 
     // Prevent self-deletion
     if (userId === session.user.id) {
-      return createErrorResponse(
-        "You cannot delete your own account",
-        UserManagementErrorCodes.CANNOT_DELETE_SELF,
-        400,
-        "Self-deletion is not allowed",
-        ErrorSeverity.MEDIUM
+      return new NextResponse(
+        JSON.stringify({ error: "Cannot delete your own account" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
 
@@ -870,28 +821,14 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: `User "${existingUser.first_name} ${existingUser.last_name}" deleted successfully`,
+      message: "User deleted successfully",
       deletedUserId: userId,
     });
   } catch (error) {
     console.error("Error deleting user:", error);
-
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      return createErrorResponse(
-        "Database deletion failed",
-        UserManagementErrorCodes.DATABASE_ERROR,
-        500,
-        `Prisma error: ${error.code} - ${error.message}`,
-        ErrorSeverity.HIGH
-      );
-    }
-
-    return createErrorResponse(
-      "Failed to delete user",
-      UserManagementErrorCodes.INTERNAL_SERVER_ERROR,
-      500,
-      error instanceof Error ? error.message : "Unknown error occurred",
-      ErrorSeverity.CRITICAL
+    return new NextResponse(
+      JSON.stringify({ error: "Internal server error" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }

@@ -1,36 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { vi } from "vitest";
+import { vi, describe, it, beforeEach, expect } from "vitest";
 import { DateRangeFilter } from "@/components/admin/filters/DateRangeFilter";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { expect } from "storybook/internal/test";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { expect } from "storybook/internal/test";
-import { it } from "@faker-js/faker";
-import { beforeEach } from "node:test";
-import { describe } from "node:test";
 
 describe("DateRangeFilter", () => {
   const mockOnChange = vi.fn();

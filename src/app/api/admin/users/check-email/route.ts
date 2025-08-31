@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     if (!session?.user) {
       return new NextResponse(
         JSON.stringify({
-          error: "Authentication required",
+          error: "Unauthorized",
           code: UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS,
         }),
         { status: 401, headers: { "Content-Type": "application/json" } }
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     if (!email) {
       return new NextResponse(
         JSON.stringify({
-          error: "Email parameter is required",
+          error: "Email is required",
           code: UserManagementErrorCodes.VALIDATION_ERROR,
         }),
         { status: 400, headers: { "Content-Type": "application/json" } }
@@ -51,20 +51,16 @@ export async function GET(request: Request) {
     if (!emailRegex.test(email)) {
       return new NextResponse(
         JSON.stringify({
-          available: false,
           error: "Invalid email format",
           code: UserManagementErrorCodes.INVALID_EMAIL_FORMAT,
         }),
-        { status: 200, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
 
     // Check if email exists (case-insensitive)
     const whereClause: any = {
-      email: {
-        equals: email.toLowerCase().trim(),
-        mode: "insensitive",
-      },
+      email: email.toLowerCase().trim(),
     };
 
     // Exclude current user when editing
@@ -74,8 +70,8 @@ export async function GET(request: Request) {
       };
     }
 
-    const existingUser = await prisma.user.findFirst({
-      where: whereClause,
+    const existingUser = await prisma.user.findUnique({
+      where: { email: email.toLowerCase().trim() },
       select: { id: true },
     });
 
@@ -100,7 +96,7 @@ export async function GET(request: Request) {
 
     return new NextResponse(
       JSON.stringify({
-        error: "Failed to check email availability",
+        error: "Internal server error",
         code: UserManagementErrorCodes.INTERNAL_SERVER_ERROR,
       }),
       { status: 500, headers: { "Content-Type": "application/json" } }

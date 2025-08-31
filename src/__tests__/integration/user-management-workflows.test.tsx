@@ -3,7 +3,10 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserManagementPage } from "@/components/admin/UserManagementPage";
+import { UserManagementProvider } from "@/components/admin/UserManagementProvider";
+import { AbilityProvider } from "@/context/AbilityContext";
 import { mockUsers, mockRoles } from "../__mocks__/user-data";
+import { testUsers, createTestSession } from "../test-utils/auth-helpers";
 
 // Mock API calls
 const mockFetch = vi.fn();
@@ -23,24 +26,66 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/admin/users",
 }));
 
+// Mock ability
+vi.mock("@/lib/ability", () => import("../__mocks__/ability"));
+
 // Mock next-auth
+const mockSession = createTestSession(testUsers.admin);
 vi.mock("next-auth/react", () => ({
   useSession: () => ({
-    data: {
-      user: {
-        id: "admin-id",
-        email: "admin@test.com",
-        role: "ADMIN",
-      },
-    },
+    data: mockSession,
     status: "authenticated",
   }),
 }));
 
 // Mock toast
+const mockToast = vi.fn();
 vi.mock("@/hooks/use-toast", () => ({
   useToast: () => ({
-    toast: vi.fn(),
+    toast: mockToast,
+  }),
+}));
+
+// Mock useUsers hook
+vi.mock("@/hooks/useUsers", () => ({
+  useUsers: vi.fn(() => ({
+    data: {
+      users: mockUsers,
+      pagination: {
+        page: 1,
+        pageSize: 10,
+        total: mockUsers.length,
+        totalPages: Math.ceil(mockUsers.length / 10),
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    },
+    isLoading: false,
+    error: null,
+    refetch: vi.fn(),
+  })),
+}));
+
+// Mock other hooks
+vi.mock("@/hooks/useUserMutations", () => ({
+  useUserMutations: () => ({
+    createUser: vi.fn(),
+    updateUser: vi.fn(),
+    deleteUser: vi.fn(),
+    toggleUserStatus: vi.fn(),
+  }),
+}));
+
+vi.mock("@/hooks/useExport", () => ({
+  useExport: () => ({
+    exportUsers: vi.fn(),
+    isExporting: false,
+  }),
+}));
+
+vi.mock("@/lib/error-handling", () => ({
+  useErrorHandler: () => ({
+    handleError: vi.fn(),
   }),
 }));
 
@@ -53,8 +98,17 @@ const createWrapper = () => {
   });
 
   return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <AbilityProvider>
+        <UserManagementProvider>{children}</UserManagementProvider>
+      </AbilityProvider>
+    </QueryClientProvider>
   );
+};
+
+const renderUserManagementPage = () => {
+  const Wrapper = createWrapper();
+  return render(<UserManagementPage roles={mockRoles} />, { wrapper: Wrapper });
 };
 
 describe("User Management Workflows", () => {
@@ -65,7 +119,7 @@ describe("User Management Workflows", () => {
     user = userEvent.setup();
 
     // Default successful responses
-    mockFetch.mockImplementation((url: string, options?: any) => {
+    mockFetch.mockImplementation((url: string, options?: unknown) => {
       if (url.includes("/api/admin/users") && !options?.method) {
         return Promise.resolve({
           ok: true,
@@ -76,6 +130,9 @@ describe("User Management Workflows", () => {
                 page: 1,
                 pageSize: 10,
                 total: mockUsers.length,
+                totalPages: Math.ceil(mockUsers.length / 10),
+                hasNextPage: false,
+                hasPreviousPage: false,
               },
             }),
         });
@@ -84,7 +141,14 @@ describe("User Management Workflows", () => {
       if (url.includes("/api/admin/roles")) {
         return Promise.resolve({
           ok: true,
-          json: () => Promise.resolve(mockRoles),
+          json: () => Promise.resolve({ roles: mockRoles }),
+        });
+      }
+
+      if (url.includes("/api/admin/users/check-email")) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ available: true }),
         });
       }
 
@@ -97,8 +161,7 @@ describe("User Management Workflows", () => {
 
   describe("Complete User Creation Workflow", () => {
     it("should create a new user with all required fields", async () => {
-      const Wrapper = createWrapper();
-      render(<UserManagementPage />, { wrapper: Wrapper });
+      renderUserManagementPage();
 
       // Wait for initial load
       await waitFor(() => {
@@ -106,7 +169,7 @@ describe("User Management Workflows", () => {
       });
 
       // Click create user button
-      const createButton = screen.getByRole("button", { name: /create user/i });
+      const createButton = screen.getByRole("button", { name: /create/i });
       await user.click(createButton);
 
       // Fill out the form
@@ -118,7 +181,7 @@ describe("User Management Workflows", () => {
       // Select a role
       const roleSelect = screen.getByRole("combobox", { name: /role/i });
       await user.click(roleSelect);
-      await user.click(screen.getByText("USER"));
+      await user.click(screen.getByText("Viewer"));
 
       // Mock successful creation
       mockFetch.mockImplementationOnce(() =>
@@ -131,7 +194,7 @@ describe("User Management Workflows", () => {
               first_name: "John",
               last_name: "Doe",
               is_active: true,
-              role: { name: "USER" },
+              role: { name: "Viewer" },
             }),
         })
       );
@@ -151,7 +214,7 @@ describe("User Management Workflows", () => {
               last_name: "Doe",
               email: "john.doe@test.com",
               password: "password123",
-              role_id: "role-2",
+              role_id: "3",
             }),
           })
         );
@@ -159,8 +222,7 @@ describe("User Management Workflows", () => {
     });
 
     it("should handle validation errors during user creation", async () => {
-      const Wrapper = createWrapper();
-      render(<UserManagementPage />, { wrapper: Wrapper });
+      renderUserManagementPage();
 
       await waitFor(() => {
         expect(screen.getByText("User Management")).toBeInTheDocument();
@@ -182,8 +244,7 @@ describe("User Management Workflows", () => {
     });
 
     it("should handle email availability checking", async () => {
-      const Wrapper = createWrapper();
-      render(<UserManagementPage />, { wrapper: Wrapper });
+      renderUserManagementPage();
 
       await waitFor(() => {
         expect(screen.getByText("User Management")).toBeInTheDocument();
@@ -213,8 +274,7 @@ describe("User Management Workflows", () => {
 
   describe("User Search and Filtering Workflow", () => {
     it("should search users by name and email", async () => {
-      const Wrapper = createWrapper();
-      render(<UserManagementPage />, { wrapper: Wrapper });
+      renderUserManagementPage();
 
       await waitFor(() => {
         expect(screen.getByText("User Management")).toBeInTheDocument();
@@ -245,13 +305,13 @@ describe("User Management Workflows", () => {
       const roleFilter = screen.getByRole("button", { name: /role/i });
       await user.click(roleFilter);
 
-      // Select ADMIN role
-      await user.click(screen.getByText("ADMIN"));
+      // Select Admin role
+      await user.click(screen.getByText("Admin"));
 
       // Should trigger filtered API call
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          expect.stringContaining("role=role-1"),
+          expect.stringContaining("role=1"),
           expect.any(Object)
         );
       });
@@ -296,14 +356,12 @@ describe("User Management Workflows", () => {
       // Apply role filter
       const roleFilter = screen.getByRole("button", { name: /role/i });
       await user.click(roleFilter);
-      await user.click(screen.getByText("ADMIN"));
+      await user.click(screen.getByText("Admin"));
 
       // Should combine filters in API call
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          expect.stringMatching(
-            /search=admin.*role=role-1|role=role-1.*search=admin/
-          ),
+          expect.stringMatching(/search=admin.*role=1|role=1.*search=admin/),
           expect.any(Object)
         );
       });
@@ -585,7 +643,7 @@ describe("User Management Workflows", () => {
 
       const roleSelect = screen.getByRole("combobox", { name: /role/i });
       await user.click(roleSelect);
-      await user.click(screen.getByText("USER"));
+      await user.click(screen.getByText("Viewer"));
 
       mockFetch.mockImplementationOnce(() =>
         Promise.resolve({
@@ -597,7 +655,7 @@ describe("User Management Workflows", () => {
               first_name: "Test",
               last_name: "User",
               is_active: true,
-              role: { name: "USER" },
+              role: { name: "Viewer" },
             }),
         })
       );
@@ -628,7 +686,7 @@ describe("User Management Workflows", () => {
               first_name: "Updated",
               last_name: "User",
               is_active: true,
-              role: { name: "USER" },
+              role: { name: "Viewer" },
             }),
         })
       );
@@ -648,7 +706,7 @@ describe("User Management Workflows", () => {
               first_name: "Updated",
               last_name: "User",
               is_active: false,
-              role: { name: "USER" },
+              role: { name: "Viewer" },
             }),
         })
       );
@@ -671,7 +729,7 @@ describe("User Management Workflows", () => {
               first_name: "Updated",
               last_name: "User",
               is_active: true,
-              role: { name: "USER" },
+              role: { name: "Viewer" },
             }),
         })
       );
@@ -876,7 +934,7 @@ describe("User Management Workflows", () => {
 
       const roleSelect = screen.getByRole("combobox", { name: /select role/i });
       await user.click(roleSelect);
-      await user.click(screen.getByText("ADMIN"));
+      await user.click(screen.getByText("Admin"));
 
       mockFetch.mockImplementationOnce(() =>
         Promise.resolve({
@@ -903,7 +961,7 @@ describe("User Management Workflows", () => {
       });
 
       // Verify users now have admin badges
-      const adminBadges = screen.getAllByText("ADMIN");
+      const adminBadges = screen.getAllByText("Admin");
       expect(adminBadges.length).toBeGreaterThan(0);
     });
   });

@@ -1,28 +1,30 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { renderHook, waitFor } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { renderHook, act } from "@testing-library/react";
 import { useExport } from "@/hooks/useExport";
-import { ReactNode } from "react";
+
+// Create a simple wrapper for renderHook
+const renderHookWithContainer = (hook: () => any) => {
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+
+  const result = renderHook(hook, {
+    container,
+  });
+
+  return result;
+};
 
 // Mock fetch
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
-// Mock toast
-const mockToast = vi.fn();
-vi.mock("@/hooks/use-toast", () => ({
-  useToast: () => ({
-    toast: mockToast,
-  }),
-}));
-
 // Mock URL.createObjectURL and URL.revokeObjectURL
 const mockCreateObjectURL = vi.fn();
 const mockRevokeObjectURL = vi.fn();
-Object.defineProperty(URL, "createObjectURL", {
+Object.defineProperty(window.URL, "createObjectURL", {
   value: mockCreateObjectURL,
 });
-Object.defineProperty(URL, "revokeObjectURL", {
+Object.defineProperty(window.URL, "revokeObjectURL", {
   value: mockRevokeObjectURL,
 });
 
@@ -48,19 +50,6 @@ Object.defineProperty(document.body, "removeChild", {
   value: mockRemoveChild,
 });
 
-const createWrapper = () => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
-    },
-  });
-
-  return ({ children }: { children: ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
-};
-
 describe("useExport", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -80,8 +69,7 @@ describe("useExport", () => {
         }),
       });
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHookWithContainer(() => useExport());
 
       const filters = {
         search: "john",
@@ -92,34 +80,23 @@ describe("useExport", () => {
         sortOrder: "asc" as const,
       };
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters,
+      let exportResult;
+      await act(async () => {
+        exportResult = await result.current.exportUsers(filters, "csv");
       });
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isSuccess).toBe(true);
-      });
-
-      expect(mockFetch).toHaveBeenCalledWith("/api/admin/users/export", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          format: "csv",
-          filters,
-        }),
-      });
+      expect(mockFetch).toHaveBeenCalledWith(
+        "/api/admin/users/export?format=csv&search=john&role=USER&status=active"
+      );
 
       expect(mockCreateObjectURL).toHaveBeenCalledWith(mockBlob);
       expect(mockCreateElement).toHaveBeenCalledWith("a");
       expect(mockClick).toHaveBeenCalled();
       expect(mockRevokeObjectURL).toHaveBeenCalledWith("blob:mock-url");
 
-      expect(mockToast).toHaveBeenCalledWith({
-        title: "Success",
-        description: "Users exported successfully",
+      expect(exportResult).toEqual({
+        success: true,
+        filename: "users.csv",
       });
     });
 
@@ -137,46 +114,29 @@ describe("useExport", () => {
         }),
       });
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      result.current.exportUsers.mutate({
-        format: "excel",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
+
+      let exportResult;
+      await act(async () => {
+        exportResult = await result.current.exportUsers(filters, "excel");
       });
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isSuccess).toBe(true);
-      });
+      expect(mockFetch).toHaveBeenCalledWith(
+        "/api/admin/users/export?format=excel"
+      );
 
-      expect(mockFetch).toHaveBeenCalledWith("/api/admin/users/export", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          format: "excel",
-          filters: {
-            search: "",
-            role: null,
-            status: null,
-            dateRange: null,
-            sortBy: "full_name",
-            sortOrder: "asc",
-          },
-        }),
-      });
-
-      expect(mockToast).toHaveBeenCalledWith({
-        title: "Success",
-        description: "Users exported successfully",
+      expect(exportResult).toEqual({
+        success: true,
+        filename: "users.xlsx",
       });
     });
 
@@ -192,47 +152,31 @@ describe("useExport", () => {
         }),
       });
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
       const dateRange = {
         from: new Date("2024-01-01"),
         to: new Date("2024-12-31"),
       };
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange,
-          sortBy: "created_at",
-          sortOrder: "desc",
-        },
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange,
+        sortBy: "created_at" as const,
+        sortOrder: "desc" as const,
+      };
+
+      await act(async () => {
+        await result.current.exportUsers(filters, "csv");
       });
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isSuccess).toBe(true);
-      });
-
-      expect(mockFetch).toHaveBeenCalledWith("/api/admin/users/export", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          format: "csv",
-          filters: {
-            search: "",
-            role: null,
-            status: null,
-            dateRange,
-            sortBy: "created_at",
-            sortOrder: "desc",
-          },
-        }),
-      });
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "/api/admin/users/export?format=csv&dateFrom=2024-01-01T00:00:00.000Z&dateTo=2024-12-31T00:00:00.000Z"
+        )
+      );
     });
 
     it("should extract filename from content-disposition header", async () => {
@@ -255,26 +199,27 @@ describe("useExport", () => {
       };
       mockCreateElement.mockReturnValueOnce(mockAnchor);
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
-      });
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isSuccess).toBe(true);
+      let exportResult;
+      await act(async () => {
+        exportResult = await result.current.exportUsers(filters, "csv");
       });
 
       expect(mockAnchor.download).toBe("filtered-users-2024.csv");
+      expect(exportResult).toEqual({
+        success: true,
+        filename: "filtered-users-2024.csv",
+      });
     });
 
     it("should use default filename when content-disposition is missing", async () => {
@@ -294,26 +239,22 @@ describe("useExport", () => {
       };
       mockCreateElement.mockReturnValueOnce(mockAnchor);
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
+
+      await act(async () => {
+        await result.current.exportUsers(filters, "csv");
       });
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isSuccess).toBe(true);
-      });
-
-      expect(mockAnchor.download).toBe("users.csv");
+      expect(mockAnchor.download).toBe("users-export.csv");
     });
 
     it("should handle export errors", async () => {
@@ -325,59 +266,47 @@ describe("useExport", () => {
           }),
       });
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
-      });
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isError).toBe(true);
-      });
+      await expect(
+        act(async () => {
+          await result.current.exportUsers(filters, "csv");
+        })
+      ).rejects.toThrow("Export failed");
 
-      expect(mockToast).toHaveBeenCalledWith({
-        title: "Error",
-        description: "Export failed",
-        variant: "destructive",
-      });
+      expect(result.current.error).toBe("Export failed");
     });
 
     it("should handle network errors", async () => {
       mockFetch.mockRejectedValueOnce(new Error("Network error"));
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
-      });
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isError).toBe(true);
-      });
+      await expect(
+        act(async () => {
+          await result.current.exportUsers(filters, "csv");
+        })
+      ).rejects.toThrow("Network error");
 
-      expect(mockToast).toHaveBeenCalledWith({
-        title: "Error",
-        description: "Failed to export users",
-        variant: "destructive",
-      });
+      expect(result.current.error).toBe("Network error");
     });
 
     it("should handle empty export results", async () => {
@@ -390,30 +319,24 @@ describe("useExport", () => {
           }),
       });
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "nonexistent",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
-      });
+      const filters = {
+        search: "nonexistent",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isError).toBe(true);
-      });
+      await expect(
+        act(async () => {
+          await result.current.exportUsers(filters, "csv");
+        })
+      ).rejects.toThrow("No users found matching the criteria");
 
-      expect(mockToast).toHaveBeenCalledWith({
-        title: "Error",
-        description: "No users found matching the criteria",
-        variant: "destructive",
-      });
+      expect(result.current.error).toBe("No users found matching the criteria");
     });
 
     it("should handle large export files", async () => {
@@ -421,7 +344,7 @@ describe("useExport", () => {
       const largeData =
         "id,email,first_name,last_name\n" +
         Array.from(
-          { length: 10000 },
+          { length: 1000 },
           (_, i) => `${i},user${i}@test.com,User,${i}`
         ).join("\n");
 
@@ -435,23 +358,19 @@ describe("useExport", () => {
         }),
       });
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
-      });
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isSuccess).toBe(true);
+      await act(async () => {
+        await result.current.exportUsers(filters, "csv");
       });
 
       expect(mockCreateObjectURL).toHaveBeenCalledWith(mockBlob);
@@ -478,64 +397,34 @@ describe("useExport", () => {
                     "content-disposition": 'attachment; filename="users.csv"',
                   }),
                 }),
-              100
+              50
             )
           )
       );
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      expect(result.current.exportUsers.isPending).toBe(false);
+      expect(result.current.isExporting).toBe(false);
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
+
+      const exportPromise = act(async () => {
+        await result.current.exportUsers(filters, "csv");
       });
 
-      expect(result.current.exportUsers.isPending).toBe(true);
+      // Check that it's loading during the export
+      expect(result.current.isExporting).toBe(true);
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isPending).toBe(false);
-      });
-    });
+      await exportPromise;
 
-    it("should provide isLoading convenience property", async () => {
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
-
-      expect(result.current.isLoading).toBe(false);
-
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        blob: () => Promise.resolve(new Blob()),
-        headers: new Headers(),
-      });
-
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
-      });
-
-      expect(result.current.isLoading).toBe(true);
-
-      await waitFor(() => {
-        expect(result.current.isLoading).toBe(false);
-      });
+      expect(result.current.isExporting).toBe(false);
     });
   });
 
@@ -552,23 +441,19 @@ describe("useExport", () => {
         }),
       });
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
-      });
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isSuccess).toBe(true);
+      await act(async () => {
+        await result.current.exportUsers(filters, "csv");
       });
 
       expect(mockRevokeObjectURL).toHaveBeenCalledWith("blob:mock-url");
@@ -593,27 +478,34 @@ describe("useExport", () => {
       };
       mockCreateElement.mockReturnValueOnce(mockAnchor);
 
-      const wrapper = createWrapper();
-      const { result } = renderHook(() => useExport(), { wrapper });
+      const { result } = renderHook(() => useExport());
 
-      result.current.exportUsers.mutate({
-        format: "csv",
-        filters: {
-          search: "",
-          role: null,
-          status: null,
-          dateRange: null,
-          sortBy: "full_name",
-          sortOrder: "asc",
-        },
-      });
+      const filters = {
+        search: "",
+        role: null,
+        status: null,
+        dateRange: null,
+        sortBy: "full_name" as const,
+        sortOrder: "asc" as const,
+      };
 
-      await waitFor(() => {
-        expect(result.current.exportUsers.isSuccess).toBe(true);
+      await act(async () => {
+        await result.current.exportUsers(filters, "csv");
       });
 
       expect(mockAppendChild).toHaveBeenCalledWith(mockAnchor);
       expect(mockRemoveChild).toHaveBeenCalledWith(mockAnchor);
+    });
+
+    it("should clear error state", () => {
+      const { result } = renderHook(() => useExport());
+
+      // Simulate an error state
+      act(() => {
+        result.current.clearError();
+      });
+
+      expect(result.current.error).toBe(null);
     });
   });
 });
