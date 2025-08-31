@@ -1,28 +1,40 @@
-import { expect, afterEach, vi } from "vitest";
+import { expect, afterEach, beforeAll, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
-import * as matchers from "@testing-library/jest-dom/matchers";
+// Import shared mocks for better performance
+import {
+  getPrismaMock,
+  getAuthMock,
+  getRouterMock,
+  testUtils,
+} from "./test-utils/shared-mocks";
 
-// Extend Vitest's expect with jest-dom matchers
-expect.extend(matchers);
+// Lazy load jest-dom matchers to reduce initial load time
+let matchersLoaded = false;
+const loadMatchers = async () => {
+  if (!matchersLoaded) {
+    const matchers = await import("@testing-library/jest-dom/matchers");
+    expect.extend(matchers);
+    matchersLoaded = true;
+  }
+};
 
-// Cleanup after each test case
-afterEach(() => {
-  cleanup();
+// Load matchers on first test
+beforeAll(async () => {
+  await loadMatchers();
+});
+
+// Optimized global mocks - create once and reuse
+const createObserverMock = () => ({
+  disconnect: vi.fn(),
+  observe: vi.fn(),
+  unobserve: vi.fn(),
 });
 
 // Mock IntersectionObserver
-global.IntersectionObserver = vi.fn(() => ({
-  disconnect: vi.fn(),
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-}));
+global.IntersectionObserver = vi.fn(createObserverMock);
 
 // Mock ResizeObserver
-global.ResizeObserver = vi.fn(() => ({
-  disconnect: vi.fn(),
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-}));
+global.ResizeObserver = vi.fn(createObserverMock);
 
 // Mock matchMedia
 Object.defineProperty(window, "matchMedia", {
@@ -45,91 +57,39 @@ Object.defineProperty(window, "scrollTo", {
   value: vi.fn(),
 });
 
-// Mock localStorage
-const localStorageMock = {
+// Optimized storage mocks - create once and reuse
+const createStorageMock = () => ({
   getItem: vi.fn(),
   setItem: vi.fn(),
   removeItem: vi.fn(),
   clear: vi.fn(),
-};
-Object.defineProperty(window, "localStorage", {
-  value: localStorageMock,
 });
 
-// Mock sessionStorage
-const sessionStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-};
-Object.defineProperty(window, "sessionStorage", {
-  value: sessionStorageMock,
-});
+// Mock localStorage and sessionStorage
+Object.defineProperty(window, "localStorage", { value: createStorageMock() });
+Object.defineProperty(window, "sessionStorage", { value: createStorageMock() });
 
-// Mock next/navigation
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-    back: vi.fn(),
-    forward: vi.fn(),
-    refresh: vi.fn(),
-    prefetch: vi.fn(),
-  }),
-  useSearchParams: () => ({
-    get: vi.fn(),
-    getAll: vi.fn(),
-    has: vi.fn(),
-    keys: vi.fn(),
-    values: vi.fn(),
-    entries: vi.fn(),
-    forEach: vi.fn(),
-    toString: vi.fn(),
-  }),
-  usePathname: () => "/admin/users",
-}));
+// Import shared mocks for better performance
+import {
+  getPrismaMock,
+  getAuthMock,
+  getRouterMock,
+  testUtils,
+} from "./test-utils/shared-mocks";
 
-// Mock next-auth
-vi.mock("next-auth/react", () => ({
-  useSession: () => ({
-    data: {
-      user: {
-        id: "test-user-id",
-        email: "test@example.com",
-        role: "ADMIN",
-      },
-    },
-    status: "authenticated",
-  }),
-  signIn: vi.fn(),
-  signOut: vi.fn(),
-  getSession: vi.fn(),
-}));
+// Mock next/navigation (lazy loaded)
+vi.mock("next/navigation", () => getRouterMock());
 
-// Mock Prisma
+// Mock next-auth (lazy loaded)
+vi.mock("next-auth/react", () => getAuthMock());
+
+// Mock Prisma (lazy loaded)
 vi.mock("@/lib/prisma", () => ({
-  default: {
-    user: {
-      findMany: vi.fn(),
-      findUnique: vi.fn(),
-      findFirst: vi.fn(),
-      create: vi.fn(),
-      update: vi.fn(),
-      updateMany: vi.fn(),
-      delete: vi.fn(),
-      deleteMany: vi.fn(),
-      count: vi.fn(),
-    },
-    role: {
-      findMany: vi.fn(),
-      findUnique: vi.fn(),
-      create: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn(),
-    },
-    $transaction: vi.fn(),
-    $connect: vi.fn(),
-    $disconnect: vi.fn(),
-  },
+  default: getPrismaMock(),
 }));
+
+// Enhanced cleanup with performance optimizations
+afterEach(() => {
+  cleanup();
+  testUtils.resetMocks();
+});

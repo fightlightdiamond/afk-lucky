@@ -5,12 +5,35 @@ import { ImportDialog } from "@/components/admin/ImportDialog";
 
 // Mock the hooks
 vi.mock("@/hooks/useImport", () => ({
-  useImportPreview: vi.fn(),
-  useImportValidation: vi.fn(),
-  useImportUsers: vi.fn(),
-  validateImportFile: vi.fn(),
+  useImportPreview: vi.fn(() => ({
+    mutate: vi.fn(),
+    data: undefined,
+    isLoading: false,
+    error: null,
+    reset: vi.fn(),
+  })),
+  useImportValidation: vi.fn(() => ({
+    mutate: vi.fn(),
+    data: undefined,
+    isLoading: false,
+    error: null,
+    reset: vi.fn(),
+  })),
+  useImportUsers: vi.fn(() => ({
+    mutate: vi.fn(),
+    data: undefined,
+    isLoading: false,
+    error: null,
+    reset: vi.fn(),
+  })),
+  validateImportFile: vi.fn(() => ({ valid: true })),
   downloadSampleCSV: vi.fn(),
-  createDefaultImportOptions: vi.fn(),
+  createDefaultImportOptions: vi.fn(() => ({
+    skipDuplicates: false,
+    updateExisting: false,
+    sendWelcomeEmail: true,
+    defaultRole: "USER",
+  })),
 }));
 
 const mockRoles = [

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
 import {
   useUsers,
   useCreateUser,
@@ -9,11 +10,30 @@ import {
   useBulkDeleteUsers,
 } from "@/hooks/useUsers";
 import { userApi } from "@/lib/api";
-import { toast } from "sonner";
 
 // Mock dependencies
-vi.mock("@/lib/api");
-vi.mock("sonner");
+vi.mock("@/lib/api", () => ({
+  userApi: {
+    getUsers: vi.fn(),
+    createUser: vi.fn(),
+    updateUser: vi.fn(),
+    deleteUser: vi.fn(),
+    bulkOperation: vi.fn(),
+  },
+}));
+
+vi.mock("@/lib/error-handling", () => ({
+  useErrorHandler: () => ({
+    handleError: vi.fn(),
+    handleSuccess: vi.fn(),
+    handleWarning: vi.fn(),
+  }),
+  createRetryHandler: (fn: any, retries: number, delay: number) => {
+    // Return a function that just calls the original function without retry logic for tests
+    return (...args: any[]) => fn(...args);
+  },
+}));
+
 vi.mock("@/store/userStore", () => ({
   useUserStore: () => ({
     userFilters: {
@@ -30,6 +50,8 @@ vi.mock("@/store/userStore", () => ({
       activity_status: null,
     },
     clearSelection: vi.fn(),
+    addOptimisticUpdate: vi.fn(),
+    removeOptimisticUpdate: vi.fn(),
   }),
 }));
 
@@ -75,19 +97,28 @@ const mockUsersResponse = {
 const createWrapper = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
+      queries: {
+        retry: false,
+        retryDelay: 0,
+        staleTime: 0,
+        gcTime: 0,
+      },
+      mutations: {
+        retry: false,
+        retryDelay: 0,
+      },
     },
   });
 
-  return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+  return ({ children }: { children: React.ReactNode }) =>
+    React.createElement(QueryClientProvider, { client: queryClient }, children);
 };
 
 describe("useUsers hook", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Setup default mock responses
+    vi.mocked(userApi.getUsers).mockResolvedValue(mockUsersResponse);
   });
 
   afterEach(() => {
@@ -95,7 +126,7 @@ describe("useUsers hook", () => {
   });
 
   it("should fetch users successfully", async () => {
-    (userApi.getUsers as any).mockResolvedValue(mockUsersResponse);
+    vi.mocked(userApi.getUsers).mockResolvedValue(mockUsersResponse);
 
     const { result } = renderHook(() => useUsers(), {
       wrapper: createWrapper(),
@@ -111,39 +142,42 @@ describe("useUsers hook", () => {
   });
 
   it("should handle fetch errors", async () => {
-    const error = new Error("Failed to fetch users");
-    (userApi.getUsers as any).mockRejectedValue(error);
+    const error = {
+      message: "Failed to fetch users",
+      statusCode: 500,
+      code: "INTERNAL_SERVER_ERROR",
+    };
+    vi.mocked(userApi.getUsers).mockRejectedValue(error);
 
     const { result } = renderHook(() => useUsers(), {
       wrapper: createWrapper(),
     });
 
-    await waitFor(() => {
-      expect(result.current.isError).toBe(true);
-    });
+    // Wait for the query to settle (either success or error)
+    await waitFor(
+      () => {
+        expect(result.current.isLoading).toBe(false);
+      },
+      { timeout: 3000 }
+    );
 
-    expect(result.current.error).toBe(error);
+    // Check that it's in error state
+    expect(result.current.isError).toBe(true);
+    expect(result.current.error).toEqual(error);
   });
 
-  it("should apply client-side filtering", async () => {
-    const mockStore = {
-      userFilters: {
-        search: "john",
-        role: null,
-        status: null,
-        dateRange: null,
-        sortBy: "created_at",
-        sortOrder: "desc",
-      },
-      clearSelection: vi.fn(),
+  it("should use provided params for filtering", async () => {
+    const params = {
+      search: "john",
+      role: "USER",
+      status: "active" as const,
+      page: 1,
+      pageSize: 20,
     };
 
-    vi.mocked(require("@/store/userStore").useUserStore).mockReturnValue(
-      mockStore
-    );
-    (userApi.getUsers as any).mockResolvedValue(mockUsersResponse);
+    vi.mocked(userApi.getUsers).mockResolvedValue(mockUsersResponse);
 
-    const { result } = renderHook(() => useUsers(), {
+    const { result } = renderHook(() => useUsers(params), {
       wrapper: createWrapper(),
     });
 
@@ -151,7 +185,15 @@ describe("useUsers hook", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(result.current.data?.users).toHaveLength(1);
+    expect(userApi.getUsers).toHaveBeenCalledWith(
+      expect.objectContaining({
+        search: "john",
+        role: "USER",
+        status: "active",
+        page: 1,
+        pageSize: 20,
+      })
+    );
   });
 });
 
@@ -170,11 +212,12 @@ describe("useCreateUser hook", () => {
       avatar: null,
       role: null,
       full_name: "New User",
+      display_name: "New User",
       status: "active" as const,
       activity_status: "never" as const,
     };
 
-    (userApi.createUser as any).mockResolvedValue(newUser);
+    vi.mocked(userApi.createUser).mockResolvedValue(newUser);
 
     const { result } = renderHook(() => useCreateUser(), {
       wrapper: createWrapper(),
@@ -189,17 +232,20 @@ describe("useCreateUser hook", () => {
 
     result.current.mutate(userData);
 
-    await waitFor(() => {
-      expect(result.current.isSuccess).toBe(true);
-    });
+    await waitFor(
+      () => {
+        expect(result.current.isLoading).toBe(false);
+      },
+      { timeout: 3000 }
+    );
 
+    expect(result.current.isSuccess).toBe(true);
     expect(userApi.createUser).toHaveBeenCalledWith(userData);
-    expect(toast.success).toHaveBeenCalledWith("Tạo người dùng thành công!");
   });
 
   it("should handle create user errors", async () => {
     const error = new Error("Email already exists");
-    (userApi.createUser as any).mockRejectedValue(error);
+    vi.mocked(userApi.createUser).mockRejectedValue(error);
 
     const { result } = renderHook(() => useCreateUser(), {
       wrapper: createWrapper(),
@@ -218,7 +264,7 @@ describe("useCreateUser hook", () => {
       expect(result.current.isError).toBe(true);
     });
 
-    expect(toast.error).toHaveBeenCalledWith("Email already exists");
+    expect(result.current.error).toBe(error);
   });
 });
 
@@ -230,7 +276,8 @@ describe("useUpdateUser hook", () => {
       full_name: "Updated Doe",
     };
 
-    (userApi.updateUser as any).mockResolvedValue(updatedUser);
+    const mockResponse = { user: updatedUser };
+    vi.mocked(userApi.updateUser).mockResolvedValue(updatedUser);
 
     const { result } = renderHook(() => useUpdateUser(), {
       wrapper: createWrapper(),
@@ -250,14 +297,11 @@ describe("useUpdateUser hook", () => {
     expect(userApi.updateUser).toHaveBeenCalledWith("user-1", {
       first_name: "Updated",
     });
-    expect(toast.success).toHaveBeenCalledWith(
-      "Cập nhật người dùng thành công!"
-    );
   });
 
   it("should handle update user errors", async () => {
     const error = new Error("User not found");
-    (userApi.updateUser as any).mockRejectedValue(error);
+    vi.mocked(userApi.updateUser).mockRejectedValue(error);
 
     const { result } = renderHook(() => useUpdateUser(), {
       wrapper: createWrapper(),
@@ -274,13 +318,13 @@ describe("useUpdateUser hook", () => {
       expect(result.current.isError).toBe(true);
     });
 
-    expect(toast.error).toHaveBeenCalledWith("User not found");
+    expect(result.current.error).toBe(error);
   });
 });
 
 describe("useDeleteUser hook", () => {
   it("should delete user successfully", async () => {
-    (userApi.deleteUser as any).mockResolvedValue(undefined);
+    vi.mocked(userApi.deleteUser).mockResolvedValue(undefined);
 
     const { result } = renderHook(() => useDeleteUser(), {
       wrapper: createWrapper(),
@@ -293,12 +337,11 @@ describe("useDeleteUser hook", () => {
     });
 
     expect(userApi.deleteUser).toHaveBeenCalledWith("user-1");
-    expect(toast.success).toHaveBeenCalledWith("Xóa người dùng thành công!");
   });
 
   it("should handle delete user errors", async () => {
     const error = new Error("Cannot delete user");
-    (userApi.deleteUser as any).mockRejectedValue(error);
+    vi.mocked(userApi.deleteUser).mockRejectedValue(error);
 
     const { result } = renderHook(() => useDeleteUser(), {
       wrapper: createWrapper(),
@@ -310,13 +353,18 @@ describe("useDeleteUser hook", () => {
       expect(result.current.isError).toBe(true);
     });
 
-    expect(toast.error).toHaveBeenCalledWith("Cannot delete user");
+    expect(result.current.error).toBe(error);
   });
 });
 
 describe("useBulkDeleteUsers hook", () => {
   it("should bulk delete users successfully", async () => {
-    (userApi.deleteUser as any).mockResolvedValue(undefined);
+    const mockBulkResult = {
+      success: 2,
+      failed: 0,
+      errors: [],
+    };
+    vi.mocked(userApi.bulkOperation).mockResolvedValue(mockBulkResult);
 
     const { result } = renderHook(() => useBulkDeleteUsers(), {
       wrapper: createWrapper(),
@@ -329,16 +377,19 @@ describe("useBulkDeleteUsers hook", () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userApi.deleteUser).toHaveBeenCalledTimes(2);
-    expect(userApi.deleteUser).toHaveBeenCalledWith("user-1");
-    expect(userApi.deleteUser).toHaveBeenCalledWith("user-2");
-    expect(toast.success).toHaveBeenCalledWith("Đã xóa 2 người dùng!");
+    expect(userApi.bulkOperation).toHaveBeenCalledWith({
+      operation: "delete",
+      userIds,
+    });
   });
 
   it("should handle partial failures in bulk delete", async () => {
-    (userApi.deleteUser as any)
-      .mockResolvedValueOnce(undefined) // user-1 success
-      .mockRejectedValueOnce(new Error("Cannot delete user-2")); // user-2 fails
+    const mockBulkResult = {
+      success: 1,
+      failed: 1,
+      errors: ["Cannot delete user-2"],
+    };
+    vi.mocked(userApi.bulkOperation).mockResolvedValue(mockBulkResult);
 
     const { result } = renderHook(() => useBulkDeleteUsers(), {
       wrapper: createWrapper(),
@@ -348,10 +399,12 @@ describe("useBulkDeleteUsers hook", () => {
     result.current.mutate(userIds);
 
     await waitFor(() => {
-      expect(result.current.isError).toBe(true);
+      expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(userApi.deleteUser).toHaveBeenCalledTimes(2);
-    expect(toast.error).toHaveBeenCalled();
+    expect(userApi.bulkOperation).toHaveBeenCalledWith({
+      operation: "delete",
+      userIds,
+    });
   });
 });

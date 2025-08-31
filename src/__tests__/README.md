@@ -2,6 +2,12 @@
 
 This directory contains comprehensive tests for the admin user management system.
 
+## 📚 Documentation
+
+- **[Test Patterns and Best Practices](./TEST_PATTERNS_AND_BEST_PRACTICES.md)** - Comprehensive guide to testing patterns, best practices, and guidelines
+- **[Quick Reference Guide](./QUICK_REFERENCE.md)** - Quick reference for common test patterns and scenarios
+- **[Performance Optimizations](./test-performance-optimizations.md)** - Test performance optimization strategies and metrics
+
 ## Test Structure
 
 ```

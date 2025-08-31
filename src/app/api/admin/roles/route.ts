@@ -77,10 +77,8 @@ export async function GET(request: Request) {
       },
     })) as unknown as RoleWithCount[];
 
-    return NextResponse.json({
-      roles,
-      availablePermissions: AVAILABLE_PERMISSIONS,
-    });
+    // For GET requests, return just the roles array (not wrapped in an object)
+    return NextResponse.json(roles);
   } catch (error) {
     console.error("Error fetching roles:", error);
     return new NextResponse("Internal Server Error", { status: 500 });

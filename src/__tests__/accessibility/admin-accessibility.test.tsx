@@ -5,6 +5,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserTable } from "@/components/admin/UserTable";
 import { UserFilters } from "@/components/admin/UserFilters";
 import { BulkActionBar } from "@/components/admin/BulkActionBar";
@@ -192,7 +193,18 @@ describe("Admin User Management Accessibility", () => {
         onImport: vi.fn(),
       };
 
-      render(<UserFilters {...propsWithActions} />);
+      const queryClient = new QueryClient({
+        defaultOptions: {
+          queries: { retry: false },
+          mutations: { retry: false },
+        },
+      });
+
+      render(
+        <QueryClientProvider client={queryClient}>
+          <UserFilters {...propsWithActions} />
+        </QueryClientProvider>
+      );
 
       const exportButton = screen.getByRole("button", { name: /export/i });
       expect(exportButton).toHaveAttribute("aria-label");
@@ -225,12 +237,14 @@ describe("Admin User Management Accessibility", () => {
     it("should have accessible action buttons", () => {
       render(<BulkActionBar {...defaultProps} />);
 
-      const banButton = screen.getByRole("button", { name: /ban.*3.*user/i });
+      const banButton = screen.getByRole("button", {
+        name: "Ban 3 selected users",
+      });
       expect(banButton).toHaveAttribute("aria-label");
       expect(banButton).toHaveAttribute("aria-describedby");
 
       const unbanButton = screen.getByRole("button", {
-        name: /unban.*3.*user/i,
+        name: "Unban 3 selected users",
       });
       expect(unbanButton).toHaveAttribute("aria-label");
       expect(unbanButton).toHaveAttribute("aria-describedby");
@@ -281,9 +295,9 @@ describe("Admin User Management Accessibility", () => {
 
       // Check for current page indicator
       const currentPageButton = screen.getByRole("button", {
-        "aria-current": "page",
+        name: "Current page, page 1",
       });
-      expect(currentPageButton).toBeInTheDocument();
+      expect(currentPageButton).toHaveAttribute("aria-current", "page");
     });
 
     it("should announce pagination status", () => {

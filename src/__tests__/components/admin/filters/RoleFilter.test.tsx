@@ -25,6 +25,8 @@ describe("RoleFilter", () => {
       />
     );
 
+    const combobox = screen.getByRole("combobox");
+    expect(combobox).toBeInTheDocument();
     expect(screen.getByText("Select roles")).toBeInTheDocument();
   });
 

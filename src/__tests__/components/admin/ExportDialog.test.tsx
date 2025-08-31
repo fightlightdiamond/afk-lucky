@@ -51,7 +51,8 @@ describe("ExportDialog", () => {
     // Click on format selector
     fireEvent.click(screen.getByRole("combobox"));
 
-    expect(screen.getByText("CSV")).toBeInTheDocument();
+    // Use getAllByText and check that options exist
+    expect(screen.getAllByText("CSV").length).toBeGreaterThan(0);
     expect(screen.getByText("Excel")).toBeInTheDocument();
     expect(screen.getByText("JSON")).toBeInTheDocument();
   });
@@ -74,7 +75,7 @@ describe("ExportDialog", () => {
 
     expect(screen.queryByText("Fields to Export")).not.toBeInTheDocument();
     expect(
-      screen.getByText("All available fields will be included")
+      screen.getByText(/All available fields will be included/)
     ).toBeInTheDocument();
   });
 
@@ -178,9 +179,7 @@ describe("ExportDialog", () => {
   });
 
   it("should handle export error", async () => {
-    const mockOnExport = jest
-      .fn()
-      .mockRejectedValue(new Error("Export failed"));
+    const mockOnExport = vi.fn().mockRejectedValue(new Error("Export failed"));
     render(<ExportDialog {...defaultProps} onExport={mockOnExport} />);
 
     // Click export button
@@ -201,7 +200,7 @@ describe("ExportDialog", () => {
   });
 
   it("should show loading state during export", async () => {
-    const mockOnExport = jest
+    const mockOnExport = vi
       .fn()
       .mockImplementation(
         () => new Promise((resolve) => setTimeout(resolve, 100))

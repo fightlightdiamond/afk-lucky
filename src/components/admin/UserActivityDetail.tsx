@@ -31,6 +31,33 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { User } from "@/types/user";
 import { formatDistanceToNow, format } from "date-fns";
+
+// Helper function to safely format dates
+const safeFormatDistanceToNow = (dateString: string | null | undefined) => {
+  if (!dateString) return "Never";
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Invalid date";
+    return formatDistanceToNow(date, { addSuffix: true });
+  } catch {
+    return "Invalid date";
+  }
+};
+
+// Helper function to safely format dates with custom format
+const safeFormat = (
+  dateString: string | null | undefined,
+  formatStr: string
+) => {
+  if (!dateString) return "Never";
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Invalid date";
+    return format(date, formatStr);
+  } catch {
+    return "Invalid date";
+  }
+};
 import { cn } from "@/lib/utils";
 
 interface UserActivityDetailProps {
@@ -159,7 +186,7 @@ const getActivityStatusInfo = (user: User) => {
         bgColor: "bg-gray-50 border-gray-200",
         icon: <div className="w-2 h-2 bg-gray-400 rounded-full" />,
         description: user.last_login
-          ? `Last seen ${formatDistanceToNow(new Date(user.last_login))} ago`
+          ? `Last seen ${safeFormatDistanceToNow(user.last_login)}`
           : "Offline",
       };
     case "never":
@@ -237,8 +264,7 @@ export function UserActivityDetail({ user, trigger }: UserActivityDetailProps) {
                 <div className="text-right text-sm text-muted-foreground">
                   {user.created_at && (
                     <div>
-                      Member since{" "}
-                      {format(new Date(user.created_at), "MMM dd, yyyy")}
+                      Member since {safeFormat(user.created_at, "MMM dd, yyyy")}
                     </div>
                   )}
                 </div>
@@ -275,7 +301,7 @@ export function UserActivityDetail({ user, trigger }: UserActivityDetailProps) {
                 <div className="text-center p-4 bg-muted/50 rounded-lg">
                   <div className="text-2xl font-bold text-blue-600">
                     {user.last_login
-                      ? formatDistanceToNow(new Date(user.last_login))
+                      ? safeFormatDistanceToNow(user.last_login)
                       : "Never"}
                   </div>
                   <div className="text-sm text-muted-foreground">
@@ -317,9 +343,7 @@ export function UserActivityDetail({ user, trigger }: UserActivityDetailProps) {
                         </TooltipProvider>
                         <div>
                           <div className="font-medium text-sm">
-                            Started{" "}
-                            {formatDistanceToNow(new Date(session.startTime))}{" "}
-                            ago
+                            Started {safeFormatDistanceToNow(session.startTime)}
                           </div>
                           <div className="text-xs text-muted-foreground flex items-center gap-2">
                             <MapPin className="w-3 h-3" />
@@ -392,14 +416,11 @@ export function UserActivityDetail({ user, trigger }: UserActivityDetailProps) {
                         </div>
                         <div className="text-right">
                           <div className="text-xs text-muted-foreground">
-                            {formatDistanceToNow(new Date(session.startTime))}{" "}
-                            ago
+                            {safeFormatDistanceToNow(session.startTime)}
                           </div>
                           {session.endTime && (
                             <div className="text-xs text-muted-foreground">
-                              Ended{" "}
-                              {formatDistanceToNow(new Date(session.endTime))}{" "}
-                              ago
+                              Ended {safeFormatDistanceToNow(session.endTime)}
                             </div>
                           )}
                         </div>

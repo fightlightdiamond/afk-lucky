@@ -1,22 +1,18 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { GET, PUT, DELETE } from "@/app/api/admin/users/[id]/route";
 import { NextRequest } from "next/server";
-import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import bcrypt from "bcryptjs";
 
 // Mock dependencies
-vi.mock("@/lib/prisma");
-vi.mock("next-auth");
+vi.mock("@/lib/prisma", () => import("../../__mocks__/prisma"));
+vi.mock("next-auth", () => import("../../__mocks__/auth"));
 vi.mock("bcryptjs");
-vi.mock("@/lib/ability", () => ({
-  createAbilityForUser: vi.fn(() => ({
-    can: vi.fn(() => true),
-  })),
-}));
+vi.mock("@/lib/ability", () => import("../../__mocks__/ability"));
 
-const mockPrisma = prisma as any;
-const mockGetServerSession = getServerSession as any;
+// Import mocks after mocking
+import { mockPrisma } from "../../__mocks__/prisma";
+import { getServerSession as mockGetServerSession } from "../../__mocks__/auth";
 const mockBcrypt = bcrypt as any;
 
 describe("/api/admin/users/[id]", () => {

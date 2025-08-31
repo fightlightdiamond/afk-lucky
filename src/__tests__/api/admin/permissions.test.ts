@@ -7,6 +7,9 @@ import { createAbility } from "@/lib/ability";
 // Mock dependencies
 vi.mock("next-auth");
 vi.mock("@/lib/ability");
+
+// Import mocks after mocking
+import { mockAbility } from "../../__mocks__/ability";
 vi.mock("@/services/permissionService", () => ({
   AVAILABLE_PERMISSIONS: [
     {

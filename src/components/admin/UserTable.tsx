@@ -46,6 +46,18 @@ import { UserStatusManager } from "@/components/admin/UserStatusManager";
 import { UserActivityDetail } from "@/components/admin/UserActivityDetail";
 import { User, UserFilters, SortableUserField, UserStatus } from "@/types/user";
 import { formatDistanceToNow } from "date-fns";
+
+// Helper function to safely format dates
+const safeFormatDistanceToNow = (dateString: string | null | undefined) => {
+  if (!dateString) return "Never";
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Invalid date";
+    return formatDistanceToNow(date, { addSuffix: true });
+  } catch {
+    return "Invalid date";
+  }
+};
 import { cn } from "@/lib/utils";
 import {
   TableLoading,
@@ -170,7 +182,7 @@ function ActivityStatusBadge({ user }: { user: User }) {
         return {
           variant: "secondary" as const,
           label: user.last_login
-            ? `Last seen ${formatDistanceToNow(new Date(user.last_login))} ago`
+            ? `Last seen ${safeFormatDistanceToNow(user.last_login)}`
             : "Offline",
           displayLabel: "Offline",
           icon: <div className="w-2 h-2 bg-gray-400 rounded-full" />,
@@ -183,7 +195,7 @@ function ActivityStatusBadge({ user }: { user: User }) {
                     Last login: {new Date(user.last_login).toLocaleString()}
                   </p>
                   <p className="text-xs">
-                    {formatDistanceToNow(new Date(user.last_login))} ago
+                    {safeFormatDistanceToNow(user.last_login)}
                   </p>
                 </>
               ) : (

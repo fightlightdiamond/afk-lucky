@@ -1,20 +1,16 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { GET } from "@/app/api/admin/users/check-email/route";
 import { NextRequest } from "next/server";
-import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 
 // Mock dependencies
-vi.mock("@/lib/prisma");
-vi.mock("next-auth");
-vi.mock("@/lib/ability", () => ({
-  createAbilityForUser: vi.fn(() => ({
-    can: vi.fn(() => true),
-  })),
-}));
+vi.mock("@/lib/prisma", () => import("../../__mocks__/prisma"));
+vi.mock("next-auth", () => import("../../__mocks__/auth"));
+vi.mock("@/lib/ability", () => import("../../__mocks__/ability"));
 
-const mockPrisma = prisma as any;
-const mockGetServerSession = getServerSession as any;
+// Import mocks after mocking
+import { mockPrisma } from "../../__mocks__/prisma";
+import { getServerSession as mockGetServerSession } from "../../__mocks__/auth";
 
 describe("/api/admin/users/check-email", () => {
   beforeEach(() => {

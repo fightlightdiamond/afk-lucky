@@ -2,24 +2,16 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { GET, PUT, DELETE } from "@/app/api/admin/roles/[id]/route";
 import { getServerSession } from "next-auth";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { createAbility } from "@/lib/ability";
 
 // Mock dependencies
-vi.mock("next-auth");
-vi.mock("@/lib/prisma", () => ({
-  default: {
-    role: {
-      findFirst: vi.fn(),
-      update: vi.fn(),
-      delete: vi.fn(),
-    },
-    user: {
-      count: vi.fn(),
-    },
-  },
-}));
-vi.mock("@/lib/ability");
+vi.mock("next-auth", () => import("../../__mocks__/auth"));
+vi.mock("@/lib/prisma", () => import("../../__mocks__/prisma"));
+vi.mock("@/lib/ability", () => import("../../__mocks__/ability"));
+
+// Import mocks after mocking
+import { mockAbility } from "../../__mocks__/ability";
 
 const mockSession = {
   user: {

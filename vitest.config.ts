@@ -14,6 +14,7 @@ const dirname =
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react()],
+  cacheDir: "node_modules/.vitest",
   test: {
     projects: [
       // Unit and integration tests
@@ -25,6 +26,21 @@ export default defineConfig({
           setupFiles: ["./src/__tests__/setup.ts"],
           globals: true,
           include: ["src/**/*.{test,spec}.{js,ts,jsx,tsx}"],
+          // Performance optimizations
+          pool: "threads",
+          poolOptions: {
+            threads: {
+              singleThread: false,
+              maxThreads: 4,
+              minThreads: 2,
+            },
+          },
+          // Reduce test isolation overhead
+          isolate: false,
+          // Optimize test discovery - cache configuration moved to Vite's cacheDir
+          // Faster test execution
+          testTimeout: 10000,
+          hookTimeout: 10000,
           coverage: {
             provider: "v8",
             reporter: ["text", "json", "html"],

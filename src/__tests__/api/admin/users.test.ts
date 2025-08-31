@@ -3,33 +3,19 @@ import { NextRequest } from "next/server";
 import { GET, POST } from "@/app/api/admin/users/route";
 import { POST as BulkPOST } from "@/app/api/admin/users/bulk/route";
 import { getServerSession } from "next-auth";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { createAbility } from "@/lib/ability";
 import bcrypt from "bcryptjs";
 import { UserManagementErrorCodes } from "@/types/user";
 
 // Mock dependencies
-vi.mock("next-auth");
-vi.mock("@/lib/prisma", () => ({
-  default: {
-    user: {
-      findMany: vi.fn(),
-      count: vi.fn(),
-      create: vi.fn(),
-      findUnique: vi.fn(),
-      updateMany: vi.fn(),
-      delete: vi.fn(),
-      groupBy: vi.fn(),
-    },
-    role: {
-      findMany: vi.fn(),
-      findUnique: vi.fn(),
-    },
-    $transaction: vi.fn(),
-  },
-}));
-vi.mock("@/lib/ability");
+vi.mock("next-auth", () => import("../../__mocks__/auth"));
+vi.mock("@/lib/prisma", () => import("../../__mocks__/prisma"));
+vi.mock("@/lib/ability", () => import("../../__mocks__/ability"));
 vi.mock("bcryptjs");
+
+// Import mocks after mocking
+import { mockAbility } from "../../__mocks__/ability";
 
 const mockSession = {
   user: {
@@ -37,11 +23,6 @@ const mockSession = {
     email: "admin@example.com",
     role: "ADMIN",
   },
-};
-
-const mockAbility = {
-  can: vi.fn(() => true),
-  cannot: vi.fn(() => false),
 };
 
 const mockUsers = [
