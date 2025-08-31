@@ -1,5 +1,8 @@
 // Main Components Barrel Export
 
+// UI Components
+export * from "./ui";
+
 // Domain-specific components
 export * from "./admin";
 export * from "./auth";
