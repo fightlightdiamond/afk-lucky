@@ -758,34 +758,36 @@ export const UserTableOptimized = React.memo<UserTableOptimizedProps>(
             />
           </div>
         ) : (
-          <Table
-            role="table"
-            aria-label="Users table"
-            aria-describedby="table-description"
-          >
+          <>
             <div id="table-description" className="sr-only">
               Table showing {users.length} users with columns for selection,
               user information, role, status, activity, creation date, and
               actions.
             </div>
-            {tableHeader}
-            <TableBody>
-              {users.map((user, index) => (
-                <UserRow
-                  key={user.id}
-                  user={user}
-                  index={index}
-                  isSelected={selectedUsers.has(user.id)}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                  onToggleStatus={onToggleStatus}
-                  onStatusChange={onStatusChange}
-                  onUserSelection={onUserSelection}
-                  isMobile={isMobile}
-                />
-              ))}
-            </TableBody>
-          </Table>
+            <Table
+              role="table"
+              aria-label="Users table"
+              aria-describedby="table-description"
+            >
+              {tableHeader}
+              <TableBody>
+                {users.map((user, index) => (
+                  <UserRow
+                    key={user.id}
+                    user={user}
+                    index={index}
+                    isSelected={selectedUsers.has(user.id)}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                    onToggleStatus={onToggleStatus}
+                    onStatusChange={onStatusChange}
+                    onUserSelection={onUserSelection}
+                    isMobile={isMobile}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </>
         )}
       </LoadingStateWrapper>
     );

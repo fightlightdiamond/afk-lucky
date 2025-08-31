@@ -23,8 +23,8 @@ interface RoleWithCount {
   name: string;
   description: string | null;
   permissions: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   _count: {
     users: number;
   };
@@ -39,8 +39,11 @@ export async function GET(request: Request) {
     console.log("🎫 API Session:", {
       hasSession: !!session,
       userId: session?.user?.id,
+      userEmail: session?.user?.email,
       userRole: session?.user?.role,
       userPermissions: session?.user?.role?.permissions,
+      sessionKeys: session ? Object.keys(session) : [],
+      userKeys: session?.user ? Object.keys(session.user) : [],
     });
 
     if (!session?.user) {
@@ -60,14 +63,14 @@ export async function GET(request: Request) {
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    const roles = (await prisma.role.findMany({
+    const rolesData = await prisma.role.findMany({
       select: {
         id: true,
         name: true,
         description: true,
         permissions: true,
-        created_at: true,
-        updated_at: true,
+        created_at: true, // Use schema field name
+        updated_at: true, // Use schema field name
         _count: {
           select: { users: true },
         },
@@ -75,13 +78,43 @@ export async function GET(request: Request) {
       orderBy: {
         name: "asc",
       },
-    })) as unknown as RoleWithCount[];
+    });
 
-    // For GET requests, return just the roles array (not wrapped in an object)
-    return NextResponse.json(roles);
+    // Map database field names to frontend expected names
+    const roles = rolesData.map((role) => ({
+      id: role.id,
+      name: role.name,
+      description: role.description,
+      permissions: role.permissions,
+      createdAt: role.created_at.toISOString(), // Map to frontend format
+      updatedAt: role.updated_at.toISOString(), // Map to frontend format
+      _count: role._count,
+    }));
+
+    console.log("📊 API: Returning roles:", {
+      count: roles.length,
+      roleNames: roles.map((r) => r.name),
+    });
+
+    // Return roles wrapped in an object to match frontend expectations
+    return NextResponse.json({ roles });
   } catch (error) {
-    console.error("Error fetching roles:", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.error("❌ Error fetching roles:", error);
+    console.error("❌ Error details:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined,
+    });
+    return new NextResponse(
+      JSON.stringify({
+        error: "Internal Server Error",
+        details: error instanceof Error ? error.message : "Unknown error",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 }
 

@@ -18,7 +18,7 @@ import {
   useIntelligentPrefetch,
   useUsersPerformance,
 } from "@/hooks/useUsers";
-import { useUserStore } from "@/store";
+import { useUserManagement } from "./UserManagementProvider";
 import { useResponsive } from "@/hooks/useResponsive";
 import {
   useOptimizedCallback,
@@ -82,13 +82,13 @@ export const UserManagementPageOptimized =
       const [editingUser, setEditingUser] = useState<User | null>(null);
 
       // Store state
+      // Context state
       const {
         selectedUsers,
-        selectUser,
+        toggleUserSelection,
         selectAllUsers,
         clearSelection,
-        bulkSelectUsers,
-      } = useUserStore();
+      } = useUserManagement();
 
       // Determine which query to use based on configuration
       const shouldUseInfiniteQuery = enableInfiniteScroll && !isMobile;
@@ -191,10 +191,10 @@ export const UserManagementPageOptimized =
       const handleUserSelection = useOptimizedCallback(
         (userId: string, selected: boolean) => {
           const endTimer = startTimer("user-selection");
-          selectUser(userId, selected);
+          toggleUserSelection(userId);
           endTimer();
         },
-        [selectUser, startTimer],
+        [toggleUserSelection, startTimer],
         {
           trackPerformance: true,
           performanceKey: "user-selection",
@@ -204,14 +204,14 @@ export const UserManagementPageOptimized =
       const handleSelectAll = useOptimizedCallback(
         (selected: boolean) => {
           const endTimer = startTimer("select-all");
-          if (selected) {
-            bulkSelectUsers(users.map((u) => u.id));
+          if (selected && users) {
+            selectAllUsers(users.map((u) => u.id));
           } else {
             clearSelection();
           }
           endTimer();
         },
-        [users, bulkSelectUsers, clearSelection, startTimer],
+        [users, selectAllUsers, clearSelection, startTimer],
         {
           trackPerformance: true,
           performanceKey: "select-all",
@@ -232,7 +232,7 @@ export const UserManagementPageOptimized =
 
       const handleToggleStatus = useCallback(
         (userId: string, currentStatus: boolean) => {
-          const user = users.find((u) => u.id === userId);
+          const user = users?.find((u) => u.id === userId);
           if (user) {
             updateUserMutation.mutate({
               id: userId,
@@ -245,7 +245,7 @@ export const UserManagementPageOptimized =
 
       const handleStatusChange = useCallback(
         async (userId: string, newStatus: UserStatus, reason?: string) => {
-          const user = users.find((u) => u.id === userId);
+          const user = users?.find((u) => u.id === userId);
           if (user) {
             await updateUserMutation.mutateAsync({
               id: userId,
@@ -445,7 +445,7 @@ export const UserManagementPageOptimized =
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {users.filter((u) => u.is_active).length}
+                  {users?.filter((u) => u.is_active).length || 0}
                 </div>
               </CardContent>
             </Card>
@@ -457,7 +457,8 @@ export const UserManagementPageOptimized =
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {users.filter((u) => u.activity_status === "online").length}
+                  {users?.filter((u) => u.activity_status === "online")
+                    .length || 0}
                 </div>
               </CardContent>
             </Card>

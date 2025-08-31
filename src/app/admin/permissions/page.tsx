@@ -57,7 +57,11 @@ export default function PermissionsPage() {
       if (!response.ok) throw new Error("Failed to fetch permissions");
       const data = await response.json();
 
-      const permissionsList = data.permissions || data;
+      const permissionsList = Array.isArray(data.permissions)
+        ? data.permissions
+        : Array.isArray(data)
+        ? data
+        : [];
 
       // Transform the flat permissions into categorized permissions
       const categorizedPermissions = permissionsList.map(
@@ -83,6 +87,9 @@ export default function PermissionsPage() {
     } catch (error) {
       console.error("Error fetching permissions:", error);
       toast.error("Failed to load permissions");
+      // Set empty arrays on error
+      setPermissions([]);
+      setSelectedPermissions({});
     } finally {
       setIsLoading(false);
     }
