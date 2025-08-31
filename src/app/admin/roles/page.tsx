@@ -142,13 +142,34 @@ export default function RolesPage() {
   const fetchRoles = useCallback(async () => {
     try {
       setIsLoading(true);
+      console.log("🔄 Fetching roles...");
+
       const response = await fetch("/api/admin/roles");
-      if (!response.ok) throw new Error("Failed to fetch roles");
-      const { roles } = await response.json();
-      setRoles(roles);
+      console.log("📡 Response status:", response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("❌ API Error:", errorText);
+        throw new Error(`Failed to fetch roles: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("📊 Received data:", {
+        hasRoles: !!data.roles,
+        rolesCount: data.roles?.length || 0,
+        dataKeys: Object.keys(data),
+        firstRole: data.roles?.[0],
+      });
+
+      // Ensure roles is always an array
+      const rolesArray = Array.isArray(data.roles) ? data.roles : [];
+      console.log("✅ Setting roles:", rolesArray.length);
+      setRoles(rolesArray);
     } catch (error) {
-      console.error("Error fetching roles:", error);
+      console.error("❌ Error fetching roles:", error);
       toast.error("Failed to load roles");
+      // Keep empty array on error
+      setRoles([]);
     } finally {
       setIsLoading(false);
     }
@@ -350,7 +371,7 @@ export default function RolesPage() {
     []
   );
 
-  if (isLoading) {
+  if (isLoading && roles.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="w-8 h-8 animate-spin" />
@@ -400,7 +421,7 @@ export default function RolesPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {roles.length > 0 ? (
+                {roles && roles.length > 0 ? (
                   roles.map((role) => (
                     <TableRow key={role.id}>
                       <TableCell className="font-medium">{role.name}</TableCell>

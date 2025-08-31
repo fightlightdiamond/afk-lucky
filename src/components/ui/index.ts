@@ -6,6 +6,8 @@ export {
   topButtonVariants,
   type TopButtonProps,
 } from "./top-button";
+export { ScrollToTopProvider } from "./scroll-to-top-provider";
+export { GlobalScrollToTop } from "./global-scroll-to-top";
 export { Badge } from "./badge";
 export {
   Card,

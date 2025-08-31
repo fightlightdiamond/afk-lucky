@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ScrollToTopProvider } from "@/components/ui/scroll-to-top-provider";
 import { useAbility } from "@/context/AbilityContext";
 import {
   ErrorProvider,
@@ -170,6 +171,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </main>
           </div>
         </div>
+
+        {/* Scroll to Top Button */}
+        <ScrollToTopProvider threshold={0.9} mode={'vh'} />
       </div>
     </ErrorProvider>
   );

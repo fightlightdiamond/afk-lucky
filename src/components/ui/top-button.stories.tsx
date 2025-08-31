@@ -10,6 +10,7 @@ import {
   MessageCircle,
   Phone,
 } from "lucide-react";
+import {useEffect, useState} from "react";
 
 /**
  * Top Button Stories showcasing the Top Button component
@@ -309,9 +310,9 @@ export const IconVariations: Story = {
 // Real-world Usage
 export const RealWorldExample: Story = {
   render: () => {
-    const [showButton, setShowButton] = React.useState(false);
+    const [showButton, setShowButton] = useState(false);
 
-    React.useEffect(() => {
+    useEffect(() => {
       const handleScroll = () => {
         setShowButton(window.scrollY > 300);
       };

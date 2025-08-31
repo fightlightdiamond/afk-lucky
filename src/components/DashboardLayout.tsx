@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store";
 import LogoutButton from "./LogoutButton";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { ScrollToTopProvider } from "@/components/ui/scroll-to-top-provider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, FileQuestion, List, Plus } from "lucide-react";
@@ -120,6 +121,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
         {/* Main Content */}
         <main className="flex-1 p-4 overflow-y-auto sm:p-6">{children}</main>
+
+        {/* Scroll to Top Button */}
+        <ScrollToTopProvider threshold={200} />
       </div>
     </div>
   );

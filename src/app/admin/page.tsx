@@ -24,24 +24,41 @@ export default function AdminDashboard() {
     permissions: 26,
     analytics: 0,
   });
+  const [isLoadingStats, setIsLoadingStats] = useState(false);
 
   // Fetch stats
   useEffect(() => {
     const fetchStats = async () => {
+      if (!session?.user) return;
+
+      setIsLoadingStats(true);
       try {
         const response = await fetch("/api/admin/stats");
         if (response.ok) {
           const data = await response.json();
-          setStats(data);
+          // Map API response to expected structure
+          setStats({
+            users: data.users?.total ?? 0,
+            roles: data.roleDistribution?.length ?? 5,
+            permissions: 26, // Static for now
+            analytics: data.recentActivity?.length ?? 0,
+          });
+        } else {
+          console.error(
+            "Failed to fetch stats:",
+            response.status,
+            response.statusText
+          );
         }
       } catch (error) {
         console.error("Error fetching stats:", error);
+        // Keep default values on error
+      } finally {
+        setIsLoadingStats(false);
       }
     };
 
-    if (session?.user) {
-      fetchStats();
-    }
+    fetchStats();
   }, [session]);
 
   console.log("🏠 Admin Dashboard Debug:", {
@@ -71,7 +88,7 @@ export default function AdminDashboard() {
       icon: Users,
       href: "/admin/users",
       permission: "user:read",
-      count: stats.users.toString(),
+      count: (stats?.users ?? 0).toString(),
     },
     {
       title: "Roles",
@@ -79,7 +96,7 @@ export default function AdminDashboard() {
       icon: Shield,
       href: "/admin/roles",
       permission: "role:read",
-      count: stats.roles.toString(),
+      count: (stats?.roles ?? 5).toString(),
     },
     {
       title: "Permissions",
@@ -87,7 +104,7 @@ export default function AdminDashboard() {
       icon: Settings,
       href: "/admin/permissions",
       permission: "role:read",
-      count: stats.permissions.toString(),
+      count: (stats?.permissions ?? 26).toString(),
     },
     {
       title: "Analytics",
@@ -161,7 +178,9 @@ export default function AdminDashboard() {
                 <Icon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{card.count}</div>
+                <div className="text-2xl font-bold">
+                  {isLoadingStats ? "..." : card.count}
+                </div>
                 <p className="text-xs text-muted-foreground">
                   {card.description}
                 </p>
