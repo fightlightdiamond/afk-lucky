@@ -1,5 +1,5 @@
 // Debug script to test the users API endpoint
-const fetch = require("node-fetch");
+// Node 18+ has global fetch; no import needed
 
 async function testUsersAPI() {
   try {
