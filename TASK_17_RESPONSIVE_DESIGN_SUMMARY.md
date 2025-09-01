@@ -43,10 +43,10 @@ Successfully implemented comprehensive responsive design improvements for the ad
 ```typescript
 // Comprehensive responsive breakpoint detection
 export interface ResponsiveBreakpoints {
-  isMobile: boolean; // < 768px
-  isTablet: boolean; // 768px - 1024px
-  isDesktop: boolean; // 1024px - 1280px
-  isLarge: boolean; // >= 1280px
+  isMobile: boolean;  // < 768px
+  isTablet: boolean;  // >= 768px && < 1024px
+  isDesktop: boolean; // >= 1024px && < 1280px
+  isLarge: boolean;   // >= 1280px
 }
 ```
 
