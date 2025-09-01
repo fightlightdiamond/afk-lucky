@@ -22,8 +22,9 @@ Enhanced the GET /api/admin/users endpoint with advanced filtering, pagination, 
   - `queryPerformance`: Execution time and query metrics
 - **Added performance tracking** with request timing
 - **Enhanced caching headers** for better performance:
-  - Public cache for unfiltered requests (60s)
-  - Shorter cache for filtered results (30s)
+  - Private cache for authenticated responses (e.g., `Cache-Control: private, max-age=60`)
+  - Consider `no-store` for highly sensitive views
+  - `Vary: Authorization, Cookie` to prevent cross-user cache bleed
   - ETag support for conditional requests
 
 ### 3. Advanced Filtering Capabilities
