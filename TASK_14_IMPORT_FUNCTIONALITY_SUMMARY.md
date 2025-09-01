@@ -202,12 +202,6 @@ src/__tests__/
 
 ### CSV Format Requirements
 
-```csv
-email,first_name,last_name,password,role,is_active,birthday,address,locale,sex
-john.doe@example.com,John,Doe,SecurePass123!,USER,true,1990-01-15,"123 Main St, City, State",en,true
-jane.smith@example.com,Jane,Smith,AnotherPass456!,EDITOR,true,1985-06-22,"456 Oak Ave, City, State",en,false
-```
-
 ## 🎯 Success Metrics
 
 - **Functionality**: All required features implemented and working
