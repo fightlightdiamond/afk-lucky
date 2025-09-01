@@ -57,10 +57,9 @@ export const touchFriendlyClasses = {
   button: "min-h-[44px] min-w-[44px]",
   input: "min-h-[44px]",
   select: "min-h-[44px]",
-  mobileButton: "min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0",
+  mobileButton: "min-h-[44px] min-w-[44px]",
   // ... more utilities
 };
-```
 
 ### Component Enhancements
 
