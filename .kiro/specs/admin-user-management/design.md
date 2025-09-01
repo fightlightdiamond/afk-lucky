@@ -147,10 +147,9 @@ interface BulkOperationRequest {
 
 // GET /api/admin/users/export - New export endpoint
 interface ExportParams {
-  format: "csv" | "excel";
+  format: "csv" | "excel" | "json";
   filters?: UserFilters;
 }
-
 // POST /api/admin/users/import - New import endpoint
 interface ImportRequest {
   file: File;
