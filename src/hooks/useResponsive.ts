@@ -1,96 +1,102 @@
-"use client";
-
 import { useState, useEffect } from "react";
 
-export interface ResponsiveBreakpoints {
-  isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
-  isLarge: boolean;
-}
+// Mobile-first breakpoints matching Tailwind CSS defaults
+export const BREAKPOINTS = {
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  "2xl": 1536,
+} as const;
 
-export function useResponsive(): ResponsiveBreakpoints {
-  const [breakpoints, setBreakpoints] = useState<ResponsiveBreakpoints>({
-    isMobile: false,
-    isTablet: false,
-    isDesktop: false,
-    isLarge: false,
+export type Breakpoint = keyof typeof BREAKPOINTS;
+
+/**
+ * Hook to detect current screen size and breakpoint
+ */
+export function useResponsive() {
+  const [screenSize, setScreenSize] = useState({
+    width: typeof window !== "undefined" ? window.innerWidth : 0,
+    height: typeof window !== "undefined" ? window.innerHeight : 0,
   });
 
+  const [currentBreakpoint, setCurrentBreakpoint] = useState<Breakpoint | "xs">(
+    "xs"
+  );
+
   useEffect(() => {
-    const checkBreakpoints = () => {
+    const handleResize = () => {
       const width = window.innerWidth;
-      setBreakpoints({
-        isMobile: width < 768,
-        isTablet: width >= 768 && width < 1024,
-        isDesktop: width >= 1024 && width < 1280,
-        isLarge: width >= 1280,
-      });
+      const height = window.innerHeight;
+
+      setScreenSize({ width, height });
+
+      // Determine current breakpoint (mobile-first)
+      if (width >= BREAKPOINTS["2xl"]) {
+        setCurrentBreakpoint("2xl");
+      } else if (width >= BREAKPOINTS.xl) {
+        setCurrentBreakpoint("xl");
+      } else if (width >= BREAKPOINTS.lg) {
+        setCurrentBreakpoint("lg");
+      } else if (width >= BREAKPOINTS.md) {
+        setCurrentBreakpoint("md");
+      } else if (width >= BREAKPOINTS.sm) {
+        setCurrentBreakpoint("sm");
+      } else {
+        setCurrentBreakpoint("xs");
+      }
     };
 
-    // Check on mount
-    checkBreakpoints();
+    // Set initial values
+    handleResize();
 
-    // Add event listener
-    window.addEventListener("resize", checkBreakpoints);
-
-    // Cleanup
-    return () => window.removeEventListener("resize", checkBreakpoints);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return breakpoints;
+  // Helper functions for breakpoint checks
+  const isXs = currentBreakpoint === "xs";
+  const isSm = currentBreakpoint === "sm";
+  const isMd = currentBreakpoint === "md";
+  const isLg = currentBreakpoint === "lg";
+  const isXl = currentBreakpoint === "xl";
+  const is2Xl = currentBreakpoint === "2xl";
+
+  // Mobile-first responsive checks
+  const isSmUp = screenSize.width >= BREAKPOINTS.sm;
+  const isMdUp = screenSize.width >= BREAKPOINTS.md;
+  const isLgUp = screenSize.width >= BREAKPOINTS.lg;
+  const isXlUp = screenSize.width >= BREAKPOINTS.xl;
+  const is2XlUp = screenSize.width >= BREAKPOINTS["2xl"];
+
+  // Mobile-first responsive checks (down)
+  const isSmDown = screenSize.width < BREAKPOINTS.sm;
+  const isMdDown = screenSize.width < BREAKPOINTS.md;
+  const isLgDown = screenSize.width < BREAKPOINTS.lg;
+  const isXlDown = screenSize.width < BREAKPOINTS.xl;
+  const is2XlDown = screenSize.width < BREAKPOINTS["2xl"];
+
+  return {
+    screenSize,
+    currentBreakpoint,
+    // Exact breakpoint checks
+    isXs,
+    isSm,
+    isMd,
+    isLg,
+    isXl,
+    is2Xl,
+    // Mobile-first up checks
+    isSmUp,
+    isMdUp,
+    isLgUp,
+    isXlUp,
+    is2XlUp,
+    // Mobile-first down checks
+    isSmDown,
+    isMdDown,
+    isLgDown,
+    isXlDown,
+    is2XlDown,
+  };
 }
-
-// Convenience hooks for specific breakpoints
-export function useIsMobile(): boolean {
-  const { isMobile } = useResponsive();
-  return isMobile;
-}
-
-export function useIsTablet(): boolean {
-  const { isTablet } = useResponsive();
-  return isTablet;
-}
-
-export function useIsDesktop(): boolean {
-  const { isDesktop, isLarge } = useResponsive();
-  return isDesktop || isLarge;
-}
-
-// Touch-friendly size utilities
-export const touchFriendlyClasses = {
-  button: "min-h-[44px] min-w-[44px]",
-  input: "min-h-[44px]",
-  select: "min-h-[44px]",
-  checkbox: "min-h-[20px] min-w-[20px]",
-  // Apply only on mobile
-  mobileButton: "min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0",
-  mobileInput: "min-h-[44px] sm:min-h-0",
-  mobileSelect: "min-h-[44px] sm:min-h-0",
-};
-
-// Responsive grid utilities
-export const responsiveGrid = {
-  // Standard responsive grids
-  cols1to2: "grid-cols-1 md:grid-cols-2",
-  cols1to3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-  cols1to4: "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
-  cols2to4: "grid-cols-2 md:grid-cols-4",
-
-  // Mobile-first approach
-  mobileStack: "flex flex-col sm:flex-row",
-  mobileCenter: "items-center justify-center sm:justify-start",
-
-  // Gap utilities
-  gapResponsive: "gap-2 sm:gap-4 lg:gap-6",
-  paddingResponsive: "p-2 sm:p-4 lg:p-6",
-  marginResponsive: "m-2 sm:m-4 lg:m-6",
-};
-
-// Text size utilities for responsive design
-export const responsiveText = {
-  heading: "text-lg sm:text-xl lg:text-2xl",
-  subheading: "text-base sm:text-lg",
-  body: "text-sm sm:text-base",
-  caption: "text-xs sm:text-sm",
-};

@@ -6,17 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="6d31232a-fb63-44ad-bc56-a52e1ed2abd2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/admin/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/admin/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/admin/permissions/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/permissions/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/admin/roles/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/admin/roles/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/api/admin/roles/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/admin/roles/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DashboardLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DashboardLayout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/admin/UserManagementPageOptimized.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/UserManagementPageOptimized.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/admin/UserTableOptimized.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/UserTableOptimized.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ui/top-button.stories.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/top-button.stories.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,21 +45,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat/user&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/cuongpm/Documents/GitHub/lucky_&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/cuongpm/Documents/GitHub/lucky_/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "feat/mobile",
+    "last_opened_file_path": "/Users/cuongpm/Documents/GitHub/lucky_",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/Users/cuongpm/Documents/GitHub/lucky_/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />

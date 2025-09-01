@@ -7,10 +7,13 @@ import {
   Plus,
   ArrowRight,
   Loader2,
+  Smartphone,
+  Monitor,
+  Tablet,
 } from "lucide-react";
 
 /**
- * Button Stories showcasing the shadcn/ui Button component
+ * Mobile-First Button Stories showcasing touch-optimized interactions
  */
 
 const meta: Meta<typeof Button> = {
@@ -21,30 +24,37 @@ const meta: Meta<typeof Button> = {
     docs: {
       description: {
         component: `
-A versatile button component built with Radix UI Slot and class-variance-authority for flexible styling.
+A mobile-first button component optimized for touch interactions with responsive design.
 
-## Features
-- **Multiple Variants**: Default, destructive, outline, secondary, ghost, link
-- **Size Options**: Default, small, large, icon
-- **Flexible Rendering**: Can render as child element using asChild prop
-- **Icon Support**: Works seamlessly with Lucide React icons
-- **Accessibility**: Full keyboard navigation and screen reader support
+## Mobile-First Features
+- **Touch Targets**: Minimum 44px touch targets for accessibility (WCAG compliance)
+- **Responsive Sizing**: Mobile-first sizing that adapts to desktop
+- **Touch Feedback**: Enhanced active states and touch-friendly animations
+- **Progressive Enhancement**: Mobile styles as base, desktop enhancements via breakpoints
+- **Loading States**: Built-in loading spinner and disabled states
+- **Full Width**: Optional full-width mode for mobile layouts
+
+## Variants & Sizes
+- **Variants**: Default, destructive, outline, secondary, ghost, link
+- **Sizes**: Default, small, large, icon (with sm/lg variants)
+- **Touch Optimization**: All sizes meet minimum touch target requirements
 
 ## Usage
 \`\`\`tsx
 import { Button } from '@/components/ui/button'
 
-// Basic usage
-<Button>Click me</Button>
+// Mobile-optimized button
+<Button>Touch-Friendly Button</Button>
 
-// With variant and size
-<Button variant="destructive" size="lg">
-  Delete Item
-</Button>
+// With loading state
+<Button loading>Processing...</Button>
 
-// As child element (useful for links)
-<Button asChild>
-  <a href="/profile">Go to Profile</a>
+// Full width for mobile
+<Button fullWidth>Full Width Button</Button>
+
+// Icon variants with proper touch targets
+<Button size="icon">
+  <Heart className="h-4 w-4" />
 </Button>
 \`\`\`
         `,
@@ -67,8 +77,16 @@ import { Button } from '@/components/ui/button'
     },
     size: {
       control: { type: "select" },
-      options: ["default", "sm", "lg", "icon"],
-      description: "Size variant of the button",
+      options: ["default", "sm", "lg", "icon", "icon-sm", "icon-lg"],
+      description: "Size variant with mobile-first touch targets",
+    },
+    loading: {
+      control: { type: "boolean" },
+      description: "Shows loading spinner and disables interaction",
+    },
+    fullWidth: {
+      control: { type: "boolean" },
+      description: "Makes button full width (useful for mobile)",
     },
     asChild: {
       control: { type: "boolean" },
@@ -151,6 +169,86 @@ export const Icon: Story = {
   },
 };
 
+// Mobile-First Features
+export const TouchTargets: Story = {
+  render: () => (
+    <div className="space-y-4">
+      <div className="text-sm text-muted-foreground mb-4">
+        All buttons meet 44px minimum touch target (WCAG compliance)
+      </div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <Button size="sm">Small (40px min)</Button>
+        <Button size="default">Default (44px min)</Button>
+        <Button size="lg">Large (52px min)</Button>
+      </div>
+      <div className="flex gap-3">
+        <Button size="icon-sm">
+          <Smartphone className="h-4 w-4" />
+        </Button>
+        <Button size="icon">
+          <Tablet className="h-4 w-4" />
+        </Button>
+        <Button size="icon-lg">
+          <Monitor className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Touch-friendly buttons with minimum 44px touch targets for accessibility.",
+      },
+    },
+  },
+};
+
+export const LoadingStates: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4 sm:flex-row">
+      <Button loading>Loading...</Button>
+      <Button loading variant="outline">
+        Processing
+      </Button>
+      <Button loading variant="destructive">
+        Deleting
+      </Button>
+      <Button loading size="icon">
+        <span className="sr-only">Loading</span>
+      </Button>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Buttons with built-in loading states and spinners.",
+      },
+    },
+  },
+};
+
+export const FullWidth: Story = {
+  render: () => (
+    <div className="w-full max-w-sm space-y-3">
+      <Button fullWidth>Full Width Primary</Button>
+      <Button fullWidth variant="outline">
+        Full Width Outline
+      </Button>
+      <Button fullWidth variant="secondary">
+        Full Width Secondary
+      </Button>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Full-width buttons ideal for mobile layouts and forms.",
+      },
+    },
+  },
+};
+
 // With Icons
 export const WithIcon: Story = {
   args: {
@@ -226,19 +324,30 @@ export const AllVariants: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div className="flex flex-wrap gap-4 items-center">
-      <Button size="sm">Small</Button>
-      <Button size="default">Default</Button>
-      <Button size="lg">Large</Button>
-      <Button size="icon">
-        <Heart className="h-4 w-4" />
-      </Button>
+    <div className="space-y-4">
+      <div className="flex flex-wrap gap-4 items-center">
+        <Button size="sm">Small</Button>
+        <Button size="default">Default</Button>
+        <Button size="lg">Large</Button>
+      </div>
+      <div className="flex gap-4 items-center">
+        <Button size="icon-sm">
+          <Heart className="h-3 w-3" />
+        </Button>
+        <Button size="icon">
+          <Heart className="h-4 w-4" />
+        </Button>
+        <Button size="icon-lg">
+          <Heart className="h-5 w-5" />
+        </Button>
+      </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: "All available button sizes displayed together for comparison.",
+        story:
+          "All available button sizes including icon variants with proper touch targets.",
       },
     },
   },
@@ -286,6 +395,80 @@ export const ButtonGroup: Story = {
     docs: {
       description: {
         story: "Grouped buttons for related actions.",
+      },
+    },
+  },
+};
+
+// Mobile-First Layout Examples
+export const MobileLayout: Story = {
+  render: () => (
+    <div className="w-full max-w-sm mx-auto space-y-4 p-4 border rounded-lg">
+      <h3 className="text-lg font-semibold">Mobile-First Button Layout</h3>
+
+      {/* Primary action - full width on mobile */}
+      <Button fullWidth size="lg">
+        <Plus className="h-4 w-4" />
+        Create New Item
+      </Button>
+
+      {/* Secondary actions - stack on mobile, row on desktop */}
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <Button variant="outline" fullWidth className="sm:flex-1">
+          <Settings className="h-4 w-4" />
+          Settings
+        </Button>
+        <Button variant="secondary" fullWidth className="sm:flex-1">
+          <Download className="h-4 w-4" />
+          Export
+        </Button>
+      </div>
+
+      {/* Icon actions with proper touch targets */}
+      <div className="flex justify-center gap-2">
+        <Button size="icon" variant="ghost">
+          <Heart className="h-4 w-4" />
+        </Button>
+        <Button size="icon" variant="ghost">
+          <Settings className="h-4 w-4" />
+        </Button>
+        <Button size="icon" variant="ghost">
+          <Download className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Mobile-first button layout patterns with responsive behavior.",
+      },
+    },
+  },
+};
+
+export const TouchFeedback: Story = {
+  render: () => (
+    <div className="space-y-4">
+      <div className="text-sm text-muted-foreground">
+        Tap buttons to see touch-optimized feedback (scale animation, shadow
+        changes)
+      </div>
+      <div className="flex flex-wrap gap-4">
+        <Button>Touch Me</Button>
+        <Button variant="outline">Press & Hold</Button>
+        <Button variant="secondary">Tap Feedback</Button>
+        <Button size="icon">
+          <Heart className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Buttons with enhanced touch feedback including scale animations and shadow changes.",
       },
     },
   },
