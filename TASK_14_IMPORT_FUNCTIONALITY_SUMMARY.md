@@ -207,7 +207,7 @@ src/__tests__/
 - **Functionality**: All required features implemented and working
 - **User Experience**: Intuitive multi-step wizard interface
 - **Error Handling**: Comprehensive validation and error reporting
-- **Performance**: Handles files up to 10MB with 5,000+ records
+- **Performance**: Handles files up to 10MB with up to 5,000 records (server-enforced)
 - **Security**: Proper authentication and authorization checks
 - **Integration**: Seamlessly integrated with existing user management system
 
