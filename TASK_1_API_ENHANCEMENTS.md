@@ -41,6 +41,11 @@ The API now supports comprehensive filtering through query parameters:
 - **Group filtering**: `group_id` - filter by group ID
 - **Activity status**: `activity_status` - online/offline/never
 
+#### Validation limits
+- pageSize: 1–100 (default 20)
+- sortBy: one of ["full_name", "email", "created_at", "last_login", "role", "status", "activity_status"]
+- date ranges: max span 366 days
+- search: max length 128; escaped safely
 ### 4. Enhanced Sorting Options
 
 - **Multiple sort fields**: full_name, email, created_at, last_login, role, status, activity_status
