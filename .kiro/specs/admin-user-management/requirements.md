@@ -103,13 +103,12 @@ This feature enhances the existing admin user management system to provide compr
 
 #### Acceptance Criteria
 
-1. WHEN an admin exports users THEN the system SHALL generate CSV/Excel files with filtered data
+1. WHEN an admin exports users THEN the system SHALL generate CSV/Excel/JSON files with filtered data
 2. WHEN exporting THEN the system SHALL exclude sensitive information like passwords
 3. WHEN importing users THEN the system SHALL validate data format and required fields
 4. WHEN import validation fails THEN the system SHALL show detailed error messages
 5. WHEN importing successfully THEN the system SHALL show summary of created/updated users
 6. WHEN importing duplicate emails THEN the system SHALL handle conflicts according to admin preferences
-
 ### Requirement 9: Responsive Design and Accessibility
 
 **User Story:** As an admin using various devices, I want the user management interface to be responsive and accessible, so that I can manage users from any device.
