@@ -1,8 +1,8 @@
+import type React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { UserPagination } from "@/components/admin/UserPagination";
 import { PaginationParams } from "@/types/user";
-
 // Mock the UI components
 vi.mock("@/components/ui/button", () => ({
   Button: ({
