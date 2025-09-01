@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "storybook/test";
 import React from "react";
 import { UserActivityStats } from "@/components/admin/UserActivityStats";
 import { User, UserRole, UserStatus, ActivityStatus } from "@/types/user";
@@ -52,13 +51,13 @@ const createUser = (
     Date.now() - createdDaysAgo * 24 * 60 * 60 * 1000
   ).toISOString(),
   updated_at: new Date().toISOString(),
-  last_login: lastLogin || null,
+  last_login: lastLogin || undefined,
   last_logout:
     lastLogin && activityStatus === ActivityStatus.OFFLINE
       ? new Date(
           new Date(lastLogin).getTime() + 2 * 60 * 60 * 1000
         ).toISOString()
-      : null,
+      : undefined,
   role_id: "role-user",
   role: {
     id: "role-user",
@@ -394,11 +393,10 @@ export const WithCustomClassName: Story = {
 };
 
 export const InteractiveDemo: Story = {
-  render: () => {
+  render: function InteractiveDemoRender() {
     const [userCount, setUserCount] = React.useState(20);
-    const [onlinePercentage, setOnlinePercentage] = React.useState(10);
-    const [neverLoggedInPercentage, setNeverLoggedInPercentage] =
-      React.useState(20);
+    const [onlinePercentage, setOnlinePercentage] = React.useState(15);
+    const [neverLoggedInPercentage, setNeverLoggedInPercentage] = React.useState(25);
 
     const generateUsers = React.useMemo(() => {
       const users: User[] = [];

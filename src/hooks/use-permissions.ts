@@ -1,8 +1,9 @@
 import { useSession } from 'next-auth/react';
-import { useAbility } from '@/components/ability-context';
+import { useAbility } from '@/context/AbilityContext';
+import { Actions, Subjects } from '@/lib/ability';
 
 type PermissionAction = 'create' | 'read' | 'update' | 'delete' | 'manage';
-type PermissionResource = 'user' | 'role' | 'permission' | 'content' | 'settings';
+type PermissionResource = 'User' | 'Role' | 'Permission' | 'Content' | 'Settings';
 
 export function usePermissions() {
   const { data: session } = useSession();
@@ -26,9 +27,15 @@ export function usePermissions() {
   const canManage = (resource: PermissionResource) => hasPermission('manage', resource);
 
   // Check if user can perform action on a specific resource instance
-  const can = (action: string, subject: any, field?: string) => {
+  const can = (action: Actions, subject: Subjects, field?: string) => {
     if (!ability) return false;
     return ability.can(action, subject, field);
+  };
+
+  // Check if user cannot perform action (useful for guards)
+  const cannot = (action: Actions, subject: Subjects, field?: string) => {
+    if (!ability) return true;
+    return ability.cannot(action, subject, field);
   };
 
   return {
@@ -39,6 +46,7 @@ export function usePermissions() {
     canDelete,
     canManage,
     can,
+    cannot,
     ability,
   };
 }

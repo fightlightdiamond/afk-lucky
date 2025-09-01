@@ -1,25 +1,30 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "storybook/test";
 import { useState } from "react";
-import { FilterPresets } from "@/components/admin/filters/FilterPresets";
-import { UserFilters } from "@/types/user";
+import { FilterPresets, FilterPreset } from "@/components/admin/filters/FilterPresets";
+import { UserFilters, UserStatus } from "@/types/user";
 
 // Interactive wrapper for Storybook
-const InteractiveFilterPresets = (props: any) => {
+const InteractiveFilterPresets = (props: {
+  presets?: FilterPreset[];
+  currentFilters?: UserFilters;
+  onPresetSelect: (filters: Partial<UserFilters>) => void;
+  disabled?: boolean;
+}) => {
   const [currentFilters, setCurrentFilters] = useState<UserFilters>(
-    props.currentFilters
+    props.currentFilters || { search: '', status: null, role: null, dateRange: null, activityDateRange: null, sortBy: 'created_at', sortOrder: 'desc', activity_status: null }
   );
 
-  const handlePresetApply = (filters: UserFilters) => {
-    setCurrentFilters(filters);
-    props.onPresetApply(filters);
+  const handlePresetSelect = (filters: Partial<UserFilters>) => {
+    setCurrentFilters({ ...currentFilters, ...filters });
+    props.onPresetSelect(filters);
   };
 
   return (
     <FilterPresets
       {...props}
       currentFilters={currentFilters}
-      onPresetApply={handlePresetApply}
+      onPresetSelect={handlePresetSelect}
     />
   );
 };
@@ -32,7 +37,7 @@ const meta: Meta<typeof FilterPresets> = {
     docs: {
       description: {
         component:
-          "A filter presets component providing quick access to commonly used filter combinations. Features predefined presets like 'Active Users', 'Recently Created', 'Never Logged In', and custom preset management.",
+          "Filter presets help users quickly apply common filter combinations. Features predefined presets like 'Active Users', 'Recently Created', 'Never Logged In', and custom preset management.",
       },
     },
   },
@@ -41,25 +46,9 @@ const meta: Meta<typeof FilterPresets> = {
       description: "Current filter state",
       control: { type: "object" },
     },
-    showCustomPresets: {
-      description: "Whether to show custom preset management",
-      control: { type: "boolean" },
-    },
     disabled: {
       description: "Whether the presets are disabled",
       control: { type: "boolean" },
-    },
-    onPresetApply: {
-      description: "Callback when a preset is applied",
-      action: "presetApply",
-    },
-    onPresetSave: {
-      description: "Callback when a custom preset is saved",
-      action: "presetSave",
-    },
-    onPresetDelete: {
-      description: "Callback when a custom preset is deleted",
-      action: "presetDelete",
     },
   },
   tags: ["autodocs"],
@@ -85,105 +74,71 @@ const defaultFilters: UserFilters = {
 const activeFilters: UserFilters = {
   ...defaultFilters,
   search: "admin",
-  status: "active",
+  status: UserStatus.ACTIVE,
   role: "role-admin",
 };
 
 export const Default: Story = {
   args: {
-    currentFilters: defaultFilters,
-    showCustomPresets: true,
+    presets: undefined, 
+    currentFilters: {
+      search: "",
+      status: null,
+      role: null,
+      dateRange: null,
+      activityDateRange: null,
+      sortBy: "created_at",
+      sortOrder: "desc",
+      activity_status: null,
+    },
+    onPresetSelect: fn(),
     disabled: false,
-    onPresetApply: fn(),
-    onPresetSave: fn(),
-    onPresetDelete: fn(),
   },
 };
 
-export const WithActiveFilters: Story = {
+export const WithActiveFilter: Story = {
   args: {
     currentFilters: activeFilters,
-    showCustomPresets: true,
     disabled: false,
-    onPresetApply: fn(),
-    onPresetSave: fn(),
-    onPresetDelete: fn(),
   },
-  parameters: {
-    docs: {
-      description: {
-        story: "Filter presets with some filters already applied.",
+};
+
+export const WithCustomPresets: Story = {
+  args: {
+    presets: [
+      {
+        id: "custom-1",
+        label: "VIP Users",
+        description: "High-value users",
+        filters: {
+          role: "admin",
+          status: UserStatus.ACTIVE,
+        },
       },
-    },
+    ],
   },
 };
 
 export const WithoutCustomPresets: Story = {
   args: {
     currentFilters: defaultFilters,
-    showCustomPresets: false,
     disabled: false,
-    onPresetApply: fn(),
-    onPresetSave: fn(),
-    onPresetDelete: fn(),
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Filter presets without custom preset management functionality.",
-      },
-    },
   },
 };
 
 export const Disabled: Story = {
   args: {
-    currentFilters: activeFilters,
-    showCustomPresets: true,
     disabled: true,
-    onPresetApply: fn(),
-    onPresetSave: fn(),
-    onPresetDelete: fn(),
   },
 };
 
 export const InteractiveDemo: Story = {
-  render: (args) => {
-    const [currentFilters, setCurrentFilters] =
-      useState<UserFilters>(defaultFilters);
-    const [showCustomPresets, setShowCustomPresets] = useState(true);
-    const [disabled, setDisabled] = useState(false);
-    const [customPresets, setCustomPresets] = useState([
-      {
-        id: "1",
-        name: "My Admins",
-        filters: { ...defaultFilters, role: "role-admin", status: "active" },
-      },
-      {
-        id: "2",
-        name: "Inactive Users",
-        filters: { ...defaultFilters, status: "inactive" },
-      },
-    ]);
+  render: function InteractiveDemoRender(args) {
+    const [currentFilters, setCurrentFilters] = useState<UserFilters>(defaultFilters);
 
-    const handlePresetApply = (filters: UserFilters) => {
-      setCurrentFilters(filters);
-      args.onPresetApply?.(filters);
-    };
-
-    const handlePresetSave = (name: string, filters: UserFilters) => {
-      const newPreset = {
-        id: Date.now().toString(),
-        name,
-        filters,
-      };
-      setCustomPresets((prev) => [...prev, newPreset]);
-      args.onPresetSave?.(name, filters);
-    };
-
-    const handlePresetDelete = (presetId: string) => {
-      setCustomPresets((prev) => prev.filter((p) => p.id !== presetId));
-      args.onPresetDelete?.(presetId);
+    const handlePresetSelect = (filters: Partial<UserFilters>) => {
+      setCurrentFilters({ ...currentFilters, ...filters });
+      args.onPresetSelect?.(filters);
     };
 
     const getActiveFiltersDescription = () => {
@@ -201,99 +156,38 @@ export const InteractiveDemo: Story = {
     };
 
     return (
-      <div className="w-full max-w-lg space-y-6">
+      <div className="p-4 space-y-6">
+        <div className="text-sm text-muted-foreground">
+          This story demonstrates the FilterPresets component with interactive
+          state management. Try applying different presets and see how they
+          affect the current filters.
+        </div>
+
         <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={showCustomPresets}
-                onChange={(e) => setShowCustomPresets(e.target.checked)}
-              />
-              Show Custom Presets
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={disabled}
-                onChange={(e) => setDisabled(e.target.checked)}
-              />
-              Disabled
-            </label>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium">Filter Presets Demo</h3>
           </div>
 
           <FilterPresets
+            {...args}
             currentFilters={currentFilters}
-            showCustomPresets={showCustomPresets}
-            disabled={disabled}
-            customPresets={customPresets}
-            onPresetApply={handlePresetApply}
-            onPresetSave={handlePresetSave}
-            onPresetDelete={handlePresetDelete}
+            onPresetSelect={handlePresetSelect}
           />
-        </div>
 
-        <div className="p-4 bg-muted rounded-lg space-y-3">
-          <h4 className="font-medium">Current Filter State:</h4>
-          <p className="text-sm text-muted-foreground">
-            {getActiveFiltersDescription()}
-          </p>
-
-          <div className="text-xs space-y-1">
-            {currentFilters.search && (
-              <p>
-                <strong>Search:</strong> "{currentFilters.search}"
-              </p>
-            )}
-            {currentFilters.role && (
-              <p>
-                <strong>Role:</strong> {currentFilters.role}
-              </p>
-            )}
-            {currentFilters.status && (
-              <p>
-                <strong>Status:</strong> {currentFilters.status}
-              </p>
-            )}
-            {currentFilters.activity_status && (
-              <p>
-                <strong>Activity:</strong> {currentFilters.activity_status}
-              </p>
-            )}
-            {currentFilters.dateRange && (
-              <p>
-                <strong>Date Range:</strong> Selected
-              </p>
-            )}
+          <div className="mt-6 p-4 bg-muted rounded-lg">
+            <div className="text-sm font-medium mb-2">Current Filters:</div>
+            <div className="text-sm text-muted-foreground mb-2">
+              {getActiveFiltersDescription()}
+            </div>
+            <pre className="text-xs bg-background p-2 rounded border overflow-auto max-h-40">
+              {JSON.stringify(currentFilters, null, 2)}
+            </pre>
           </div>
         </div>
-
-        {customPresets.length > 0 && (
-          <div className="p-4 bg-muted rounded-lg space-y-2">
-            <h4 className="font-medium">Custom Presets:</h4>
-            <ul className="text-sm space-y-1">
-              {customPresets.map((preset) => (
-                <li
-                  key={preset.id}
-                  className="flex items-center justify-between"
-                >
-                  <span>{preset.name}</span>
-                  <button
-                    onClick={() => handlePresetDelete(preset.id)}
-                    className="text-red-600 hover:text-red-800 text-xs"
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         <div className="text-xs text-muted-foreground">
           <p>
-            <strong>Tip:</strong> Use presets to quickly apply common filter
-            combinations!
+            <strong>Tip:</strong> Click presets to apply filters quickly.
           </p>
         </div>
       </div>

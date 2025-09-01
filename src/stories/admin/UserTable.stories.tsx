@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "storybook/test";
+import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { UserTable } from "@/components/admin/UserTable";
 import {
@@ -558,7 +559,7 @@ export const AccessibilityDemo: Story = {
 };
 
 export const InteractiveDemo: Story = {
-  render: (args) => {
+  render: function InteractiveDemoRender(args) {
     const [users, setUsers] = useState(sampleUsers);
     const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
     const [filters, setFilters] = useState(defaultFilters);

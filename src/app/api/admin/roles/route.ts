@@ -9,14 +9,8 @@ import {
   type Permission,
 } from "@/services/permissionService";
 
-// Define UserRole enum since it's not available from @prisma/client
-export enum UserRole {
-  ADMIN = "ADMIN",
-  USER = "USER",
-  AUTHOR = "AUTHOR",
-  EDITOR = "EDITOR",
-  MODERATOR = "MODERATOR",
-}
+// Import UserRole from Prisma generated types
+import { UserRole } from "@prisma/client";
 
 interface RoleWithCount {
   id: string;

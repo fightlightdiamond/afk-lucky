@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BulkOperations } from "@/components/admin/BulkOperations";
 import { User, Role, UserRole, UserStatus, ActivityStatus } from "@/types/user";
@@ -209,10 +209,10 @@ export const LargeSelection: Story = {
 };
 
 export const InteractiveDemo: Story = {
-  render: (args) => {
-    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
-    const [disabled, setDisabled] = useState(false);
-    const [operationInProgress, setOperationInProgress] = useState(false);
+  render: function InteractiveDemoRender(args) {
+    const [selectedUsers, setSelectedUsers] = React.useState<User[]>([]);
+    const [disabled, setDisabled] = React.useState(false);
+    const [operationInProgress, setOperationInProgress] = React.useState(false);
 
     const handleAddUser = () => {
       const newUser = {
@@ -292,12 +292,8 @@ export const InteractiveDemo: Story = {
           onClearSelection={handleClearSelection}
           availableRoles={mockRoles}
           disabled={disabled || operationInProgress}
-          onBulkBan={() => simulateOperation("Bulk Ban")}
-          onBulkUnban={() => simulateOperation("Bulk Unban")}
-          onBulkDelete={() => simulateOperation("Bulk Delete")}
-          onBulkAssignRole={(roleId) =>
-            simulateOperation(`Bulk Role Assignment (${roleId})`)
-          }
+          onSuccess={() => console.log("Operation successful")}
+          onError={(error) => console.error("Operation failed:", error)}
         />
       </div>
     );

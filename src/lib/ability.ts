@@ -1,24 +1,24 @@
-import { Ability, AbilityBuilder, AbilityClass } from "@casl/ability";
+import { createMongoAbility, AbilityBuilder, MongoAbility } from "@casl/ability";
 import { Session } from "next-auth";
+import { UserRole } from "@prisma/client";
 
-type Actions = "manage" | "create" | "read" | "update" | "delete";
-type Subjects = "all" | "User" | "Role" | "Story" | "Profile" | "Contact";
+export type Actions = "manage" | "create" | "read" | "update" | "delete" | "publish";
 
-export type AppAbility = Ability<[Actions, Subjects]>;
+export type Subjects = 
+  | "User"
+  | "Role"  
+  | "Story"
+  | "Profile"
+  | "Contact"
+  | "Permission"
+  | "Content"
+  | "Settings"
+  | "all";
 
-// Define user roles
-export enum UserRole {
-  ADMIN = "ADMIN",
-  AUTHOR = "AUTHOR",
-  EDITOR = "EDITOR",
-  MODERATOR = "MODERATOR",
-  USER = "USER",
-}
-
-export const AppAbility = Ability as AbilityClass<AppAbility>;
+export type AppAbility = MongoAbility<[Actions, Subjects]>;
 
 export function defineAbilitiesFor(session: Session | null) {
-  const { can, build } = new AbilityBuilder<AppAbility>(AppAbility);
+  const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
 
   // Guest permissions
   if (!session?.user) {
@@ -41,7 +41,6 @@ export function defineAbilitiesFor(session: Session | null) {
 
   // Map permissions to CASL abilities
   userPermissions.forEach((permission) => {
-    const [resource, action] = permission.split(":");
 
     switch (permission) {
       // User permissions

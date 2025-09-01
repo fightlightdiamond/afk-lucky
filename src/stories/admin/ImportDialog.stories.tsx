@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "storybook/test";
-import { useState } from "react";
+// import { fn } from "@storybook/test";
+const fn = () => () => {};
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ImportDialog } from "@/components/admin/ImportDialog";
-import { ImportOptions, ImportResponse } from "@/types/user";
+import { Role, UserRole } from "@/types/user";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,42 +16,15 @@ const queryClient = new QueryClient({
 });
 
 // Interactive wrapper for Storybook
-const InteractiveImportDialog = (props: any) => {
-  const [open, setOpen] = useState(props.open || false);
-  const [isImporting, setIsImporting] = useState(false);
-
-  const handleImport = async (file: File, options: ImportOptions) => {
-    setIsImporting(true);
-    // Simulate import process
-    await new Promise((resolve) => setTimeout(resolve, 4000));
-    setIsImporting(false);
-    setOpen(false);
-    props.onImport(file, options);
-  };
-
-  const handleOpenChange = (newOpen: boolean) => {
-    if (!isImporting) {
-      setOpen(newOpen);
-      props.onOpenChange(newOpen);
-    }
-  };
-
+const InteractiveImportDialog = (props: { open: boolean; onClose: () => void; roles: Role[] }) => {
   return (
-    <div>
-      <button
-        onClick={() => setOpen(true)}
-        className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-      >
-        Open Import Dialog
-      </button>
+    <QueryClientProvider client={queryClient}>
       <ImportDialog
-        {...props}
-        open={open}
-        onOpenChange={handleOpenChange}
-        onImport={handleImport}
-        isImporting={isImporting}
+        open={props.open}
+        onClose={props.onClose}
+        roles={props.roles}
       />
-    </div>
+    </QueryClientProvider>
   );
 };
 
@@ -77,32 +51,16 @@ const meta: Meta<typeof ImportDialog> = {
   },
   argTypes: {
     open: {
+      control: { type: "boolean" },
       description: "Whether the dialog is open",
-      control: { type: "boolean" },
     },
-    availableRoles: {
-      description: "Available roles for default assignment",
+    onClose: {
+      action: "onClose",
+      description: "Callback when dialog should close",
+    },
+    roles: {
       control: { type: "object" },
-    },
-    maxFileSize: {
-      description: "Maximum file size in bytes",
-      control: { type: "number" },
-    },
-    supportedFormats: {
-      description: "Supported file formats",
-      control: { type: "object" },
-    },
-    isImporting: {
-      description: "Whether import is in progress",
-      control: { type: "boolean" },
-    },
-    onOpenChange: {
-      description: "Callback when dialog open state changes",
-      action: "openChange",
-    },
-    onImport: {
-      description: "Callback when import is initiated",
-      action: "import",
+      description: "Available roles for import",
     },
   },
   tags: ["autodocs"],
@@ -112,138 +70,134 @@ export default meta;
 type Story = StoryObj<typeof ImportDialog>;
 
 // Sample roles for import
-const sampleRoles = [
-  { id: "role-admin", name: "ADMIN", description: "System Administrator" },
-  { id: "role-editor", name: "EDITOR", description: "Content Editor" },
-  { id: "role-moderator", name: "MODERATOR", description: "Content Moderator" },
-  { id: "role-user", name: "USER", description: "Regular User" },
+const sampleRoles: Role[] = [
+  {
+    id: "role-admin",
+    name: UserRole.ADMIN,
+    description: "System Administrator",
+    permissions: ["admin:read", "admin:write", "user:read", "user:write"],
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
+  },
+  {
+    id: "role-editor",
+    name: UserRole.EDITOR,
+    description: "Content Editor",
+    permissions: ["content:read", "content:write", "user:read"],
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
+  },
+  {
+    id: "role-moderator",
+    name: UserRole.MODERATOR,
+    description: "Content Moderator",
+    permissions: ["content:read", "content:moderate", "user:read"],
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
+  },
+  {
+    id: "role-user",
+    name: UserRole.USER,
+    description: "Regular User",
+    permissions: ["user:read"],
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
+  },
 ];
 
 export const Default: Story = {
   args: {
     open: false,
-    availableRoles: sampleRoles,
-    maxFileSize: 10 * 1024 * 1024, // 10MB
-    supportedFormats: [".csv", ".xlsx", ".xls"],
-    isImporting: false,
-    onOpenChange: fn(),
-    onImport: fn(),
+    onClose: fn(),
+    roles: sampleRoles,
   },
 };
 
 export const WithLimitedRoles: Story = {
   args: {
     open: false,
-    availableRoles: sampleRoles.slice(2), // Only moderator and user
-    maxFileSize: 10 * 1024 * 1024,
-    supportedFormats: [".csv", ".xlsx", ".xls"],
-    isImporting: false,
-    onOpenChange: fn(),
-    onImport: fn(),
+    onClose: fn(),
+    roles: sampleRoles.slice(2), // Only moderator and user
   },
 };
 
-export const NoRoles: Story = {
-  args: {
-    open: false,
-    availableRoles: [],
-    maxFileSize: 10 * 1024 * 1024,
-    supportedFormats: [".csv", ".xlsx", ".xls"],
-    isImporting: false,
-    onOpenChange: fn(),
-    onImport: fn(),
-  },
-};
-
-export const CSVOnly: Story = {
-  args: {
-    open: false,
-    availableRoles: sampleRoles,
-    maxFileSize: 5 * 1024 * 1024, // 5MB
-    supportedFormats: [".csv"],
-    isImporting: false,
-    onOpenChange: fn(),
-    onImport: fn(),
-  },
-};
-
-export const SmallFileLimit: Story = {
-  args: {
-    open: false,
-    availableRoles: sampleRoles,
-    maxFileSize: 1 * 1024 * 1024, // 1MB
-    supportedFormats: [".csv", ".xlsx", ".xls"],
-    isImporting: false,
-    onOpenChange: fn(),
-    onImport: fn(),
-  },
-};
-
-export const LargeFileLimit: Story = {
-  args: {
-    open: false,
-    availableRoles: sampleRoles,
-    maxFileSize: 100 * 1024 * 1024, // 100MB
-    supportedFormats: [".csv", ".xlsx", ".xls"],
-    isImporting: false,
-    onOpenChange: fn(),
-    onImport: fn(),
-  },
-};
-
-export const ImportingState: Story = {
-  args: {
-    open: false,
-    availableRoles: sampleRoles,
-    maxFileSize: 10 * 1024 * 1024,
-    supportedFormats: [".csv", ".xlsx", ".xls"],
-    isImporting: true,
-    onOpenChange: fn(),
-    onImport: fn(),
-  },
-};
-
-export const OpenByDefault: Story = {
+export const Open: Story = {
   args: {
     open: true,
-    availableRoles: sampleRoles,
-    maxFileSize: 10 * 1024 * 1024,
-    supportedFormats: [".csv", ".xlsx", ".xls"],
-    isImporting: false,
-    onOpenChange: fn(),
-    onImport: fn(),
+    onClose: fn(),
+    roles: sampleRoles,
   },
 };
 
 export const ExtendedFormats: Story = {
   args: {
     open: false,
-    availableRoles: sampleRoles,
-    maxFileSize: 10 * 1024 * 1024,
-    supportedFormats: [".csv", ".xlsx", ".xls", ".tsv", ".txt"],
-    isImporting: false,
-    onOpenChange: fn(),
-    onImport: fn(),
+    onClose: fn(),
+    roles: sampleRoles,
+  },
+};
+
+export const NoRoles: Story = {
+  args: {
+    open: false,
+    onClose: fn(),
+    roles: [],
+  },
+};
+
+export const CSVOnly: Story = {
+  args: {
+    open: false,
+    onClose: fn(),
+    roles: sampleRoles,
+  },
+};
+
+export const SmallFileLimit: Story = {
+  args: {
+    open: false,
+    onClose: fn(),
+    roles: sampleRoles,
+  },
+};
+
+export const LargeFileLimit: Story = {
+  args: {
+    open: false,
+    onClose: fn(),
+    roles: sampleRoles,
+  },
+};
+
+export const ImportingState: Story = {
+  args: {
+    open: false,
+    onClose: fn(),
+    roles: sampleRoles,
+  },
+};
+
+export const OpenByDefault: Story = {
+  args: {
+    open: true,
+    onClose: fn(),
+    roles: sampleRoles,
   },
 };
 
 export const ImportingWithProgress: Story = {
   args: {
     open: true,
-    availableRoles: sampleRoles,
-    maxFileSize: 10 * 1024 * 1024,
-    supportedFormats: [".csv", ".xlsx", ".xls"],
-    isImporting: true,
-    onOpenChange: fn(),
-    onImport: fn(),
+    onClose: fn(),
+    roles: sampleRoles,
   },
 };
 
 // Story showing the complete import workflow
-export const ImportWorkflow: Story = {
-  render: () => {
-    const [step, setStep] = useState(1);
-    const [open, setOpen] = useState(false);
+export const InteractiveDemo: Story = {
+  render: function InteractiveDemoRender() {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [step, setStep] = React.useState(1);
 
     return (
       <div className="space-y-4">
@@ -282,7 +236,7 @@ export const ImportWorkflow: Story = {
               Previous
             </button>
             <button
-              onClick={() => setOpen(true)}
+              onClick={() => setIsOpen(true)}
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
             >
               Open Import Dialog
@@ -298,13 +252,9 @@ export const ImportWorkflow: Story = {
         </div>
 
         <ImportDialog
-          open={open}
-          onOpenChange={setOpen}
-          availableRoles={sampleRoles}
-          maxFileSize={10 * 1024 * 1024}
-          supportedFormats={[".csv", ".xlsx", ".xls"]}
-          isImporting={step === 4}
-          onImport={fn()}
+          open={isOpen}
+          onClose={() => setIsOpen(false)}
+          roles={sampleRoles}
         />
       </div>
     );

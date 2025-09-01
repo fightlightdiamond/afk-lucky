@@ -5,24 +5,19 @@ import { ExportDialog } from "@/components/admin/ExportDialog";
 import { ExportFormat } from "@/types/user";
 
 // Interactive wrapper for Storybook
-const InteractiveExportDialog = (props: any) => {
+const InteractiveExportDialog = (props: React.ComponentProps<typeof ExportDialog>) => {
   const [open, setOpen] = useState(props.open || false);
-  const [isExporting, setIsExporting] = useState(false);
 
   const handleExport = async (format: ExportFormat, fields?: string[]) => {
-    setIsExporting(true);
     // Simulate export process
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    setIsExporting(false);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setOpen(false);
     props.onExport(format, fields);
   };
 
-  const handleOpenChange = (newOpen: boolean) => {
-    if (!isExporting) {
-      setOpen(newOpen);
-      props.onOpenChange(newOpen);
-    }
+  const handleClose = () => {
+    setOpen(false);
+    props.onClose();
   };
 
   return (
@@ -36,9 +31,8 @@ const InteractiveExportDialog = (props: any) => {
       <ExportDialog
         {...props}
         open={open}
-        onOpenChange={handleOpenChange}
+        onClose={handleClose}
         onExport={handleExport}
-        isExporting={isExporting}
       />
     </div>
   );
@@ -63,11 +57,11 @@ const meta: Meta<typeof ExportDialog> = {
     },
     totalRecords: {
       description: "Total number of records available for export",
-      control: { type: "number" },
+      control: { type: "number", min: 0 },
     },
     filteredRecords: {
       description: "Number of records after applying filters",
-      control: { type: "number" },
+      control: { type: "number", min: 0 },
     },
     availableFields: {
       description: "Available fields for export selection",
@@ -138,10 +132,6 @@ export const Default: Story = {
   args: {
     open: false,
     totalRecords: 1250,
-    filteredRecords: 1250,
-    availableFields: defaultAvailableFields,
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -151,9 +141,6 @@ export const WithFilters: Story = {
     open: false,
     totalRecords: 1250,
     filteredRecords: 89,
-    availableFields: defaultAvailableFields,
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -162,10 +149,6 @@ export const SmallDataset: Story = {
   args: {
     open: false,
     totalRecords: 25,
-    filteredRecords: 25,
-    availableFields: defaultAvailableFields,
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -175,9 +158,6 @@ export const LargeDataset: Story = {
     open: false,
     totalRecords: 50000,
     filteredRecords: 50000,
-    availableFields: defaultAvailableFields,
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -187,9 +167,6 @@ export const HeavilyFiltered: Story = {
     open: false,
     totalRecords: 10000,
     filteredRecords: 3,
-    availableFields: defaultAvailableFields,
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -198,7 +175,6 @@ export const MinimalFields: Story = {
   args: {
     open: false,
     totalRecords: 1250,
-    filteredRecords: 1250,
     availableFields: [
       { key: "id", label: "User ID", description: "Unique identifier" },
       {
@@ -217,8 +193,6 @@ export const MinimalFields: Story = {
         description: "Whether user is active",
       },
     ],
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -227,7 +201,6 @@ export const ExtensiveFields: Story = {
   args: {
     open: false,
     totalRecords: 1250,
-    filteredRecords: 1250,
     availableFields: [
       ...defaultAvailableFields,
       {
@@ -258,8 +231,6 @@ export const ExtensiveFields: Story = {
         description: "Soft deletion timestamp",
       },
     ],
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -268,10 +239,6 @@ export const ExportingState: Story = {
   args: {
     open: false,
     totalRecords: 1250,
-    filteredRecords: 1250,
-    availableFields: defaultAvailableFields,
-    isExporting: true,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -280,10 +247,6 @@ export const OpenByDefault: Story = {
   args: {
     open: true,
     totalRecords: 1250,
-    filteredRecords: 1250,
-    availableFields: defaultAvailableFields,
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -292,10 +255,6 @@ export const NoRecords: Story = {
   args: {
     open: false,
     totalRecords: 0,
-    filteredRecords: 0,
-    availableFields: defaultAvailableFields,
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -304,10 +263,6 @@ export const ExportingLargeDataset: Story = {
   args: {
     open: true,
     totalRecords: 100000,
-    filteredRecords: 100000,
-    availableFields: defaultAvailableFields,
-    isExporting: true,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };
@@ -316,7 +271,6 @@ export const CustomFieldLabels: Story = {
   args: {
     open: false,
     totalRecords: 1250,
-    filteredRecords: 1250,
     availableFields: [
       { key: "id", label: "🆔 User ID", description: "Unique user identifier" },
       { key: "email", label: "📧 Email", description: "Primary email address" },
@@ -342,8 +296,6 @@ export const CustomFieldLabels: Story = {
         description: "Most recent login",
       },
     ],
-    isExporting: false,
-    onOpenChange: fn(),
     onExport: fn(),
   },
 };

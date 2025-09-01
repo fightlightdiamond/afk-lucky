@@ -1,14 +1,53 @@
 // Main types index file - exports all user management types
 
-// User-related types
+// Import types from centralized locations
 export type {
   User,
+  Role,
+  UserRole,
+  UserWithRole,
+  UserWithRoleSelect,
+  transformUserForAPI,
+  createOrderBy
+} from "@/lib/prisma-types";
+
+export type {
+  CreateUserInput,
+  UpdateUserInput,
+  GetUsersParamsInput,
+  BulkOperationInput
+} from "@/lib/validation";
+
+export type {
+  ApiResponse,
+  ApiErrorResponse,
+  ApiResponseMetadata,
+  BatchRequest,
+  BatchResponse,
+  FileUploadRequest,
+  FileUploadResponse,
+  ApiRequestOptions,
+  PaginationRequest,
+  SortRequest,
+  FilterRequest,
+  QueryRequest,
+  WebhookPayload,
+  RateLimitInfo,
+  HealthCheckResponse,
+  ApiVersion,
+  RequestContext,
+  CacheOptions,
+  ApiMetrics,
+  SearchRequest,
+  SearchResponse
+} from "./api";
+
+// User-related types
+export type {
   AuthUser,
   PublicUser,
-  Role,
   UserFilters,
   FilterPreset,
-  PaginationParams,
   PaginationConfig,
   GetUsersParams,
   UsersResponse,
@@ -35,11 +74,7 @@ export type {
   UserDialogState,
   BulkOperationState,
   UserFormData,
-  ExportRequest,
-  ExportResponse,
-  ImportRequest,
   ImportOptions,
-  ImportResponse,
   ImportError,
   ImportWarning,
   DateRange,
@@ -48,13 +83,11 @@ export type {
   AuthUserField,
   FilterableUserField,
   SortableUserField,
-  SortOrder,
   FieldValidationRule,
 } from "./user";
 
 // User enums
 export {
-  UserRole,
   UserStatus,
   ActivityStatus,
   UserManagementErrorCodes,
@@ -85,30 +118,7 @@ export {
 // User type aliases
 export type { BulkOperationType, ExportFormat } from "./user";
 
-// API-related types
-export type {
-  ApiResponse,
-  ApiResponseMetadata,
-  ApiErrorResponse,
-  ApiRequestOptions,
-  PaginationRequest,
-  SortRequest,
-  FilterRequest,
-  QueryRequest,
-  BatchRequest,
-  BatchResponse,
-  FileUploadRequest,
-  FileUploadResponse,
-  WebhookPayload,
-  RateLimitInfo,
-  HealthCheckResponse,
-  ApiVersion,
-  RequestContext,
-  CacheOptions,
-  ApiMetrics,
-  SearchRequest,
-  SearchResponse,
-} from "./api";
+// Note: API types already exported above
 
 // API enums
 export {
@@ -130,7 +140,6 @@ export type {
   FormValidationResult,
   FormState,
   FormConfig,
-  UserFormData,
   UserEditFormData,
   BulkOperationFormData,
   FilterFormData,
@@ -177,26 +186,9 @@ export type {
   ApiErrorResponse as ErrorResponse,
 } from "./user";
 
-// Type utility helpers
-export type Partial<T> = {
-  [P in keyof T]?: T[P];
-};
-
-export type Required<T> = {
-  [P in keyof T]-?: T[P];
-};
-
-export type Pick<T, K extends keyof T> = {
-  [P in K]: T[P];
-};
-
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+// Note: Removed custom utility types as they're built into TypeScript
 
 // Common type combinations
-export type UserWithRole = User & {
-  role: Required<Role>;
-};
-
 export type UserListItem = Pick<
   User,
   "id" | "email" | "full_name" | "is_active" | "created_at" | "last_login"

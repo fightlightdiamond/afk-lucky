@@ -1,17 +1,8 @@
 import { NextAuthOptions, DefaultSession, getServerSession } from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient, User as PrismaUser } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-
-// Define UserRole enum
-export enum UserRole {
-  ADMIN = "ADMIN",
-  USER = "USER",
-  AUTHOR = "AUTHOR",
-  EDITOR = "EDITOR",
-  MODERATOR = "MODERATOR",
-}
+import prisma from "@/lib/prisma";
 
 // Extend NextAuth types
 declare module "next-auth" {
@@ -39,7 +30,6 @@ declare module "next-auth" {
   }
 }
 
-const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -102,7 +92,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.role = user.role;
         token.email = user.email;
-        token.name = user.name;
+        token.name = user.name || user.email;
 
         console.log("✅ JWT Token updated:", {
           id: token.id,

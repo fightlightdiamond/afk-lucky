@@ -153,8 +153,8 @@ export const LargeSelection: Story = {
 };
 
 export const InteractiveDemo: Story = {
-  render: (args) => {
-    const [selectedCount, setSelectedCount] = React.useState(3);
+  render: function InteractiveDemoRender(args) {
+    const [selectedCount, setSelectedCount] = React.useState(5);
     const [disabled, setDisabled] = React.useState(false);
 
     return (

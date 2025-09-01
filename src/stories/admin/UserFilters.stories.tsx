@@ -5,7 +5,11 @@ import { UserFilters } from "@/components/admin/UserFilters";
 import { UserFilters as UserFiltersType, Role, UserRole } from "@/types/user";
 
 // Interactive wrapper for Storybook
-const InteractiveUserFilters = (props: any) => {
+const InteractiveUserFilters = (props: {
+  filters: UserFiltersType;
+  onFiltersChange: (filters: UserFiltersType) => void;
+  onExport: (format: "csv" | "excel", fields?: string[]) => void;
+}) => {
   const [filters, setFilters] = useState<UserFiltersType>(props.filters);
 
   const handleFiltersChange = (newFilters: UserFiltersType) => {

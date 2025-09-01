@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "storybook/test";
-import { useState } from "react";
+import React, { useState } from "react";
 import { BulkConfirmDialog } from "@/components/admin/BulkConfirmDialog";
 import {
   User,
@@ -13,8 +13,13 @@ import {
 import { Button } from "@/components/ui/button";
 
 // Interactive wrapper for Storybook
-const InteractiveBulkConfirmDialog = (args: any) => {
-  const [open, setOpen] = useState(args.open || false);
+const InteractiveBulkConfirmDialog = (args: {
+  operation: BulkOperationType | null;
+  selectedUsers: User[];
+  role?: Role;
+  onConfirm?: (reason?: string, options?: { force?: boolean }) => void;
+}) => {
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleConfirm = async (
@@ -29,29 +34,15 @@ const InteractiveBulkConfirmDialog = (args: any) => {
     args.onConfirm?.(reason, options);
   };
 
-  const handleOpenChange = (newOpen: boolean) => {
-    if (!loading) {
-      setOpen(newOpen);
-      args.onOpenChange?.(newOpen);
-    }
-  };
-
   return (
-    <div>
-      <Button
-        onClick={() => setOpen(true)}
-        variant={args.operation === "delete" ? "destructive" : "default"}
-      >
-        Open{" "}
-        {args.operation
-          ?.replace(/_/g, " ")
-          .replace(/\b\w/g, (l: string) => l.toUpperCase())}{" "}
-        Dialog
-      </Button>
+    <div className="space-y-4">
+      <Button onClick={() => setOpen(true)}>Open Bulk Confirm Dialog</Button>
       <BulkConfirmDialog
-        {...args}
         open={open}
-        onOpenChange={handleOpenChange}
+        onOpenChange={setOpen}
+        operation={args.operation}
+        selectedUsers={args.selectedUsers}
+        role={args.role}
         onConfirm={handleConfirm}
         loading={loading}
       />
@@ -261,9 +252,9 @@ export const OpenByDefault: Story = {
 };
 
 export const AllOperations: Story = {
-  render: (args) => {
+  render: function AllOperationsRender(args) {
     const [currentOperation, setCurrentOperation] =
-      useState<BulkOperationType>("ban");
+      React.useState<BulkOperationType>("ban");
     const operations: BulkOperationType[] = [
       "ban",
       "unban",

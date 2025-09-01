@@ -5,7 +5,7 @@ import { ImportOptionsForm } from "@/components/admin/ImportOptionsForm";
 import { ImportOptions, Role, UserRole } from "@/types/user";
 
 // Interactive wrapper for Storybook
-const InteractiveImportOptionsForm = (args: any) => {
+const ImportOptionsFormWrapper = (args: React.ComponentProps<typeof ImportOptionsForm>) => {
   const [options, setOptions] = useState<ImportOptions>(args.options);
 
   const handleOptionsChange = (newOptions: ImportOptions) => {
@@ -22,9 +22,9 @@ const InteractiveImportOptionsForm = (args: any) => {
   );
 };
 
-const meta: Meta<typeof ImportOptionsForm> = {
+const meta: Meta<typeof ImportOptionsFormWrapper> = {
   title: "Admin/ImportOptionsForm",
-  component: InteractiveImportOptionsForm,
+  component: ImportOptionsFormWrapper,
   parameters: {
     layout: "padded",
     docs: {
@@ -201,13 +201,14 @@ export const LimitedRoles: Story = {
 export const ConservativeSettings: Story = {
   args: {
     options: {
-      skipDuplicates: true,
-      updateExisting: false,
-      skipInvalidRows: false,
+      skipDuplicates: false,
+      updateExisting: true,
+      skipInvalidRows: true,
       defaultRole: undefined,
-      defaultStatus: false,
+      defaultStatus: true,
       sendWelcomeEmail: false,
       requirePasswordReset: true,
+      validateOnly: false,
     },
     roles: sampleRoles,
   },
@@ -219,17 +220,18 @@ export const AggressiveSettings: Story = {
       skipDuplicates: false,
       updateExisting: true,
       skipInvalidRows: true,
-      defaultRole: "role-user",
+      defaultRole: "USER",
       defaultStatus: true,
       sendWelcomeEmail: true,
       requirePasswordReset: false,
+      validateOnly: false,
     },
     roles: sampleRoles,
   },
 };
 
 export const InteractiveDemo: Story = {
-  render: (args) => {
+  render: function InteractiveDemoRender(args) {
     const [preset, setPreset] = useState("default");
 
     const presets = {
@@ -306,7 +308,7 @@ export const InteractiveDemo: Story = {
           <strong>Current Preset:</strong> {currentPreset.name}
         </div>
 
-        <InteractiveImportOptionsForm
+        <ImportOptionsFormWrapper
           {...args}
           options={currentPreset.options}
           roles={sampleRoles}

@@ -5,7 +5,7 @@ import { RoleFilter } from "@/components/admin/filters/RoleFilter";
 import { Role, UserRole } from "@/types/user";
 
 // Interactive wrapper for Storybook
-const InteractiveRoleFilter = (props: any) => {
+const RoleFilterWrapper = (props: React.ComponentProps<typeof RoleFilter>) => {
   const [selectedRole, setSelectedRole] = useState<string | null>(
     props.selectedRole || null
   );
@@ -309,7 +309,7 @@ export const RolesWithLongNames: Story = {
 };
 
 export const InteractiveDemo: Story = {
-  render: (args) => {
+  render: function InteractiveDemoRender(args) {
     const [selectedRole, setSelectedRole] = useState<string | null>(null);
     const [showPermissions, setShowPermissions] = useState(true);
     const [disabled, setDisabled] = useState(false);

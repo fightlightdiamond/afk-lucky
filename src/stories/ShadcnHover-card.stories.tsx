@@ -118,7 +118,7 @@ export const UserProfile: Story = {
       description: 'Kiểu huy hiệu' 
     },
   },
-  render: (args: any) => (
+  render: (args: { openDelay: number; closeDelay: number; userName: string; userHandle: string; userBio: string; userAvatar: string; userFallback: string; joinDate: string; followers: string; following: string; showStats: boolean; showBadge: boolean; badgeText: string; badgeVariant: 'default' | 'secondary' | 'destructive' | 'outline' }) => (
     <HoverCard openDelay={args.openDelay} closeDelay={args.closeDelay}>
       <HoverCardTrigger asChild>
         <Button variant="link">{args.userHandle}</Button>
@@ -188,7 +188,7 @@ export const ProductCard: Story = {
     showRating: { control: 'boolean', description: 'Hiển thị đánh giá' },
     showStock: { control: 'boolean', description: 'Hiển thị trạng thái kho' },
   },
-  render: (args: any) => (
+  render: (args: { productName: string; productPrice: string; productDescription: string; productImage: string; productRating: string; productReviews: string; inStock: boolean; showRating: boolean; showStock: boolean }) => (
     <HoverCard>
       <HoverCardTrigger asChild>
         <Button variant="outline">{args.productName}</Button>
@@ -250,7 +250,7 @@ export const CompanyCard: Story = {
     location: { control: 'text', description: 'Địa điểm công ty' },
     showDetails: { control: 'boolean', description: 'Hiển thị chi tiết công ty' },
   },
-  render: (args: any) => (
+  render: (args: { companyName: string; companyDescription: string; companyLogo: string; companyWebsite: string; employees: string; founded: string; location: string; showDetails: boolean }) => (
     <HoverCard>
       <HoverCardTrigger asChild>
         <Button variant="link">{args.companyName}</Button>
@@ -305,7 +305,7 @@ export const SimpleText: Story = {
       description: 'Kiểu nút kích hoạt'
     },
   },
-  render: (args: any) => (
+  render: (args: { triggerText: string; contentText: string; triggerVariant: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' }) => (
     <HoverCard>
       <HoverCardTrigger asChild>
         <Button variant={args.triggerVariant}>{args.triggerText}</Button>

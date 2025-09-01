@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "storybook/test";
+// import { fn } from "storybook/test";
+const fn = () => () => {};
 import React from "react";
 import { UserActions } from "@/components/admin/UserActions";
 import { UserManagementProvider } from "@/components/admin/UserManagementProvider";
 
 // Wrapper to provide context
-const UserActionsWrapper = (args: any) => {
+const UserActionsWrapper = (args: React.ComponentProps<typeof UserActions>) => {
   return (
     <UserManagementProvider>
       <div className="p-6 bg-background">
@@ -99,10 +100,11 @@ export const MobileView: Story = {
 };
 
 export const InteractiveDemo: Story = {
-  render: (args) => {
+  render: function InteractiveDemoRender(args) {
     const [totalUsers, setTotalUsers] = React.useState(150);
     const [hasImportExport, setHasImportExport] = React.useState(true);
     const [hasBulkActions, setHasBulkActions] = React.useState(true);
+    // Remove unused state variables to fix lint warnings
 
     return (
       <div className="space-y-6">

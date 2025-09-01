@@ -1,13 +1,18 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "storybook/test";
-import { useState } from "react";
+// import { fn } from "@storybook/test";
+const fn = () => () => {};
+import React from "react";
 import { BulkResultDialog } from "@/components/admin/BulkResultDialog";
-import { BulkOperationResult, BulkOperationType } from "@/types/user";
+import type {
+  BulkOperationType,
+  BulkOperationResult,
+} from "@/types/user";
+import { UserManagementErrorCodes } from "@/types/user";
 import { Button } from "@/components/ui/button";
 
 // Interactive wrapper for Storybook
-const InteractiveBulkResultDialog = (props: any) => {
-  const [open, setOpen] = useState(props.open || false);
+const InteractiveBulkResultDialog = (props: React.ComponentProps<typeof BulkResultDialog>) => {
+  const [open, setOpen] = React.useState(props.open || false);
 
   return (
     <div>
@@ -69,13 +74,14 @@ const meta: Meta<typeof BulkResultDialog> = {
 export default meta;
 type Story = StoryObj<typeof BulkResultDialog>;
 
-const baseResult: Omit<BulkOperationResult, "success" | "failed" | "skipped"> =
-  {
-    total: 100,
-    duration: 45000, // 45 seconds
-    startedAt: new Date(Date.now() - 60000).toISOString(), // 1 minute ago
-    completedAt: new Date().toISOString(),
-  };
+const baseResult: Omit<BulkOperationResult, "failed" | "success" | "skipped"> = {
+  operation: "ban" as BulkOperationType,
+  total: 100,
+  duration: 45000,
+  startedAt: new Date(Date.now() - 60000).toISOString(),
+  completedAt: new Date().toISOString(),
+  errors: [],
+};
 
 export const FullSuccess: Story = {
   args: {
@@ -86,7 +92,6 @@ export const FullSuccess: Story = {
       success: 100,
       failed: 0,
       skipped: 0,
-      errors: [],
     },
     onOpenChange: fn(),
     onRetry: fn(),
@@ -109,7 +114,7 @@ export const PartialSuccess: Story = {
           userEmail: "admin@example.com",
           userName: "Admin User",
           error: "Cannot delete admin user",
-          code: "CANNOT_DELETE_ADMIN",
+          code: UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS,
           timestamp: new Date().toISOString(),
         },
         {
@@ -117,7 +122,7 @@ export const PartialSuccess: Story = {
           userEmail: "john.doe@example.com",
           userName: "John Doe",
           error: "User has active sessions",
-          code: "ACTIVE_SESSIONS",
+          code: UserManagementErrorCodes.USER_SUSPENDED,
           timestamp: new Date().toISOString(),
         },
         {
@@ -125,7 +130,7 @@ export const PartialSuccess: Story = {
           userEmail: "jane.smith@example.com",
           userName: "Jane Smith",
           error: "Database constraint violation",
-          code: "DB_CONSTRAINT",
+          code: UserManagementErrorCodes.DATABASE_ERROR,
           timestamp: new Date().toISOString(),
         },
       ],
@@ -148,37 +153,41 @@ export const MostlyFailed: Story = {
       errors: [
         {
           userId: "user-1",
-          userEmail: "user1@example.com",
+          userEmail: "error1@example.com",
+          userName: "Error User 1",
           error: "Permission denied",
-          code: "PERMISSION_DENIED",
+          code: UserManagementErrorCodes.PERMISSION_DENIED,
           timestamp: new Date().toISOString(),
         },
         {
           userId: "user-2",
-          userEmail: "user2@example.com",
-          error: "Role not found",
-          code: "ROLE_NOT_FOUND",
+          userEmail: "error2@example.com",
+          userName: "Error User 2",
+          error: "User not found",
+          code: UserManagementErrorCodes.USER_NOT_FOUND,
           timestamp: new Date().toISOString(),
         },
         {
           userId: "user-3",
-          userEmail: "user3@example.com",
-          error: "User already has this role",
-          code: "ROLE_ALREADY_ASSIGNED",
+          userEmail: "error3@example.com",
+          userName: "Error User 3",
+          error: "Database error",
+          code: UserManagementErrorCodes.DATABASE_ERROR,
           timestamp: new Date().toISOString(),
         },
         {
           userId: "user-4",
-          userEmail: "user4@example.com",
-          error: "Database connection timeout",
-          code: "DB_TIMEOUT",
+          userEmail: "error4@example.com",
+          userName: "Error User 4",
+          error: "Network timeout",
+          code: UserManagementErrorCodes.TIMEOUT_ERROR,
           timestamp: new Date().toISOString(),
         },
         {
           userId: "user-5",
           userEmail: "user5@example.com",
           error: "Invalid user state",
-          code: "INVALID_STATE",
+          code: UserManagementErrorCodes.VALIDATION_ERROR,
           timestamp: new Date().toISOString(),
         },
       ],
@@ -202,13 +211,13 @@ export const CompleteFailure: Story = {
         {
           userId: "system",
           error: "Database connection failed",
-          code: "DB_CONNECTION_FAILED",
+          code: UserManagementErrorCodes.DATABASE_CONNECTION_FAILED,
           timestamp: new Date().toISOString(),
         },
         {
           userId: "system",
           error: "Authentication service unavailable",
-          code: "AUTH_SERVICE_DOWN",
+          code: UserManagementErrorCodes.SERVICE_UNAVAILABLE,
           timestamp: new Date().toISOString(),
         },
       ],
@@ -233,7 +242,7 @@ export const WithWarnings: Story = {
           userId: "user-1",
           userEmail: "blocked@example.com",
           error: "User is permanently blocked",
-          code: "PERMANENTLY_BLOCKED",
+          code: UserManagementErrorCodes.USER_SUSPENDED,
           timestamp: new Date().toISOString(),
         },
       ],
@@ -287,12 +296,12 @@ export const LargeDataset: Story = {
         }`,
         code:
           i % 4 === 0
-            ? "PERMISSION_DENIED"
+            ? UserManagementErrorCodes.PERMISSION_DENIED
             : i % 4 === 1
-            ? "USER_NOT_FOUND"
+            ? UserManagementErrorCodes.USER_NOT_FOUND
             : i % 4 === 2
-            ? "DB_ERROR"
-            : "NETWORK_TIMEOUT",
+            ? UserManagementErrorCodes.DATABASE_ERROR
+            : UserManagementErrorCodes.TIMEOUT_ERROR,
         timestamp: new Date(Date.now() - i * 1000).toISOString(),
       })),
     },
@@ -319,7 +328,7 @@ export const SmallDataset: Story = {
           userEmail: "admin@example.com",
           userName: "Admin User",
           error: "Cannot deactivate admin user",
-          code: "CANNOT_DEACTIVATE_ADMIN",
+          code: UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS,
           timestamp: new Date().toISOString(),
         },
       ],
@@ -344,7 +353,7 @@ export const WithExportUrl: Story = {
           userId: "user-1",
           userEmail: "error@example.com",
           error: "Sample error",
-          code: "SAMPLE_ERROR",
+          code: UserManagementErrorCodes.VALIDATION_ERROR,
           timestamp: new Date().toISOString(),
         },
       ],
@@ -370,14 +379,14 @@ export const OpenByDefault: Story = {
           userId: "user-1",
           userEmail: "protected@example.com",
           error: "User is protected from deletion",
-          code: "PROTECTED_USER",
+          code: UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS,
           timestamp: new Date().toISOString(),
         },
         {
           userId: "user-2",
           userEmail: "active@example.com",
           error: "User has active sessions",
-          code: "ACTIVE_SESSIONS",
+          code: UserManagementErrorCodes.USER_SUSPENDED,
           timestamp: new Date().toISOString(),
         },
       ],
@@ -389,9 +398,9 @@ export const OpenByDefault: Story = {
 };
 
 export const AllOperationTypes: Story = {
-  render: () => {
+  render: function AllOperationTypesRender() {
     const [currentOperation, setCurrentOperation] =
-      useState<BulkOperationType>("ban");
+      React.useState<BulkOperationType>("ban");
     const operations: BulkOperationType[] = [
       "ban",
       "unban",
@@ -488,6 +497,7 @@ export const AllOperationTypes: Story = {
         </div>
 
         <InteractiveBulkResultDialog
+          open={false}
           operation={currentOperation}
           result={getResultForOperation(currentOperation)}
           onOpenChange={fn()}

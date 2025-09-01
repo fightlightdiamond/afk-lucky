@@ -1,8 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "storybook/test";
+import { fn } from "@storybook/test";
 import { useState } from "react";
 import { UserDialog } from "@/components/admin/UserDialog";
 import { User, Role, UserRole, UserStatus, ActivityStatus } from "@/types/user";
+
+// Import UserFormData type from the component
+type UserFormData = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password?: string;
+  confirmPassword?: string;
+  role_id?: string;
+  is_active: boolean;
+  locale?: string;
+};
 
 // Sample roles for the dialog
 const sampleRoles: Role[] = [
@@ -87,22 +99,31 @@ const sampleUser: User = {
 };
 
 // Interactive wrapper for Storybook
-const InteractiveUserDialog = (props: any) => {
+interface InteractiveUserDialogProps {
+  open?: boolean;
+  user?: User | null;
+  roles?: Role[];
+  onOpenChange?: (open: boolean) => void;
+  onSubmit?: (data: Omit<UserFormData, "confirmPassword">) => Promise<void>;
+  onCancel?: () => void;
+}
+
+const InteractiveUserDialog = (props: InteractiveUserDialogProps) => {
   const [open, setOpen] = useState(props.open || false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: Omit<UserFormData, "confirmPassword">) => {
     setIsLoading(true);
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsLoading(false);
     setOpen(false);
-    props.onSubmit(data);
+    props.onSubmit?.(data);
   };
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
-    props.onOpenChange(newOpen);
+    props.onOpenChange?.(newOpen);
   };
 
   return (
@@ -119,6 +140,7 @@ const InteractiveUserDialog = (props: any) => {
         onOpenChange={handleOpenChange}
         onSubmit={handleSubmit}
         isLoading={isLoading}
+        roles={props.roles || []}
       />
     </div>
   );
@@ -195,8 +217,8 @@ export const EditUserWithoutRole: Story = {
     open: false,
     user: {
       ...sampleUser,
-      role: null,
-      role_id: null,
+      role: undefined,
+      role_id: undefined,
     },
     roles: sampleRoles,
     isLoading: false,
@@ -285,8 +307,8 @@ export const UserWithMinimalData: Story = {
       is_active: true,
       created_at: "2024-01-01T00:00:00Z",
       updated_at: "2024-01-01T00:00:00Z",
-      role_id: null,
-      role: null,
+      role_id: undefined,
+      role: undefined,
       full_name: "Min User",
       display_name: "Min User",
       status: UserStatus.ACTIVE,

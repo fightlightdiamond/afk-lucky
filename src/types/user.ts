@@ -1,5 +1,11 @@
 // Enhanced User Management Types
 
+// Import UserRole from Prisma generated types
+import { UserRole } from "@prisma/client";
+
+// Re-export UserRole for convenience
+export { UserRole };
+
 // Base User interface with all database fields
 export interface User {
   id: string;
@@ -64,14 +70,6 @@ export interface PublicUser {
   locale?: string;
 }
 
-// User role enum matching Prisma schema
-export enum UserRole {
-  ADMIN = "ADMIN",
-  USER = "USER",
-  AUTHOR = "AUTHOR",
-  EDITOR = "EDITOR",
-  MODERATOR = "MODERATOR",
-}
 
 // User status enum
 export enum UserStatus {

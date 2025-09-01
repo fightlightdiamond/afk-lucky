@@ -32,7 +32,7 @@ export const resetAbilityMocks = () => {
 
 // Helper function to mock specific permissions
 export const mockPermissions = (permissions: Record<string, boolean>) => {
-  mockAbility.can.mockImplementation((...args: any[]) => {
+  mockAbility.can.mockImplementation((...args: unknown[]) => {
     if (args.length >= 2) {
       const [action, subject] = args;
       const key = `${action}:${subject}`;

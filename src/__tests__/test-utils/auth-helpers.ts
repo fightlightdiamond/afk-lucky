@@ -1,14 +1,6 @@
 import { vi } from "vitest";
 import { Session } from "next-auth";
-
-// Import UserRole enum directly to avoid circular dependencies
-export enum UserRole {
-  ADMIN = "ADMIN",
-  AUTHOR = "AUTHOR",
-  EDITOR = "EDITOR",
-  MODERATOR = "MODERATOR",
-  USER = "USER",
-}
+import { UserRole } from "@prisma/client";
 
 // Type definitions for test users and sessions
 export interface TestUser {

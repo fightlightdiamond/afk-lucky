@@ -4,19 +4,27 @@ import React, { useState } from "react";
 import { FieldMappingForm } from "@/components/admin/FieldMappingForm";
 
 // Interactive wrapper for Storybook
-const InteractiveFieldMappingForm = (args: any) => {
-  const [mapping, setMapping] = useState(args.mapping || {});
+const InteractiveFieldMappingForm = (props: {
+  headers?: string[];
+  mapping?: Record<string, string>;
+  onChange: (mapping: Record<string, string>) => void;
+  suggestedMapping?: Record<string, string>;
+}) => {
+  const [mapping, setMapping] = useState<Record<string, string>>(
+    props.mapping || {}
+  );
 
   const handleMappingChange = (newMapping: Record<string, string>) => {
     setMapping(newMapping);
-    args.onChange?.(newMapping);
+    props.onChange(newMapping);
   };
 
   return (
     <FieldMappingForm
-      {...args}
+      headers={props.headers || []}
       mapping={mapping}
       onChange={handleMappingChange}
+      suggestedMapping={props.suggestedMapping || {}}
     />
   );
 };
@@ -38,9 +46,9 @@ const meta: Meta<typeof FieldMappingForm> = {
       description: "Array of column headers from the imported file",
       control: { type: "object" },
     },
-    mapping: {
-      description: "Current field mapping object",
-      control: { type: "object" },
+    onChange: {
+      description: "Callback when mapping changes",
+      action: "mappingChanged",
     },
     suggestedMapping: {
       description: "AI-suggested field mapping",
@@ -243,8 +251,69 @@ export const MissingRequiredFields: Story = {
   },
 };
 
+export const WithPreMappedFields: Story = {
+  args: {
+    headers: ["Email Address", "First Name", "Last Name", "User Role", "Status"],
+    mapping: {
+      "Email Address": "email",
+      "First Name": "first_name",
+      "Last Name": "last_name",
+    },
+    onChange: fn(),
+    suggestedMapping: {},
+  },
+};
+
+export const WithManyHeaders: Story = {
+  args: {
+    headers: [
+      "user_email",
+      "user_first_name",
+      "user_last_name",
+      "user_password",
+      "user_role",
+      "user_active",
+      "user_birthday",
+      "user_address",
+      "user_locale",
+      "user_sex",
+      "user_group_id",
+      "user_slack_webhook_url",
+    ],
+    mapping: {},
+    suggestedMapping: {
+      user_email: "email",
+      user_first_name: "first_name",
+      user_last_name: "last_name",
+      user_password: "password",
+      user_role: "role",
+      user_active: "is_active",
+      user_birthday: "birthday",
+      user_address: "address",
+      user_locale: "locale",
+      user_sex: "sex",
+      user_group_id: "group_id",
+      user_slack_webhook_url: "slack_webhook_url",
+    },
+    onChange: fn(),
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    headers: ["Email", "First Name", "Last Name", "Role", "Status"],
+    mapping: {
+      Email: "email",
+      "First Name": "first_name",
+      "Last Name": "last_name",
+    },
+    onChange: fn(),
+    suggestedMapping: {},
+  },
+};
+
 export const InteractiveDemo: Story = {
-  render: (args) => {
+  render: function InteractiveDemoRender(args) {
     const [selectedScenario, setSelectedScenario] = useState("standard");
 
     const scenarios = {

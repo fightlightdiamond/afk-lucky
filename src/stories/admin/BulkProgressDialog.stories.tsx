@@ -1,13 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "storybook/test";
-import { useState } from "react";
+import { fn } from "@storybook/test";
+import React from "react";
 import { BulkProgressDialog } from "@/components/admin/BulkProgressDialog";
-import { BulkOperationProgress } from "@/types/user";
+import {
+  BulkOperationProgress,
+  BulkOperationResult,
+  BulkOperationError,
+  BulkOperationType,
+  UserManagementErrorCodes,
+} from "@/types/user";
 import { Button } from "@/components/ui/button";
 
 // Interactive wrapper for Storybook
-const InteractiveBulkProgressDialog = (props: any) => {
-  const [open, setOpen] = useState(props.open || false);
+const InteractiveBulkProgressDialog = (props: React.ComponentProps<typeof BulkProgressDialog>) => {
+  const [open, setOpen] = React.useState(props.open || false);
 
   return (
     <div>
@@ -61,8 +67,8 @@ const baseProgress: Omit<
   BulkOperationProgress,
   "status" | "progress" | "processed"
 > = {
-  id: "bulk-op-1",
-  operation: "ban",
+  operationId: "bulk-op-1",
+  operation: "ban" as BulkOperationType,
   total: 100,
   startedAt: new Date(Date.now() - 30000).toISOString(), // 30 seconds ago
 };
@@ -123,6 +129,8 @@ export const Completed: Story = {
       progress: 100,
       processed: 100,
       result: {
+        operation: "ban" as BulkOperationType,
+        startedAt: new Date(Date.now() - 60000).toISOString(),
         total: 100,
         success: 95,
         failed: 3,
@@ -132,14 +140,14 @@ export const Completed: Story = {
             userId: "user-1",
             userEmail: "john.doe@example.com",
             error: "User is already banned",
-            code: "ALREADY_BANNED",
+            code: UserManagementErrorCodes.USER_ALREADY_INACTIVE,
             timestamp: new Date().toISOString(),
           },
           {
             userId: "user-2",
             userEmail: "jane.smith@example.com",
             error: "Cannot ban admin user",
-            code: "CANNOT_BAN_ADMIN",
+            code: UserManagementErrorCodes.INSUFFICIENT_PERMISSIONS,
             timestamp: new Date().toISOString(),
           },
         ],
@@ -160,6 +168,8 @@ export const Failed: Story = {
       progress: 25,
       processed: 25,
       result: {
+        operation: "ban" as BulkOperationType,
+        startedAt: new Date(Date.now() - 120000).toISOString(),
         total: 100,
         success: 20,
         failed: 5,
@@ -167,23 +177,23 @@ export const Failed: Story = {
         errors: [
           {
             userId: "user-1",
-            userEmail: "john.doe@example.com",
-            error: "Database connection failed",
-            code: "DB_ERROR",
+            userEmail: "error1@example.com",
+            error: "Permission denied",
+            code: UserManagementErrorCodes.PERMISSION_DENIED,
             timestamp: new Date().toISOString(),
           },
           {
             userId: "user-2",
-            userEmail: "jane.smith@example.com",
-            error: "Permission denied",
-            code: "PERMISSION_DENIED",
+            userEmail: "error2@example.com",
+            error: "User not found",
+            code: UserManagementErrorCodes.USER_NOT_FOUND,
             timestamp: new Date().toISOString(),
           },
           {
             userId: "user-3",
-            userEmail: "bob.wilson@example.com",
-            error: "User not found",
-            code: "USER_NOT_FOUND",
+            userEmail: "error3@example.com",
+            error: "Database error",
+            code: UserManagementErrorCodes.DATABASE_ERROR,
             timestamp: new Date().toISOString(),
           },
         ],
@@ -204,6 +214,8 @@ export const Cancelled: Story = {
       progress: 60,
       processed: 60,
       result: {
+        operation: "ban" as BulkOperationType,
+        startedAt: new Date(Date.now() - 90000).toISOString(),
         total: 100,
         success: 55,
         failed: 2,
@@ -213,7 +225,7 @@ export const Cancelled: Story = {
             userId: "user-1",
             userEmail: "john.doe@example.com",
             error: "Operation was cancelled",
-            code: "CANCELLED",
+            code: UserManagementErrorCodes.BULK_OPERATION_CANCELLED,
             timestamp: new Date().toISOString(),
           },
         ],
@@ -315,14 +327,15 @@ export const OpenByDefault: Story = {
 };
 
 export const ProgressSimulation: Story = {
-  render: () => {
-    const [progress, setProgress] = useState<BulkOperationProgress>({
+  render: function ProgressSimulationRender() {
+    const [progress, setProgress] = React.useState<BulkOperationProgress>({
       ...baseProgress,
       status: "pending",
       progress: 0,
       processed: 0,
     });
-    const [isRunning, setIsRunning] = useState(false);
+    const [isRunning, setIsRunning] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
     const startSimulation = () => {
       setIsRunning(true);
@@ -345,6 +358,8 @@ export const ProgressSimulation: Story = {
               progress: 100,
               processed: prev.total,
               result: {
+                operation: prev.operation as BulkOperationType,
+                startedAt: prev.startedAt,
                 total: prev.total,
                 success: Math.floor(prev.total * 0.9),
                 failed: Math.floor(prev.total * 0.08),
@@ -354,7 +369,7 @@ export const ProgressSimulation: Story = {
                     userId: "user-1",
                     userEmail: "error@example.com",
                     error: "Sample error message",
-                    code: "SAMPLE_ERROR",
+                    code: UserManagementErrorCodes.VALIDATION_ERROR,
                     timestamp: new Date().toISOString(),
                   },
                 ],
@@ -405,11 +420,13 @@ export const ProgressSimulation: Story = {
           </div>
         </div>
 
-        <InteractiveBulkProgressDialog
+        <BulkProgressDialog
+          open={open}
           progress={progress}
           canCancel={isRunning}
-          onOpenChange={fn()}
+          onOpenChange={setOpen}
           onCancel={() => {
+            console.log("Cancel clicked");
             setIsRunning(false);
             setProgress((prev) => ({ ...prev, status: "cancelled" }));
             fn()();

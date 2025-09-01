@@ -15,6 +15,7 @@ export const AbilityProvider = ({ children }: AbilityProviderProps) => {
   const { data: session } = useSession();
 
   // Create ability instance and update it when session changes
+  // Memoize để tránh re-computation không cần thiết
   const ability = useMemo(() => {
     return createAbility(session);
   }, [session]);

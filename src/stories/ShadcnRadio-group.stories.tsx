@@ -7,9 +7,39 @@ import {
 } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
 
-const meta: Meta<typeof RadioGroup> = {
+// Wrapper component for interactive demos
+function RadioGroupWrapper(props: {
+  defaultValue?: string;
+  disabled?: boolean;
+  orientation?: 'vertical' | 'horizontal';
+  showLabels?: boolean;
+  options?: string;
+  spacing?: string;
+}) {
+  const [value, setValue] = React.useState(props.defaultValue || "");
+  const containerClass = props.orientation === 'horizontal' 
+    ? `flex flex-row ${props.spacing || 'gap-3'}` 
+    : `flex flex-col ${props.spacing || 'gap-3'}`;
+
+  const optionsList = props.options 
+    ? props.options.split(',').map(option => option.trim()).filter(option => option.length > 0)
+    : ['default', 'comfortable', 'compact'];
+
+  return (
+    <RadioGroup value={value} onValueChange={setValue} className={containerClass} disabled={props.disabled}>
+      {optionsList.map((option, index) => (
+        <div key={option} className="flex items-center gap-3">
+          <RadioGroupItem value={option.toLowerCase()} id={`r${index + 1}`} />
+          {props.showLabels && <Label htmlFor={`r${index + 1}`}>{option}</Label>}
+        </div>
+      ))}
+    </RadioGroup>
+  );
+}
+
+const meta: Meta<typeof RadioGroupWrapper> = {
   title: 'Shadcn UI/RadioGroup',
-  component: RadioGroup,
+  component: RadioGroupWrapper,
   parameters: {
     layout: 'centered',
   },
@@ -55,94 +85,47 @@ const meta: Meta<typeof RadioGroup> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: (args) => {
-    const containerClass = args.orientation === 'horizontal' 
-      ? `flex flex-row ${args.spacing}` 
-      : `flex flex-col ${args.spacing}`;
+export const InteractiveDemo: Story = {};
 
-    const optionsList = args.options 
-      ? args.options.split(',').map(option => option.trim()).filter(option => option.length > 0)
-      : ['default', 'comfortable', 'compact'];
+export const Default: Story = {};
 
-    return (
-      <RadioGroup defaultValue={args.defaultValue} disabled={args.disabled} className={containerClass}>
-        {optionsList.map((option, index) => (
-          <div key={option} className="flex items-center gap-3">
-            <RadioGroupItem value={option.toLowerCase()} id={`r${index + 1}`} />
-            {args.showLabels && <Label htmlFor={`r${index + 1}`}>{option}</Label>}
-          </div>
-        ))}
-      </RadioGroup>
-    )
-  },
-};
+// Form wrapper component
+function FormRadioGroupWrapper() {
+  const [selectedValue, setSelectedValue] = React.useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert(`You selected: ${selectedValue}`);
+  };
+
+  const options = ['All new messages', 'Direct messages and mentions', 'Nothing'];
+
+  return (
+    <form onSubmit={handleSubmit} className="w-2/3 space-y-6">
+      <div className="space-y-3">
+        <Label className="text-sm font-medium">Notify me about...</Label>
+        <RadioGroup
+          value={selectedValue}
+          onValueChange={setSelectedValue}
+          className="flex flex-col"
+        >
+          {options.map((option, index) => (
+            <div key={option} className="flex items-center gap-3">
+              <RadioGroupItem value={option.toLowerCase().replace(/\s+/g, '-')} id={`form-${index}`} />
+              <Label htmlFor={`form-${index}`} className="font-normal">
+                {option}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
+      </div>
+      <Button className="bg-black text-white" type="submit">Submit</Button>
+    </form>
+  );
+}
 
 export const Form: Story = {
-  args: {
-    formTitle: 'Notify me about...',
-    formOptions: 'All new messages,Direct messages and mentions,Nothing',
-    buttonText: 'Submit',
-    buttonColor: 'bg-black text-white',
-    optionsSeparator: ',',
-  },
-  argTypes: {
-    formTitle: {
-      control: { type: 'text' },
-      description: 'Form title/label'
-    },
-    formOptions: {
-      control: { type: 'text' },
-      description: 'Form options (comma separated, e.g: "Option 1,Option 2,Option 3,Option 4")'
-    },
-    optionsSeparator: {
-      control: { type: 'text' },
-      description: 'Separator for options (default: comma)'
-    },
-    buttonText: {
-      control: { type: 'text' },
-      description: 'Submit button text'
-    },
-    buttonColor: {
-      control: { type: 'text' },
-      description: 'Button CSS classes'
-    },
-  },
-  render: (args) => {
-    const [selectedValue, setSelectedValue] = React.useState("");
-
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      alert(`You selected: ${selectedValue}`);
-    };
-
-    const optionsList = args.formOptions 
-      ? args.formOptions.split(args.optionsSeparator).map(option => option.trim()).filter(option => option.length > 0)
-      : ['All new messages', 'Direct messages and mentions', 'Nothing'];
-
-    return (
-      <form onSubmit={handleSubmit} className="w-2/3 space-y-6">
-        <div className="space-y-3">
-          <Label className="text-sm font-medium">{args.formTitle}</Label>
-          <RadioGroup
-            value={selectedValue}
-            onValueChange={setSelectedValue}
-            className="flex flex-col"
-          >
-            {optionsList.map((option, index) => (
-              <div key={option} className="flex items-center gap-3">
-                <RadioGroupItem value={option.toLowerCase().replace(/\s+/g, '-')} id={`form-${index}`} />
-                <Label htmlFor={`form-${index}`} className="font-normal">
-                  {option}
-                </Label>
-              </div>
-            ))}
-          </RadioGroup>
-        </div>
-        <Button className={args.buttonColor} type="submit">{args.buttonText}</Button>
-      </form>
-    )
-  },
+  render: () => <FormRadioGroupWrapper />,
 };
 
 

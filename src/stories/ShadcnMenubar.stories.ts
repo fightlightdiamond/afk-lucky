@@ -207,7 +207,7 @@ export const Default: Story = {
     fullscreenText: 'Toggle Fullscreen',
     sidebarText: 'Hide Sidebar',
   },
-  render: (args) => {
+  render: function InteractiveDemoRender(args) {
     const [bookmarksBarChecked, setBookmarksBarChecked] = useState(false);
     const [fullURLsChecked, setFullURLsChecked] = useState(true);
     const [selectedProfile, setSelectedProfile] = useState(args.selectedProfile);
@@ -491,7 +491,7 @@ export const VietnameseMenubar: Story = {
     fullscreenText: 'Chuyển đổi toàn màn hình',
     sidebarText: 'Ẩn thanh bên',
   },
-  render: (args) => {
+  render: function VietnameseDemoRender(args) {
     const [bookmarksBarChecked, setBookmarksBarChecked] = useState(false);
     const [fullURLsChecked, setFullURLsChecked] = useState(true);
     const [selectedProfile, setSelectedProfile] = useState('minh');

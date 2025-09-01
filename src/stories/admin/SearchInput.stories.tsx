@@ -4,20 +4,20 @@ import { useState } from "react";
 import { SearchInput } from "@/components/admin/filters/SearchInput";
 
 // Interactive wrapper for Storybook
-const InteractiveSearchInput = (props: any) => {
-  const [value, setValue] = useState(props.value || "");
+const SearchInputWrapper = (args: React.ComponentProps<typeof SearchInput>) => {
+  const [value, setValue] = useState(args.value || "");
 
   const handleChange = (newValue: string) => {
     setValue(newValue);
-    props.onChange(newValue);
+    args.onChange(newValue);
   };
 
-  return <SearchInput {...props} value={value} onChange={handleChange} />;
+  return <SearchInput {...args} value={value} onChange={handleChange} />;
 };
 
 const meta: Meta<typeof SearchInput> = {
   title: "Admin/Filters/SearchInput",
-  component: InteractiveSearchInput,
+  component: SearchInputWrapper,
   parameters: {
     layout: "centered",
     docs: {
@@ -166,7 +166,7 @@ export const LongSearchTerm: Story = {
 };
 
 export const InteractiveDemo: Story = {
-  render: (args) => {
+  render: function InteractiveDemoRender(args) {
     const [searchValue, setSearchValue] = useState("");
     const [debounceMs, setDebounceMs] = useState(300);
     const [searchHistory, setSearchHistory] = useState<string[]>([]);

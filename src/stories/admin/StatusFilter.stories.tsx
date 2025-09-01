@@ -1,31 +1,31 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "storybook/test";
 import { useState } from "react";
-import { StatusFilter } from "@/components/admin/filters/StatusFilter";
+import { StatusFilter, type StatusFilterValue } from "@/components/admin/filters/StatusFilter";
 
 // Interactive wrapper for Storybook
-const InteractiveStatusFilter = (props: any) => {
-  const [selectedStatus, setSelectedStatus] = useState<string | null>(
-    props.selectedStatus || null
+const StatusFilterWrapper = (args: React.ComponentProps<typeof StatusFilter>) => {
+  const [selectedStatus, setSelectedStatus] = useState<StatusFilterValue>(
+    args.value || "all"
   );
 
-  const handleStatusChange = (status: string | null) => {
+  const handleStatusChange = (status: StatusFilterValue) => {
     setSelectedStatus(status);
-    props.onStatusChange(status);
+    args.onChange(status);
   };
 
   return (
     <StatusFilter
-      {...props}
-      selectedStatus={selectedStatus}
-      onStatusChange={handleStatusChange}
+      {...args}
+      value={selectedStatus}
+      onChange={handleStatusChange}
     />
   );
 };
 
 const meta: Meta<typeof StatusFilter> = {
   title: "Admin/Filters/StatusFilter",
-  component: InteractiveStatusFilter,
+  component: StatusFilterWrapper,
   parameters: {
     layout: "centered",
     docs: {
@@ -36,12 +36,10 @@ const meta: Meta<typeof StatusFilter> = {
     },
   },
   argTypes: {
-    selectedStatus: {
+    value: {
       description: "Currently selected status",
-      control: {
-        type: "select",
-        options: [null, "active", "inactive", "banned"],
-      },
+      control: { type: "select" },
+      options: ["all", "active", "inactive", "banned", "pending", "suspended"],
     },
     disabled: {
       description: "Whether the filter is disabled",
@@ -51,12 +49,12 @@ const meta: Meta<typeof StatusFilter> = {
       description: "Whether to show user counts for each status",
       control: { type: "boolean" },
     },
-    statusCounts: {
+    counts: {
       description: "User counts for each status",
       control: { type: "object" },
     },
-    onStatusChange: {
-      description: "Callback when selected status changes",
+    onChange: {
+      description: "Callback when status changes",
       action: "statusChange",
     },
   },
@@ -69,52 +67,52 @@ type Story = StoryObj<typeof StatusFilter>;
 const sampleStatusCounts = {
   active: 145,
   inactive: 23,
-  banned: 7,
+  total: 175,
 };
 
 export const Default: Story = {
   args: {
-    selectedStatus: null,
+    value: "all",
     disabled: false,
     showCounts: false,
-    onStatusChange: fn(),
+    onChange: fn(),
   },
 };
 
 export const WithActiveSelection: Story = {
   args: {
-    selectedStatus: "active",
+    value: "active",
     disabled: false,
     showCounts: false,
-    onStatusChange: fn(),
+    onChange: fn(),
   },
 };
 
 export const WithInactiveSelection: Story = {
   args: {
-    selectedStatus: "inactive",
+    value: "inactive",
     disabled: false,
     showCounts: false,
-    onStatusChange: fn(),
+    onChange: fn(),
   },
 };
 
 export const WithBannedSelection: Story = {
   args: {
-    selectedStatus: "banned",
+    value: "banned",
     disabled: false,
     showCounts: false,
-    onStatusChange: fn(),
+    onChange: fn(),
   },
 };
 
 export const WithCounts: Story = {
   args: {
-    selectedStatus: null,
+    value: "all",
     disabled: false,
     showCounts: true,
-    statusCounts: sampleStatusCounts,
-    onStatusChange: fn(),
+    counts: sampleStatusCounts,
+    onChange: fn(),
   },
   parameters: {
     docs: {
@@ -127,35 +125,35 @@ export const WithCounts: Story = {
 
 export const WithCountsAndSelection: Story = {
   args: {
-    selectedStatus: "active",
+    value: "active",
     disabled: false,
     showCounts: true,
-    statusCounts: sampleStatusCounts,
-    onStatusChange: fn(),
+    counts: sampleStatusCounts,
+    onChange: fn(),
   },
 };
 
 export const Disabled: Story = {
   args: {
-    selectedStatus: "active",
+    value: "active",
     disabled: true,
     showCounts: true,
-    statusCounts: sampleStatusCounts,
-    onStatusChange: fn(),
+    counts: sampleStatusCounts,
+    onChange: fn(),
   },
 };
 
 export const ZeroCounts: Story = {
   args: {
-    selectedStatus: null,
+    value: "all",
     disabled: false,
     showCounts: true,
-    statusCounts: {
+    counts: {
       active: 0,
       inactive: 0,
-      banned: 0,
+      total: 0,
     },
-    onStatusChange: fn(),
+    onChange: fn(),
   },
   parameters: {
     docs: {
@@ -168,15 +166,15 @@ export const ZeroCounts: Story = {
 
 export const LargeCounts: Story = {
   args: {
-    selectedStatus: null,
+    value: "all",
     disabled: false,
     showCounts: true,
-    statusCounts: {
+    counts: {
       active: 12567,
       inactive: 3421,
-      banned: 89,
+      total: 16077,
     },
-    onStatusChange: fn(),
+    onChange: fn(),
   },
   parameters: {
     docs: {
@@ -189,14 +187,14 @@ export const LargeCounts: Story = {
 };
 
 export const InteractiveDemo: Story = {
-  render: (args) => {
-    const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-    const [showCounts, setShowCounts] = useState(true);
+  render: function InteractiveDemoRender(args) {
+    const [selectedStatus, setSelectedStatus] = useState<StatusFilterValue>('all');
     const [disabled, setDisabled] = useState(false);
+    const [showCounts, setShowCounts] = useState(true);
 
-    const handleStatusChange = (status: string | null) => {
+    const handleStatusChange = (status: StatusFilterValue) => {
       setSelectedStatus(status);
-      args.onStatusChange?.(status);
+      args.onChange?.(status);
     };
 
     const getStatusDescription = (status: string | null) => {
@@ -235,22 +233,22 @@ export const InteractiveDemo: Story = {
           </div>
 
           <StatusFilter
-            selectedStatus={selectedStatus}
+            value={selectedStatus}
             disabled={disabled}
             showCounts={showCounts}
-            statusCounts={showCounts ? sampleStatusCounts : undefined}
-            onStatusChange={handleStatusChange}
+            counts={showCounts ? { active: 45, inactive: 12, total: 57 } : undefined}
+            onChange={handleStatusChange}
           />
         </div>
 
         <div className="p-4 bg-muted rounded-lg space-y-2">
           <h4 className="font-medium">
-            Current Filter: {selectedStatus || "All Statuses"}
+            Current Filter: {selectedStatus === 'all' ? 'All Statuses' : selectedStatus}
           </h4>
           <p className="text-sm text-muted-foreground">
-            {getStatusDescription(selectedStatus)}
+            {getStatusDescription(selectedStatus === 'all' ? null : selectedStatus)}
           </p>
-          {showCounts && selectedStatus && (
+          {showCounts && selectedStatus !== 'all' && (
             <p className="text-sm">
               <strong>Count:</strong>{" "}
               {

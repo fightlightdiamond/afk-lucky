@@ -16,15 +16,9 @@ export function useMediaQuery(query: string): boolean {
       setMatches(event.matches);
     };
 
-    // Use the newer addEventListener if available, fallback to addListener
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
-    } else {
-      // Fallback for older browsers
-      mediaQuery.addListener(handleChange);
-      return () => mediaQuery.removeListener(handleChange);
-    }
+    // Use modern addEventListener (addListener/removeListener are deprecated)
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, [query]);
 
   return matches;
