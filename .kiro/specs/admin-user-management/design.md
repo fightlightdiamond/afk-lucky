@@ -299,18 +299,6 @@ LIMIT $8 OFFSET $9;
 
 #### Required Database Indexes
 
-```sql
--- Indexes for optimal performance
-CREATE INDEX idx_users_search ON users USING gin(
-  to_tsvector('english', first_name || ' ' || last_name || ' ' || email)
-);
-CREATE INDEX idx_users_role_id ON users(role_id);
-CREATE INDEX idx_users_is_active ON users(is_active);
-CREATE INDEX idx_users_created_at ON users(created_at);
-CREATE INDEX idx_users_last_login ON users(last_login);
-CREATE INDEX idx_users_email_unique ON users(email);
-```
-
 ### Prisma Query Optimizations
 
 ```typescript
