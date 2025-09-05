@@ -139,7 +139,7 @@ export function useForgotPassword() {
       toast.success(data.message);
 
       // In development, show reset link
-      if (data.resetLink) {
+      if (data.resetLink && process.env.NODE_ENV === "development") {
         console.log("🔗 Reset link:", data.resetLink);
         toast.info("Check console for reset link (dev only)");
       }
