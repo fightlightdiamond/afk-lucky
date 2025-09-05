@@ -5,3 +5,4 @@ export { useUIStore } from "./uiStore";
 
 // Re-export types for convenience
 export type { AuthUser, User as AdminUser, PublicUser } from "@/types/user";
+export { useChatStore } from "./chatStore";
