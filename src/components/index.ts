@@ -31,3 +31,4 @@ export { StatusBar } from "./StatusBar";
 export { StoreHydration } from "./StoreHydration";
 export { ThemeProvider } from "./theme-provider";
 export { UsersList } from "./UsersList";
+export * from "./chat";
