@@ -68,6 +68,8 @@ model User {
   coin            BigInt    @default(1000)
   locale          String?   @default("en")
   group_id        Int?      @default(1)
+  group           Group?    @relation(fields: [group_id], references: [id])
+  messages        Message[]
 
   // Indexes for optimal query performance
   @@index([role_id])
@@ -297,4 +299,38 @@ model UserSubscription {
   updated_at      DateTime @updatedAt
   
   @@map("user_subscriptions")
+}
+
+model Group {
+  id        Int      @id @default(autoincrement())
+  name      String
+  users     User[]
+  messages  Message[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("groups")
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("conversations")
+}
+
+model Message {
+  id             String        @id @default(cuid())
+  conversationId String?
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  group_id       Int?
+  group          Group?        @relation(fields: [group_id], references: [id])
+  senderId       String
+  sender         User          @relation(fields: [senderId], references: [id])
+  content        String
+  createdAt      DateTime      @default(now())
+
+  @@map("messages")
 }
