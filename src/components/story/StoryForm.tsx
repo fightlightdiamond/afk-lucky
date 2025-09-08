@@ -5,6 +5,7 @@ import StoryLoadingStages from "./StoryLoadingStages";
 import MagicalLoader from "./MagicalLoader";
 import SmartProgressLoader from "./SmartProgressLoader";
 import InteractiveLoader from "./InteractiveLoader";
+import ClickToSpeak from "./ClickToSpeak";
 
 export default function StoryForm() {
   const [prompt, setPrompt] = useState("Tạo giúp tôi 1 truyện chêm về IT");
@@ -239,7 +240,7 @@ export default function StoryForm() {
               </h3>
             </div>
             <div className="whitespace-pre-line text-gray-800 leading-relaxed bg-white p-4 rounded-lg shadow-sm border border-green-100">
-              {story}
+              <ClickToSpeak text={story} />
             </div>
           </div>
         )}

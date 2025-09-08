@@ -32,6 +32,7 @@ import AdvancedOptionsConfig from "./AdvancedOptionsConfig";
 import StoryConfigSummary from "./StoryConfigSummary";
 import TemplateCard from "./TemplateCard";
 import PreferencesStatus from "./PreferencesStatus";
+import ClickToSpeak from "./ClickToSpeak";
 
 export default function AdvancedStoryForm() {
   const [prompt, setPrompt] = useState("");
@@ -694,7 +695,7 @@ export default function AdvancedStoryForm() {
               </h3>
             </div>
             <div className="whitespace-pre-line text-gray-800 leading-relaxed bg-white p-4 rounded-lg shadow-sm border border-green-100">
-              {story}
+              <ClickToSpeak text={story} />
             </div>
           </div>
         )}
