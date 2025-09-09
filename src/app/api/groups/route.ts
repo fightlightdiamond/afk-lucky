@@ -48,7 +48,9 @@ export async function POST(req: Request) {
     return NextResponse.json(group, { status: 201 });
 
     return NextResponse.json(group);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Internal Server Error";
+    // Optionally log `error` server-side
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
