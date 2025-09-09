@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { storyVersions, getVersionBySlug } from "@/data/storyVersions";
 
 // Get user's current version
