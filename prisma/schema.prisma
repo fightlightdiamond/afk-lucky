@@ -343,19 +343,19 @@ model GroupMember {
 }
 
 model Message {
-  id             String       @id @default(cuid())
+  id             String        @id @default(cuid())
   senderId       String
   conversationId String?
   groupId        String?
   content        String
-  createdAt      DateTime     @default(now())
+  createdAt      DateTime      @default(now())
 
-  sender         User         @relation(fields: [senderId], references: [id])
-  conversation   Conversation? @relation(fields: [conversationId], references: [id])
-  group          Group?       @relation(fields: [groupId], references: [id])
+  sender         User          @relation(fields: [senderId], references: [id])
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)  // cascade on delete ([prisma.io](https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/referential-actions?utm_source=openai))
+  group          Group?        @relation(fields: [groupId], references: [id], onDelete: Cascade)        // cascade on delete ([prisma.io](https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/referential-actions?utm_source=openai))
 
   @@index([senderId])
-  @@index([conversationId])
-  @@index([groupId])
+  @@index([conversationId, createdAt])  // composite index for chronological fetches ([prisma.io](https://www.prisma.io/docs/orm/prisma-schema/data-model/models?utm_source=openai))
+  @@index([groupId, createdAt])         // composite index for chronological fetches ([prisma.io](https://www.prisma.io/docs/orm/prisma-schema/data-model/models?utm_source=openai))
   @@map("messages")
 }
