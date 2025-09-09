@@ -69,6 +69,10 @@ model User {
   locale          String?   @default("en")
   group_id        Int?      @default(1)
 
+  ownedGroups     Group[]        @relation("GroupOwner")
+  groupMembers    GroupMember[]
+  messages        Message[]
+
   // Indexes for optimal query performance
   @@index([role_id])
   @@index([is_active])
@@ -297,4 +301,61 @@ model UserSubscription {
   updated_at      DateTime @updatedAt
   
   @@map("user_subscriptions")
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  isGroup   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  messages  Message[]
+
+  @@map("conversations")
+}
+
+model Group {
+  id        String   @id @default(cuid())
+  name      String
+  ownerId   String
+  owner     User     @relation("GroupOwner", fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+
+  members   GroupMember[]
+  messages  Message[]
+
+  @@index([ownerId])
+  @@map("groups")
+}
+
+model GroupMember {
+  id       String   @id @default(cuid())
+  groupId  String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  group    Group   @relation(fields: [groupId], references: [id])
+  user     User    @relation(fields: [userId], references: [id])
+
+  @@index([groupId])
+  @@index([userId])
+  @@unique([groupId, userId])
+  @@map("group_members")
+}
+
+model Message {
+  id             String        @id @default(cuid())
+  senderId       String
+  conversationId String?
+  groupId        String?
+  content        String
+  createdAt      DateTime      @default(now())
+
+  sender         User          @relation(fields: [senderId], references: [id])
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)  // cascade on delete ([prisma.io](https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/referential-actions?utm_source=openai))
+  group          Group?        @relation(fields: [groupId], references: [id], onDelete: Cascade)        // cascade on delete ([prisma.io](https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/referential-actions?utm_source=openai))
+
+  @@index([senderId])
+  @@index([conversationId, createdAt])  // composite index for chronological fetches ([prisma.io](https://www.prisma.io/docs/orm/prisma-schema/data-model/models?utm_source=openai))
+  @@index([groupId, createdAt])         // composite index for chronological fetches ([prisma.io](https://www.prisma.io/docs/orm/prisma-schema/data-model/models?utm_source=openai))
+  @@map("messages")
 }
