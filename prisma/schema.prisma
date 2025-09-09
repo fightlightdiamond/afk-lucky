@@ -68,10 +68,10 @@ model User {
   coin            BigInt    @default(1000)
   locale          String?   @default("en")
   group_id        Int?      @default(1)
-
+  group           Group?    @relation(fields: [group_id], references: [id])
+  messages        Message[]
   ownedGroups     Group[]        @relation("GroupOwner")
   groupMembers    GroupMember[]
-  messages        Message[]
 
   // Indexes for optimal query performance
   @@index([role_id])
@@ -318,8 +318,9 @@ model Group {
   name      String
   ownerId   String
   owner     User     @relation("GroupOwner", fields: [ownerId], references: [id])
+  users     User[]
   createdAt DateTime @default(now())
-
+  updatedAt DateTime @updatedAt
   members   GroupMember[]
   messages  Message[]
 
