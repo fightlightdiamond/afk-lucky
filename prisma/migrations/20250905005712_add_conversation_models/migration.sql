@@ -55,10 +55,10 @@ CREATE UNIQUE INDEX "group_members_groupId_userId_key" ON "public"."group_member
 CREATE INDEX "messages_senderId_idx" ON "public"."messages"("senderId");
 
 -- CreateIndex
-CREATE INDEX "messages_conversationId_idx" ON "public"."messages"("conversationId");
+CREATE INDEX "messages_conversation_createdAt_idx" ON "public"."messages"("conversationId","createdAt");
 
 -- CreateIndex
-CREATE INDEX "messages_groupId_idx" ON "public"."messages"("groupId");
+CREATE INDEX "messages_group_createdAt_idx" ON "public"."messages"("groupId","createdAt");
 
 -- AddForeignKey
 ALTER TABLE "public"."groups" ADD CONSTRAINT "groups_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "public"."users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
