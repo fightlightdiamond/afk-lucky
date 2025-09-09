@@ -5,6 +5,7 @@ import StoryLoadingStages from "./StoryLoadingStages";
 import MagicalLoader from "./MagicalLoader";
 import SmartProgressLoader from "./SmartProgressLoader";
 import InteractiveLoader from "./InteractiveLoader";
+import MarkdownRenderer from "../MarkdownRenderer";
 
 export default function StoryForm() {
   const [prompt, setPrompt] = useState("Tạo giúp tôi 1 truyện chêm về IT");
@@ -238,8 +239,8 @@ export default function StoryForm() {
                 ✨ Truyện của bạn đã sẵn sàng!
               </h3>
             </div>
-            <div className="whitespace-pre-line text-gray-800 leading-relaxed bg-white p-4 rounded-lg shadow-sm border border-green-100">
-              {story}
+            <div className="text-gray-800 leading-relaxed bg-white p-4 rounded-lg shadow-sm border border-green-100">
+              <MarkdownRenderer markdown={story} />
             </div>
           </div>
         )}
@@ -276,8 +277,8 @@ export default function StoryForm() {
                       {new Date(s.createdAt).toLocaleString("vi-VN")}
                     </p>
                   </div>
-                  <div className="whitespace-pre-line text-gray-800 text-sm leading-relaxed">
-                    {s.content}
+                  <div className="text-gray-800 text-sm leading-relaxed">
+                    <MarkdownRenderer markdown={s.content} />
                   </div>
                 </li>
               ))}
