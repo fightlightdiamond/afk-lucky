@@ -16,9 +16,27 @@ export async function POST(req: Request) {
   }
 
   try {
-    const connectIds = Array.from(
-      new Set([session.user.id, ...memberIds])
-    ).map((id) => ({ id }));
+    const uniqueMemberIds = Array.from(new Set([session.user.id, ...memberIds]));
+
+    // Block reassigning members already in another group
+    const conflicts = await prisma.user.findMany({
+      where: {
+        id:    { in: uniqueMemberIds },
+        group_id: { not: null }
+      },
+      select: {
+        id:      true,
+        group_id: true
+      },
+    });
+    if (conflicts.length > 0) {
+      return NextResponse.json(
+        { error: "Some members already belong to a group", conflicts },
+        { status: 409 }
+      );
+    }
+
+    const connectIds = uniqueMemberIds.map((id) => ({ id }));
 
     const group = await prisma.group.create({
       data: {
@@ -26,6 +44,8 @@ export async function POST(req: Request) {
         users: { connect: connectIds },
       },
     });
+
+    return NextResponse.json(group, { status: 201 });
 
     return NextResponse.json(group);
   } catch (error: any) {
