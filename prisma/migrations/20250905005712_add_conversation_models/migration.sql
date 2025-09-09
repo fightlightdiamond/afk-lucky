@@ -70,10 +70,30 @@ ALTER TABLE "public"."group_members" ADD CONSTRAINT "group_members_groupId_fkey"
 ALTER TABLE "public"."group_members" ADD CONSTRAINT "group_members_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."messages" ADD CONSTRAINT "messages_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "public"."users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."messages" ADD CONSTRAINT "messages_senderId_fkey"
+  FOREIGN KEY ("senderId")
+  REFERENCES "public"."users"("id")
+  ON DELETE RESTRICT
+  ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."messages" ADD CONSTRAINT "messages_conversationId_fkey" FOREIGN KEY ("conversationId") REFERENCES "public"."conversations"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."messages" ADD CONSTRAINT "messages_conversationId_fkey"
+  FOREIGN KEY ("conversationId")
+  REFERENCES "public"."conversations"("id")
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."messages" ADD CONSTRAINT "messages_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "public"."groups"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."messages" ADD CONSTRAINT "messages_groupId_fkey"
+  FOREIGN KEY ("groupId")
+  REFERENCES "public"."groups"("id")
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+-- Ensure exactly one parent is set
+ALTER TABLE "public"."messages"
+  ADD CONSTRAINT "messages_exactly_one_parent_chk"
+  CHECK (
+    (CASE WHEN "conversationId" IS NOT NULL THEN 1 ELSE 0 END) +
+    (CASE WHEN "groupId"        IS NOT NULL THEN 1 ELSE 0 END) = 1
+  );
