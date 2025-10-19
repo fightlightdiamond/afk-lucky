@@ -33,12 +33,16 @@ import StoryConfigSummary from "./StoryConfigSummary";
 import TemplateCard from "./TemplateCard";
 import PreferencesStatus from "./PreferencesStatus";
 import ClickToSpeak from "./ClickToSpeak";
+import AIAPIStatus from "./AIAPIStatus";
+import { useGenerateAdvancedStory } from "@/hooks/useAdvancedStories";
 
 export default function AdvancedStoryForm() {
   const [prompt, setPrompt] = useState("");
   const [story, setStory] = useState("");
-  const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
+
+  // Use the new advanced story generation hook
+  const generateStoryMutation = useGenerateAdvancedStory();
 
   // UI States
   const [activeTab, setActiveTab] = useState<
@@ -145,7 +149,6 @@ export default function AdvancedStoryForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setStory("");
 
     try {
@@ -158,23 +161,17 @@ export default function AdvancedStoryForm() {
         session_id: sessionId,
       };
 
-      const res = await fetch("/api/story/advanced", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestData),
-      });
+      const result = await generateStoryMutation.mutateAsync(requestData);
 
-      const data = await res.json();
-      if (data.content) {
-        setStory(data.content);
+      if (result.content) {
+        setStory(result.content);
         fetchHistory();
       } else {
         setStory("Không tạo được nội dung.");
       }
     } catch (err) {
-      setStory("Đã xảy ra lỗi.");
-    } finally {
-      setLoading(false);
+      setStory("Đã xảy ra lỗi khi tạo truyện.");
+      console.error("Story generation error:", err);
     }
   };
 
@@ -203,13 +200,20 @@ export default function AdvancedStoryForm() {
   return (
     <>
       {/* Loading overlays */}
-      {loadingStyle === "stages" && <StoryLoadingStages isLoading={loading} />}
-      {loadingStyle === "magical" && <MagicalLoader isLoading={loading} />}
+      {loadingStyle === "stages" && (
+        <StoryLoadingStages isLoading={generateStoryMutation.isPending} />
+      )}
+      {loadingStyle === "magical" && (
+        <MagicalLoader isLoading={generateStoryMutation.isPending} />
+      )}
       {loadingStyle === "smart" && (
-        <SmartProgressLoader isLoading={loading} estimatedTime={45} />
+        <SmartProgressLoader
+          isLoading={generateStoryMutation.isPending}
+          estimatedTime={45}
+        />
       )}
       {loadingStyle === "interactive" && (
-        <InteractiveLoader isLoading={loading} />
+        <InteractiveLoader isLoading={generateStoryMutation.isPending} />
       )}
 
       <div className="max-w-6xl mx-auto p-6">
@@ -370,7 +374,7 @@ export default function AdvancedStoryForm() {
                     className="w-full border-2 border-gray-200 rounded-lg p-4 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                     rows={4}
                     placeholder="Nhập ý tưởng truyện của bạn..."
-                    disabled={loading}
+                    disabled={generateStoryMutation.isPending}
                   />
                 </div>
 
@@ -508,10 +512,10 @@ export default function AdvancedStoryForm() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <button
                 type="submit"
-                disabled={loading || !prompt.trim()}
+                disabled={generateStoryMutation.isPending || !prompt.trim()}
                 className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 text-white px-6 py-3 rounded-lg font-medium transition-all transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-lg"
               >
-                {loading ? (
+                {generateStoryMutation.isPending ? (
                   <span className="flex items-center justify-center">
                     <svg
                       className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
@@ -546,6 +550,9 @@ export default function AdvancedStoryForm() {
 
           {/* Right Panel - Settings & Preview */}
           <div className="space-y-6">
+            {/* AI API Status */}
+            <AIAPIStatus />
+
             {/* Loading Style Selector */}
             <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
               <h3 className="font-semibold text-purple-800 mb-3">

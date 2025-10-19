@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed-new.ts"
   },
   "scripts": {
     "dev": "next dev --turbopack",
@@ -23,7 +23,13 @@
     "test:accessibility": "playwright test src/__tests__/e2e/accessibility-e2e.test.ts",
     "validate:structure": "tsx scripts/validate-structure.ts",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "db:reset": "./scripts/reset-database.sh",
+    "db:check": "node scripts/check-database.js",
+    "db:seed": "npx prisma db seed",
+    "db:migrate": "npx prisma migrate deploy",
+    "db:generate": "npx prisma generate",
+    "db:studio": "npx prisma studio"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",

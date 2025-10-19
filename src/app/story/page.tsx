@@ -1,5 +1,6 @@
 import StoryForm from "@/components/story/StoryForm";
 import UsageTracker from "@/components/story/UsageTracker";
+import AIAPIStatus from "@/components/story/AIAPIStatus";
 import Link from "next/link";
 import { Zap, Crown } from "lucide-react";
 
@@ -41,6 +42,9 @@ export default function SimpleStoryPage() {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* AI API Status */}
+            <AIAPIStatus />
+
             {/* Usage Tracker */}
             <UsageTracker />
 
@@ -111,12 +115,20 @@ export default function SimpleStoryPage() {
                 </li>
               </ul>
 
-              <Link
-                href="/story/versions"
-                className="block mt-4 text-center text-blue-600 hover:text-blue-800 text-sm font-medium"
-              >
-                Compare all versions →
-              </Link>
+              <div className="mt-4 space-y-2">
+                <Link
+                  href="/story/versions"
+                  className="block text-center text-blue-600 hover:text-blue-800 text-sm font-medium"
+                >
+                  Compare all versions →
+                </Link>
+                <Link
+                  href="/story/test-api"
+                  className="block text-center text-green-600 hover:text-green-800 text-xs font-medium"
+                >
+                  🧪 Test Python API Integration
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -67,7 +67,7 @@ model User {
   deleted_at      DateTime?
   coin            BigInt    @default(1000)
   locale          String?   @default("en")
-  group_id        Int?      @default(1)
+  group_id        Int?
   group           Group?    @relation(fields: [group_id], references: [id])
   messages        Message[]
   ownedGroups     Group[]        @relation("GroupOwner")
@@ -314,7 +314,7 @@ model Conversation {
 }
 
 model Group {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   name      String
   ownerId   String
   owner     User     @relation("GroupOwner", fields: [ownerId], references: [id])
@@ -330,7 +330,7 @@ model Group {
 
 model GroupMember {
   id       String   @id @default(cuid())
-  groupId  String
+  groupId  Int
   userId   String
   joinedAt DateTime @default(now())
 
@@ -347,7 +347,7 @@ model Message {
   id             String        @id @default(cuid())
   senderId       String
   conversationId String?
-  groupId        String?
+  groupId        Int?
   content        String
   createdAt      DateTime      @default(now())
 
