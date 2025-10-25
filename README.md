@@ -28,6 +28,8 @@ Lucky là một nền tảng tạo truyện tương tác hiện đại được 
 - 🎛️ **Tạo truyện nâng cao** - Với cấu hình chi tiết
 - 🌐 **Hỗ trợ đa ngôn ngữ** - Tiếng Việt/Tiếng Anh với tỷ lệ tùy chỉnh
 - 🎭 **Tùy chỉnh phong cách** - Tone, style, readability level
+- 🔊 **Text-to-Speech (TTS)** - Chuyển đổi truyện thành audio tự động
+- 🎵 **Audio Generation** - Tạo file WAV từ văn bản tiếng Việt
 - 💬 **AI Chat** - Trò chuyện với AI assistant
 - 🗺️ **Tạo lịch trình du lịch** - AI-powered itinerary generation
 - ⚡ **Rate limiting & Retry logic** - Xử lý lỗi thông minh
@@ -569,6 +571,7 @@ cd aiapi && python test_api.py
 - [Quick Start Guide](./QUICK_START.md) - Khởi chạy nhanh trong 10 phút
 - [Development Guide](./DEVELOPMENT_GUIDE.md) - Hướng dẫn phát triển chi tiết
 - [AI Backend Setup Guide](./aiapi/SETUP_GUIDE.md) - Hướng dẫn chi tiết Python backend
+- [TTS Integration Guide](./TTS_INTEGRATION_GUIDE.md) - Hướng dẫn tích hợp Text-to-Speech
 - [Database Setup](./DATABASE_SETUP.md) - Cấu hình database
 - [Implementation Summary](./docs/IMPLEMENTATION_SUMMARY.md) - Tổng quan implementation
 - [Import/Export Guidelines](./docs/IMPORT_EXPORT_GUIDELINES.md) - Hướng dẫn import/export

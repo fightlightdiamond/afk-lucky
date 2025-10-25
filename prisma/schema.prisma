@@ -172,6 +172,9 @@ model Story {
   // Story sections
   sections  Json?    // Store structured sections (story, moral, quiz, glossary)
   
+  // Audio
+  audioUrl  String?  // URL to TTS audio file
+  
   // Metadata
   metadata  Json?    // Store generation metadata
   word_count Int?

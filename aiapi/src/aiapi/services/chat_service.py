@@ -1,5 +1,5 @@
 """
-Chat service for general AI conversations.
+Chat service for general AI conversations with modern OpenAI API.
 """
 from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
 from openai import OpenAI, RateLimitError, APIError
@@ -21,7 +21,7 @@ client = OpenAI(
 )
 def generate_chat_response(message: ChatMessage) -> ChatResponse:
     """
-    Generate AI response for chat messages.
+    Generate AI response for chat messages using modern OpenAI API.
     
     Args:
         message: Chat message with content and optional context
@@ -46,10 +46,12 @@ def generate_chat_response(message: ChatMessage) -> ChatResponse:
             "content": message.content
         })
         
+        # Use updated API call without deprecated parameters
         response = client.chat.completions.create(
             model=settings.azure_deployment_name,
             messages=messages,
-            max_tokens=1024
+            max_tokens=1024,
+            temperature=0.7
         )
         
         ai_response = response.choices[0].message.content or "I couldn't generate a response."

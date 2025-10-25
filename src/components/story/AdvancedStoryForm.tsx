@@ -32,13 +32,14 @@ import AdvancedOptionsConfig from "./AdvancedOptionsConfig";
 import StoryConfigSummary from "./StoryConfigSummary";
 import TemplateCard from "./TemplateCard";
 import PreferencesStatus from "./PreferencesStatus";
-import ClickToSpeak from "./ClickToSpeak";
+import StoryAudioPlayer from "./StoryAudioPlayer";
 import AIAPIStatus from "./AIAPIStatus";
 import { useGenerateAdvancedStory } from "@/hooks/useAdvancedStories";
 
 export default function AdvancedStoryForm() {
   const [prompt, setPrompt] = useState("");
   const [story, setStory] = useState("");
+  const [storyData, setStoryData] = useState<any>(null);
   const [history, setHistory] = useState<any[]>([]);
 
   // Use the new advanced story generation hook
@@ -165,6 +166,7 @@ export default function AdvancedStoryForm() {
 
       if (result.content) {
         setStory(result.content);
+        setStoryData(result); // Save full story object including audioUrl
         fetchHistory();
       } else {
         setStory("Không tạo được nội dung.");
@@ -701,8 +703,19 @@ export default function AdvancedStoryForm() {
                 ✨ Your Story is Ready!
               </h3>
             </div>
+
+            {/* AI Audio Player */}
+            <div className="mb-4">
+              <StoryAudioPlayer
+                storyContent={story}
+                audioUrl={storyData?.audioUrl}
+                autoGenerate={!storyData?.audioUrl}
+              />
+            </div>
+
+            {/* Story Content */}
             <div className="whitespace-pre-line text-gray-800 leading-relaxed bg-white p-4 rounded-lg shadow-sm border border-green-100">
-              <ClickToSpeak text={story} />
+              {story}
             </div>
           </div>
         )}

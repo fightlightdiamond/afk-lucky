@@ -84,3 +84,35 @@ class ChatMessage(BaseModel):
 class ChatResponse(BaseModel):
     response: str = Field(..., description="AI response")
     error: Optional[str] = Field(None, description="Error message if any")
+
+# TTS models
+class TTSRequest(BaseModel):
+    text: str = Field(..., description="Text to convert to speech")
+    output_format: Literal["wav", "base64", "bytes", "file"] = Field("base64", description="Output format")
+
+class TTSResponse(BaseModel):
+    audio_base64: Optional[str] = Field(None, description="Base64 encoded audio data")
+    audio_data: Optional[List[float]] = Field(None, description="Raw audio data as list")
+    format: str = Field(..., description="Audio format")
+    sampling_rate: int = Field(..., description="Audio sampling rate")
+    duration: float = Field(..., description="Audio duration in seconds")
+    size_bytes: Optional[int] = Field(None, description="Audio size in bytes")
+    file_path: Optional[str] = Field(None, description="Server file path (if saved)")
+    file_url: Optional[str] = Field(None, description="URL to access the audio file")
+    error: Optional[str] = Field(None, description="Error message if any")
+
+class StoryWithTTSRequest(BaseModel):
+    prompt: str = Field(..., description="The story prompt")
+    config: Optional[StoryConfig] = None
+    preferences: Optional[StoryPreferences] = None
+    template_id: Optional[str] = None
+    generate_audio: bool = Field(False, description="Generate TTS audio for the story")
+    audio_format: Literal["wav", "base64", "bytes", "file"] = Field("base64", description="Audio output format")
+
+class StoryWithTTSResponse(BaseModel):
+    title: str
+    content: str
+    sections: Optional[StorySection] = None
+    metadata: Optional[StoryMetadata] = None
+    audio: Optional[TTSResponse] = None
+    error: Optional[str] = None

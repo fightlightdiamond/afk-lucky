@@ -5,11 +5,12 @@ import StoryLoadingStages from "./StoryLoadingStages";
 import MagicalLoader from "./MagicalLoader";
 import SmartProgressLoader from "./SmartProgressLoader";
 import InteractiveLoader from "./InteractiveLoader";
-import ClickToSpeak from "./ClickToSpeak";
+import StoryAudioPlayer from "./StoryAudioPlayer";
 
 export default function StoryForm() {
   const [prompt, setPrompt] = useState("Tạo giúp tôi 1 truyện chêm về IT");
   const [story, setStory] = useState("");
+  const [storyData, setStoryData] = useState<any>(null); // Full story object with audioUrl
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
   const [loadingStyle, setLoadingStyle] = useState<
@@ -31,6 +32,7 @@ export default function StoryForm() {
       const data = await res.json();
       if (data.content) {
         setStory(data.content);
+        setStoryData(data); // Save full story object including audioUrl
         fetchHistory();
       } else {
         setStory("Không tạo được nội dung.");
@@ -239,8 +241,18 @@ export default function StoryForm() {
                 ✨ Truyện của bạn đã sẵn sàng!
               </h3>
             </div>
+            {/* AI Audio Player - Replaces browser speech */}
+            <div className="mb-4">
+              <StoryAudioPlayer
+                storyContent={story}
+                audioUrl={storyData?.audioUrl}
+                autoGenerate={!storyData?.audioUrl}
+              />
+            </div>
+
+            {/* Story Content */}
             <div className="whitespace-pre-line text-gray-800 leading-relaxed bg-white p-4 rounded-lg shadow-sm border border-green-100">
-              <ClickToSpeak text={story} />
+              {story}
             </div>
           </div>
         )}

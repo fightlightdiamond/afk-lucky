@@ -64,16 +64,64 @@ function mapReadabilityLevel(
   return mapping[level] || "intermediate";
 }
 
+// Helper function to clean markdown for TTS
+function cleanTextForTTS(text: string): string {
+  return text
+    .replace(/\*\*/g, "") // Remove bold markers
+    .replace(/\*/g, "") // Remove italic markers
+    .replace(/#{1,6}\s/g, "") // Remove headers
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, "$1") // Convert links to text
+    .replace(/`/g, "") // Remove code markers
+    .trim();
+}
+
 // Simple story generation (backward compatibility)
-export async function createAndSaveStory(prompt: string) {
+export async function createAndSaveStory(
+  prompt: string,
+  generateAudio: boolean = true
+) {
+  console.log("📝 Creating story with prompt:", prompt);
+
   const content = await generateStory(prompt);
 
+  if (!content || content.trim() === "") {
+    throw new Error("Story content is empty");
+  }
+
+  console.log("✅ Story content generated:", content.substring(0, 100) + "...");
+
+  // Generate audio FIRST if requested
+  let audioUrl = null;
+  if (generateAudio) {
+    try {
+      console.log("🎵 Generating audio for story...");
+      const { generateTTSFile } = await import("@/lib/aiapi");
+
+      // Clean markdown before sending to TTS
+      const cleanedContent = cleanTextForTTS(content);
+      console.log("🧹 Cleaned text for TTS (removed markdown)");
+
+      const audioResult = await generateTTSFile(cleanedContent);
+      if (audioResult && audioResult.file_url) {
+        audioUrl = audioResult.file_url;
+        console.log("✅ Audio generated:", audioUrl);
+      }
+    } catch (error) {
+      console.error("❌ Failed to generate audio:", error);
+      // Continue without audio
+    }
+  }
+
+  // Save story WITH audio URL
   const story = await prisma.story.create({
     data: {
       prompt,
       content,
+      audioUrl,
     },
   });
+
+  console.log("✅ Story saved to DB:", story.id);
 
   return story;
 }
@@ -167,13 +215,34 @@ export async function createAdvancedStory(request: StoryGenerationRequest) {
     throw new Error(storyResponse.error);
   }
 
+  // Generate audio for advanced story
+  let audioUrl = null;
+  try {
+    console.log("🎵 Generating audio for advanced story...");
+    const { generateTTSFile } = await import("@/lib/aiapi");
+
+    // Clean markdown before sending to TTS
+    const cleanedContent = cleanTextForTTS(storyResponse.content);
+    console.log("🧹 Cleaned text for TTS (removed markdown)");
+
+    const audioResult = await generateTTSFile(cleanedContent);
+    if (audioResult && audioResult.file_url) {
+      audioUrl = audioResult.file_url;
+      console.log("✅ Audio generated:", audioUrl);
+    }
+  } catch (error) {
+    console.error("❌ Failed to generate audio:", error);
+    // Continue without audio
+  }
+
   // Save to database
   const story = await prisma.story.create({
     data: {
       prompt: request.prompt,
       content: storyResponse.content,
       title: storyResponse.title,
-      config: request.config as any,
+      audioUrl,
+      config: request.config as unknown,
       preferences: request.preferences as unknown,
       template_id: request.template_id,
       sections: storyResponse.sections

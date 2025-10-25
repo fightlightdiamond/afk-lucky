@@ -51,6 +51,24 @@ export default function SimpleStoryPage() {
             {/* Upgrade Cards */}
             <div className="space-y-4">
               <Link
+                href="/story/with-audio"
+                className="block p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg shadow-sm border border-purple-200 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">🎵</span>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">With Audio</h3>
+                    <p className="text-sm text-gray-600">
+                      Story + Text-to-Speech
+                    </p>
+                    <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                      New!
+                    </span>
+                  </div>
+                </div>
+              </Link>
+
+              <Link
                 href="/story/advanced"
                 className="block p-4 bg-white rounded-lg shadow-sm border border-purple-200 hover:shadow-md transition-shadow"
               >
