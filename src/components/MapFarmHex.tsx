@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 import styles from "./MapFarmHex.module.css";
 
 export interface HexPosition {
@@ -33,6 +34,47 @@ export interface MapFarmHexProps {
   className?: string;
 }
 
+type HeroType = NonNullable<Hero["type"]>;
+type MonsterType = NonNullable<Monster["type"]>;
+
+const HERO_TYPE_COLOR: Record<HeroType, string> = {
+  warrior: "bg-red-500 text-white",
+  mage: "bg-blue-500 text-white",
+  archer: "bg-green-500 text-white",
+  assassin: "bg-purple-500 text-white",
+};
+
+const HERO_TYPE_ICON: Record<HeroType, string> = {
+  warrior: "⚔️",
+  mage: "🔮",
+  archer: "🏹",
+  assassin: "🗡️",
+};
+
+const MONSTER_TYPE_COLOR: Record<MonsterType, string> = {
+  goblin: "bg-green-600 text-white",
+  orc: "bg-gray-600 text-white",
+  dragon: "bg-red-600 text-white",
+  skeleton: "bg-black text-white",
+};
+
+const MONSTER_TYPE_ICON: Record<MonsterType, string> = {
+  goblin: "👹",
+  orc: "👺",
+  dragon: "🐉",
+  skeleton: "💀",
+};
+
+const generateHexGrid = (): HexPosition[] => {
+  const grid: HexPosition[] = [];
+  for (let r = 0; r < 7; r++) {
+    for (let q = 0; q < 7; q++) {
+      grid.push({ q, r });
+    }
+  }
+  return grid;
+};
+
 export default function MapFarmHex({
   heroPositions = [],
   monsterPositions = [],
@@ -42,18 +84,7 @@ export default function MapFarmHex({
   animated = true,
   className = "",
 }: MapFarmHexProps) {
-  // Generate 7x7 hex grid (49 cells total)
-  const generateHexGrid = () => {
-    const grid: HexPosition[] = [];
-    for (let r = 0; r < 7; r++) {
-      for (let q = 0; q < 7; q++) {
-        grid.push({ q, r });
-      }
-    }
-    return grid;
-  };
-
-  const hexGrid = generateHexGrid();
+  const hexGrid = React.useMemo(generateHexGrid, []);
 
   // Helper functions
   const getHeroAtPosition = (pos: HexPosition) => {
@@ -78,12 +109,11 @@ export default function MapFarmHex({
 
   return (
     <div
-      className={`
-        relative w-fit mx-auto p-6 bg-gradient-to-br from-green-50 to-emerald-100 
-        rounded-2xl shadow-lg
-        ${animated ? styles.mapContainer : ""}
-        ${className}
-      `}
+      className={cn(
+        "relative w-fit mx-auto p-6 bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl shadow-lg",
+        animated && styles.mapContainer,
+        className
+      )}
     >
       {/* 7x7 Hex Grid */}
       <div className={styles.hexGrid}>
@@ -92,18 +122,25 @@ export default function MapFarmHex({
           const monsterData = getMonsterAtPosition(pos);
           const isHighlightedCell = isHighlighted(pos);
           const isSelectedCell = isSelected(pos);
+          const heroType = (heroData?.hero.type ?? "assassin") as HeroType;
+          const monsterType = (monsterData?.monster.type ?? "skeleton") as MonsterType;
+          const hexagonBg = heroData
+            ? "bg-blue-200 border-blue-300"
+            : monsterData
+            ? "bg-red-200 border-red-300"
+            : "bg-green-50 border-green-200";
 
           return (
             <div
               key={`hex-${pos.q}-${pos.r}`}
-              className={`
-                ${styles.hexCell}
-                ${animated ? styles.animated : ""}
-                ${heroData ? styles.heroCell : ""}
-                ${monsterData ? styles.monsterCell : ""}
-                ${isHighlightedCell ? styles.highlightedCell : ""}
-                ${isSelectedCell ? styles.selectedCell : ""}
-              `}
+              className={cn(
+                styles.hexCell,
+                animated && styles.animated,
+                heroData && styles.heroCell,
+                monsterData && styles.monsterCell,
+                isHighlightedCell && styles.highlightedCell,
+                isSelectedCell && styles.selectedCell
+              )}
               style={
                 {
                   "--hex-q": pos.q,
@@ -115,24 +152,19 @@ export default function MapFarmHex({
             >
               {/* Hexagon shape */}
               <div
-                className={`
-                  ${styles.hexagon}
-                  ${
-                    heroData
-                      ? "bg-blue-200 border-blue-300"
-                      : monsterData
-                      ? "bg-red-200 border-red-300"
-                      : "bg-green-50 border-green-200"
-                  }
-                  hover:bg-opacity-80 transition-all duration-200
-                `}
+                className={cn(
+                  styles.hexagon,
+                  hexagonBg,
+                  "hover:bg-opacity-80 transition-all duration-200"
+                )}
               >
                 {/* Hero content */}
                 {heroData && (
                   <div
-                    className={`${styles.cellContent} ${
-                      animated ? styles.heroContent : ""
-                    }`}
+                    className={cn(
+                      styles.cellContent,
+                      animated && styles.heroContent
+                    )}
                   >
                     {heroData.hero.image ? (
                       <Image
@@ -144,26 +176,12 @@ export default function MapFarmHex({
                       />
                     ) : (
                       <div
-                        className={`
-                          w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
-                          ${
-                            heroData.hero.type === "warrior"
-                              ? "bg-red-500 text-white"
-                              : heroData.hero.type === "mage"
-                              ? "bg-blue-500 text-white"
-                              : heroData.hero.type === "archer"
-                              ? "bg-green-500 text-white"
-                              : "bg-purple-500 text-white"
-                          }
-                        `}
+                        className={cn(
+                          "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
+                          HERO_TYPE_COLOR[heroType]
+                        )}
                       >
-                        {heroData.hero.type === "warrior"
-                          ? "⚔️"
-                          : heroData.hero.type === "mage"
-                          ? "🔮"
-                          : heroData.hero.type === "archer"
-                          ? "🏹"
-                          : "🗡️"}
+                        {HERO_TYPE_ICON[heroType]}
                       </div>
                     )}
                     {heroData.hero.level && (
@@ -177,9 +195,10 @@ export default function MapFarmHex({
                 {/* Monster content */}
                 {monsterData && (
                   <div
-                    className={`${styles.cellContent} ${
-                      animated ? styles.monsterContent : ""
-                    }`}
+                    className={cn(
+                      styles.cellContent,
+                      animated && styles.monsterContent
+                    )}
                   >
                     {monsterData.monster.image ? (
                       <Image
@@ -191,26 +210,12 @@ export default function MapFarmHex({
                       />
                     ) : (
                       <div
-                        className={`
-                          w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
-                          ${
-                            monsterData.monster.type === "goblin"
-                              ? "bg-green-600 text-white"
-                              : monsterData.monster.type === "orc"
-                              ? "bg-gray-600 text-white"
-                              : monsterData.monster.type === "dragon"
-                              ? "bg-red-600 text-white"
-                              : "bg-black text-white"
-                          }
-                        `}
+                        className={cn(
+                          "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
+                          MONSTER_TYPE_COLOR[monsterType]
+                        )}
                       >
-                        {monsterData.monster.type === "goblin"
-                          ? "👹"
-                          : monsterData.monster.type === "orc"
-                          ? "👺"
-                          : monsterData.monster.type === "dragon"
-                          ? "🐉"
-                          : "💀"}
+                        {MONSTER_TYPE_ICON[monsterType]}
                       </div>
                     )}
                     {monsterData.monster.level && (
