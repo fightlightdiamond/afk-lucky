@@ -8,7 +8,7 @@ from pathlib import Path
 import os
 
 from ..models import TTSRequest, TTSResponse
-from ..services.tts_service import generate_tts_audio, is_tts_available
+from ..services.tts_service import generate_tts_audio, is_tts_available, tts_service
 
 router = APIRouter()
 
@@ -22,17 +22,45 @@ def tts_status():
     """
     return {
         "available": is_tts_available(),
-        "model": "facebook/mms-tts-vie",
-        "supported_formats": ["wav", "base64", "bytes"]
+        "vi_model": "facebook/mms-tts-vie",
+        "en_model": "facebook/mms-tts-eng",
+        "hybrid_mode": tts_service.hybrid_mode,
+        "en_model_loaded": tts_service.en_model is not None,
+        "supported_formats": ["wav", "base64", "bytes", "file"]
+    }
+
+@router.post("/tts/config/hybrid")
+def set_hybrid_mode(enabled: bool):
+    """
+    Enable or disable hybrid TTS mode.
+    
+    Args:
+        enabled: True to enable hybrid mode, False for Vietnamese-only
+        
+    Returns:
+        Updated configuration
+    """
+    if enabled and not tts_service.en_model:
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot enable hybrid mode: English model not loaded"
+        )
+    
+    tts_service.hybrid_mode = enabled
+    
+    return {
+        "hybrid_mode": tts_service.hybrid_mode,
+        "message": f"Hybrid mode {'enabled' if enabled else 'disabled'}"
     }
 
 @router.post("/tts/generate", response_model=TTSResponse)
-def generate_tts(req: TTSRequest):
+def generate_tts(req: TTSRequest, use_hybrid: bool = None):
     """
-    Generate TTS audio from text.
+    Generate TTS audio from text with optional hybrid mode.
     
     Args:
         req: TTS request with text and format
+        use_hybrid: Override hybrid mode for this request (None = use default)
         
     Returns:
         TTSResponse with audio data
@@ -49,7 +77,12 @@ def generate_tts(req: TTSRequest):
     # Determine if we should save file
     save_file = req.output_format == "file"
     
-    result = generate_tts_audio(req.text, req.output_format, save_file)
+    result = tts_service.text_to_speech(
+        req.text, 
+        req.output_format, 
+        save_file,
+        use_hybrid=use_hybrid
+    )
     
     if result is None:
         raise HTTPException(status_code=500, detail="Failed to generate TTS audio")

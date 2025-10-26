@@ -181,7 +181,7 @@ class AIApiClient {
     return this.makeRequest<TTSResponse>("/tts/generate", request);
   }
 
-  async generateTTSFile(request: TTSRequest): Promise<any> {
+  async generateTTSFile(request: TTSRequest): Promise<unknown> {
     return this.makeRequest<unknown>("/tts/generate-file", request);
   }
 
@@ -196,7 +196,10 @@ class AIApiClient {
 
   async getTTSStatus(): Promise<{
     available: boolean;
-    model: string;
+    vi_model: string;
+    en_model: string;
+    hybrid_mode: boolean;
+    en_model_loaded: boolean;
     supported_formats: string[];
   }> {
     const response = await fetch(`${this.baseUrl}/tts/status`);

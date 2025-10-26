@@ -20,6 +20,43 @@ export function useTTSStatus() {
   });
 }
 
+// TTS Hybrid Mode Hook
+export function useTTSHybridMode() {
+  const { data: status, refetch } = useTTSStatus();
+
+  const toggleHybridMode = useMutation({
+    mutationFn: async (enabled: boolean) => {
+      const response = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_AIAPI_URL || "http://localhost:8001/api/v1"
+        }/tts/config/hybrid?enabled=${enabled}`,
+        { method: "POST" }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || "Failed to toggle hybrid mode");
+      }
+
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      refetch();
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+
+  return {
+    hybridMode: status?.hybrid_mode ?? false,
+    enModelLoaded: status?.en_model_loaded ?? false,
+    toggleHybridMode: toggleHybridMode.mutate,
+    isToggling: toggleHybridMode.isPending,
+  };
+}
+
 // TTS Generation Hook
 export function useGenerateTTS() {
   return useMutation({
@@ -39,7 +76,7 @@ export function useGenerateTTS() {
         );
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error("TTS generation failed:", error);
       toast.error(
         error.message || "Failed to generate audio. Please try again."
@@ -80,7 +117,7 @@ export function useGenerateStoryWithTTS() {
         });
       }
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error("Story with TTS generation failed:", error);
       toast.error(
         error.message ||

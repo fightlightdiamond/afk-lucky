@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 
-from .routers import itinerary, story, chat, tts
+from .routers import itinerary, story, chat, tts, story_search
 from .config import settings
 
 app = FastAPI(
@@ -40,6 +40,7 @@ app.include_router(itinerary.router, prefix="/api/v1", tags=["itinerary"])
 app.include_router(story.router, prefix="/api/v1", tags=["story"])
 app.include_router(chat.router, prefix="/api/v1", tags=["chat"])
 app.include_router(tts.router, prefix="/api/v1", tags=["tts"])
+app.include_router(story_search.router, prefix="/api/v1", tags=["story-search"])
 
 @app.get("/")
 def read_root():
