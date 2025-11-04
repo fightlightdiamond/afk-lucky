@@ -44,3 +44,9 @@ next-env.d.ts
 storybook-static
 
 .early.coverage
+*/__pycache__
+*/.pytest_cache
+*/chroma_data
+*/logs
+chroma_data/
+_py/

@@ -30,8 +30,11 @@ functions = [
 
 @retry(
     retry=retry_if_exception_type((RateLimitError, APIError)),
-    wait=wait_random_exponential(min=1, max=10),
-    stop=stop_after_attempt(5),
+    wait=wait_random_exponential(
+        min=settings.retry_min_wait_seconds,
+        max=settings.retry_max_wait_seconds
+    ),
+    stop=stop_after_attempt(settings.retry_max_attempts),
     reraise=True
 )
 def call_openai_function(prompt: str, destination: str, days: int):

@@ -1,0 +1,1002 @@
+[
+  {
+    "word": "laptop",
+    "definition": "A portable computer that can be easily carried and used in different locations",
+    "vietnamese_translation": "máy tính xách tay",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "I use my laptop for work every day",
+    "ipa": "/ˈlæp.tɑːp/"
+  },
+  {
+    "word": "smartphone",
+    "definition": "A mobile phone with advanced features like internet access and apps",
+    "vietnamese_translation": "điện thoại thông minh",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "My smartphone helps me stay connected with friends",
+    "ipa": "/ˈsmɑːrt.foʊn/"
+  },
+  {
+    "word": "application",
+    "definition": "A software program designed to perform specific tasks on a computer or mobile device",
+    "vietnamese_translation": "ứng dụng",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "I downloaded a new application to learn English",
+    "ipa": "/ˌæp.lɪˈkeɪ.ʃən/"
+  },
+  {
+    "word": "database",
+    "definition": "An organized collection of data stored and accessed electronically",
+    "vietnamese_translation": "cơ sở dữ liệu",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "The company stores customer information in a secure database",
+    "ipa": "/ˈdeɪ.tə.beɪs/"
+  },
+  {
+    "word": "algorithm",
+    "definition": "A step-by-step procedure for solving a problem or completing a task",
+    "vietnamese_translation": "thuật toán",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "The search engine uses a complex algorithm to rank results",
+    "ipa": "/ˈæl.ɡə.rɪ.ðəm/"
+  },
+  {
+    "word": "artificial intelligence",
+    "definition": "Computer systems able to perform tasks that normally require human intelligence",
+    "vietnamese_translation": "trí tuệ nhân tạo",
+    "part_of_speech": "phrase",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "Artificial intelligence is transforming many industries",
+    "ipa": "/ˌɑːr.tɪˈfɪʃ.əl ɪnˈtel.ɪ.dʒəns/"
+  },
+  {
+    "word": "keyboard",
+    "definition": "A set of keys used to type on a computer",
+    "vietnamese_translation": "bàn phím",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "My keyboard has a comfortable layout for typing",
+    "ipa": "/ˈkiː.bɔːrd/"
+  },
+  {
+    "word": "download",
+    "definition": "To transfer data from the internet to your computer",
+    "vietnamese_translation": "tải xuống",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "I need to download the latest software update",
+    "ipa": "/ˌdaʊnˈloʊd/"
+  },
+  {
+    "word": "cybersecurity",
+    "definition": "Protection of computer systems and networks from digital attacks",
+    "vietnamese_translation": "an ninh mạng",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "Cybersecurity is crucial for protecting personal data",
+    "ipa": "/ˌsaɪ.bər.sɪˈkjʊr.ə.ti/"
+  },
+  {
+    "word": "cloud computing",
+    "definition": "Storing and accessing data over the internet instead of on local computers",
+    "vietnamese_translation": "điện toán đám mây",
+    "part_of_speech": "phrase",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "Cloud computing allows us to access files from anywhere",
+    "ipa": "/klaʊd kəmˈpjuː.tɪŋ/"
+  },
+  {
+    "word": "blockchain",
+    "definition": "A digital ledger technology that records transactions across multiple computers",
+    "vietnamese_translation": "chuỗi khối",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "Blockchain technology is the foundation of cryptocurrencies",
+    "ipa": "/ˈblɑːk.tʃeɪn/"
+  },
+  {
+    "word": "quantum computing",
+    "definition": "Computing using quantum-mechanical phenomena for processing information",
+    "vietnamese_translation": "điện toán lượng tử",
+    "part_of_speech": "phrase",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "Quantum computing could revolutionize data processing",
+    "ipa": "/ˈkwɑːn.təm kəmˈpjuː.tɪŋ/"
+  },
+  {
+    "word": "meeting",
+    "definition": "A gathering of people for discussion or decision-making",
+    "vietnamese_translation": "cuộc họp",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "We have a team meeting every Monday morning",
+    "ipa": "/ˈmiː.tɪŋ/"
+  },
+  {
+    "word": "deadline",
+    "definition": "The latest time or date by which something must be completed",
+    "vietnamese_translation": "hạn chót",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "The project deadline is next Friday",
+    "ipa": "/ˈded.laɪn/"
+  },
+  {
+    "word": "contract",
+    "definition": "A written legal agreement between two or more parties",
+    "vietnamese_translation": "hợp đồng",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "We signed a contract with the new supplier",
+    "ipa": "/ˈkɑːn.trækt/"
+  },
+  {
+    "word": "profit",
+    "definition": "Money gained after all expenses are subtracted from revenue",
+    "vietnamese_translation": "lợi nhuận",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "The company made a good profit this quarter",
+    "ipa": "/ˈprɑː.fɪt/"
+  },
+  {
+    "word": "negotiate",
+    "definition": "To discuss something in order to reach an agreement",
+    "vietnamese_translation": "đàm phán, thương lượng",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "We need to negotiate the contract terms with the supplier",
+    "ipa": "/nɪˈɡoʊ.ʃi.eɪt/"
+  },
+  {
+    "word": "revenue",
+    "definition": "The total income generated by a business from its operations",
+    "vietnamese_translation": "doanh thu",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "The company's revenue increased by 20% this year",
+    "ipa": "/ˈrev.ə.nuː/"
+  },
+  {
+    "word": "entrepreneur",
+    "definition": "A person who starts and runs a business",
+    "vietnamese_translation": "doanh nhân",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "She became a successful entrepreneur at age 25",
+    "ipa": "/ˌɑːn.trə.prəˈnɜːr/"
+  },
+  {
+    "word": "investment",
+    "definition": "Money put into a business or project to make a profit",
+    "vietnamese_translation": "đầu tư",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "The company needs more investment to expand",
+    "ipa": "/ɪnˈvest.mənt/"
+  },
+  {
+    "word": "stakeholder",
+    "definition": "A person or group with an interest or concern in a business",
+    "vietnamese_translation": "bên liên quan",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "We must consider all stakeholders when making this decision",
+    "ipa": "/ˈsteɪk.hoʊl.dər/"
+  },
+  {
+    "word": "synergy",
+    "definition": "The combined power of a group working together that is greater than the total of individual efforts",
+    "vietnamese_translation": "sự cộng hưởng, hiệu ứng tổng hợp",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "The merger created synergy between the two companies",
+    "ipa": "/ˈsɪn.ər.dʒi/"
+  },
+  {
+    "word": "merger",
+    "definition": "The combination of two companies into one",
+    "vietnamese_translation": "sự sáp nhập",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "The merger created the largest tech company in the region",
+    "ipa": "/ˈmɜːr.dʒər/"
+  },
+  {
+    "word": "diversification",
+    "definition": "The process of expanding into different products or markets",
+    "vietnamese_translation": "đa dạng hóa",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "Diversification helps reduce business risk",
+    "ipa": "/daɪˌvɜːr.sɪ.fɪˈkeɪ.ʃən/"
+  },
+  {
+    "word": "teacher",
+    "definition": "A person who instructs students in a school or educational setting",
+    "vietnamese_translation": "giáo viên",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "beginner",
+    "example": "My English teacher is very patient and helpful",
+    "ipa": "/ˈtiː.tʃər/"
+  },
+  {
+    "word": "homework",
+    "definition": "School assignments to be completed outside of class",
+    "vietnamese_translation": "bài tập về nhà",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "beginner",
+    "example": "I need to finish my homework before dinner",
+    "ipa": "/ˈhoʊm.wɜːrk/"
+  },
+  {
+    "word": "classroom",
+    "definition": "A room where classes are taught in a school",
+    "vietnamese_translation": "lớp học",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "beginner",
+    "example": "Our classroom has 30 students",
+    "ipa": "/ˈklæs.ruːm/"
+  },
+  {
+    "word": "exam",
+    "definition": "A formal test of knowledge or ability",
+    "vietnamese_translation": "kỳ thi",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "beginner",
+    "example": "I have an important exam next week",
+    "ipa": "/ɪɡˈzæm/"
+  },
+  {
+    "word": "curriculum",
+    "definition": "The subjects and content taught in a school or course",
+    "vietnamese_translation": "chương trình giảng dạy",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "intermediate",
+    "example": "The school updated its curriculum to include coding classes",
+    "ipa": "/kəˈrɪk.jə.ləm/"
+  },
+  {
+    "word": "scholarship",
+    "definition": "Financial aid awarded to a student to help pay for education",
+    "vietnamese_translation": "học bổng",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "intermediate",
+    "example": "She received a scholarship to study at the university",
+    "ipa": "/ˈskɑː.lər.ʃɪp/"
+  },
+  {
+    "word": "assignment",
+    "definition": "A task or piece of work given to students",
+    "vietnamese_translation": "bài tập được giao",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "intermediate",
+    "example": "The teacher gave us a challenging assignment",
+    "ipa": "/əˈsaɪn.mənt/"
+  },
+  {
+    "word": "dissertation",
+    "definition": "A long essay on a particular subject, especially for a university degree",
+    "vietnamese_translation": "luận văn",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "intermediate",
+    "example": "She is writing her dissertation on climate change",
+    "ipa": "/ˌdɪs.ərˈteɪ.ʃən/"
+  },
+  {
+    "word": "pedagogy",
+    "definition": "The method and practice of teaching",
+    "vietnamese_translation": "phương pháp sư phạm",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "advanced",
+    "example": "Modern pedagogy emphasizes student-centered learning",
+    "ipa": "/ˈped.ə.ɡɑː.dʒi/"
+  },
+  {
+    "word": "interdisciplinary",
+    "definition": "Involving two or more academic disciplines or fields of study",
+    "vietnamese_translation": "liên ngành",
+    "part_of_speech": "adjective",
+    "topic": "education",
+    "difficulty": "advanced",
+    "example": "The university offers interdisciplinary programs combining science and art",
+    "ipa": "/ˌɪn.tər.ˈdɪs.ə.plɪ.ner.i/"
+  },
+  {
+    "word": "accreditation",
+    "definition": "Official recognition that an institution meets quality standards",
+    "vietnamese_translation": "sự công nhận, kiểm định",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "advanced",
+    "example": "The university received accreditation from the national board",
+    "ipa": "/əˌkred.ɪˈteɪ.ʃən/"
+  },
+  {
+    "word": "metacognition",
+    "definition": "Awareness and understanding of one's own thought processes",
+    "vietnamese_translation": "siêu nhận thức",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "advanced",
+    "example": "Metacognition helps students become better learners",
+    "ipa": "/ˌmet.əˈkɑːɡ.nɪ.ʃən/"
+  },
+  {
+    "word": "breakfast",
+    "definition": "The first meal of the day, eaten in the morning",
+    "vietnamese_translation": "bữa sáng",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "beginner",
+    "example": "I usually have breakfast at 7 o'clock",
+    "ipa": "/ˈbrek.fəst/"
+  },
+  {
+    "word": "grocery",
+    "definition": "Food and household items sold in a store",
+    "vietnamese_translation": "thực phẩm, tạp hóa",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "beginner",
+    "example": "I need to buy groceries for the week",
+    "ipa": "/ˈɡroʊ.sər.i/"
+  },
+  {
+    "word": "laundry",
+    "definition": "Clothes and linens that need to be washed",
+    "vietnamese_translation": "quần áo cần giặt",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "beginner",
+    "example": "I need to do the laundry this weekend",
+    "ipa": "/ˈlɔːn.dri/"
+  },
+  {
+    "word": "neighbor",
+    "definition": "A person who lives near you",
+    "vietnamese_translation": "hàng xóm",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "beginner",
+    "example": "My neighbor is very friendly and helpful",
+    "ipa": "/ˈneɪ.bər/"
+  },
+  {
+    "word": "commute",
+    "definition": "To travel regularly between home and work",
+    "vietnamese_translation": "đi làm (hàng ngày)",
+    "part_of_speech": "verb",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "example": "I commute to work by bus every day",
+    "ipa": "/kəˈmjuːt/"
+  },
+  {
+    "word": "routine",
+    "definition": "A regular way of doing things in a particular order",
+    "vietnamese_translation": "thói quen, công việc thường ngày",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "example": "My morning routine includes exercise and meditation",
+    "ipa": "/ruːˈtiːn/"
+  },
+  {
+    "word": "chore",
+    "definition": "A routine task, especially a household one",
+    "vietnamese_translation": "việc nhà",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "example": "Cleaning the kitchen is my least favorite chore",
+    "ipa": "/tʃɔːr/"
+  },
+  {
+    "word": "errand",
+    "definition": "A short journey to do a specific task",
+    "vietnamese_translation": "việc vặt cần làm",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "example": "I have several errands to run this afternoon",
+    "ipa": "/ˈer.ənd/"
+  },
+  {
+    "word": "procrastinate",
+    "definition": "To delay or postpone doing something",
+    "vietnamese_translation": "trì hoãn, lần lữa",
+    "part_of_speech": "verb",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "example": "I tend to procrastinate when I have difficult tasks",
+    "ipa": "/proʊˈkræs.tɪ.neɪt/"
+  },
+  {
+    "word": "multitask",
+    "definition": "To do several things at the same time",
+    "vietnamese_translation": "làm nhiều việc cùng lúc",
+    "part_of_speech": "verb",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "example": "She can multitask efficiently while working from home",
+    "ipa": "/ˈmʌl.ti.tæsk/"
+  },
+  {
+    "word": "work-life balance",
+    "definition": "The equilibrium between time spent on work and personal life",
+    "vietnamese_translation": "cân bằng công việc và cuộc sống",
+    "part_of_speech": "phrase",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "example": "Maintaining work-life balance is important for mental health",
+    "ipa": "/wɜːrk laɪf ˈbæl.əns/"
+  },
+  {
+    "word": "mindfulness",
+    "definition": "The practice of being aware of the present moment",
+    "vietnamese_translation": "chánh niệm",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "example": "Practicing mindfulness helps reduce stress",
+    "ipa": "/ˈmaɪnd.fəl.nəs/"
+  },
+  {
+    "word": "airport",
+    "definition": "A place where aircraft take off and land",
+    "vietnamese_translation": "sân bay",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "example": "We arrived at the airport two hours before our flight",
+    "ipa": "/ˈer.pɔːrt/"
+  },
+  {
+    "word": "passport",
+    "definition": "An official document that allows you to travel to foreign countries",
+    "vietnamese_translation": "hộ chiếu",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "example": "Don't forget to bring your passport when traveling abroad",
+    "ipa": "/ˈpæs.pɔːrt/"
+  },
+  {
+    "word": "luggage",
+    "definition": "Bags and suitcases used for carrying belongings while traveling",
+    "vietnamese_translation": "hành lý",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "example": "Please check your luggage at the counter",
+    "ipa": "/ˈlʌɡ.ɪdʒ/"
+  },
+  {
+    "word": "tourist",
+    "definition": "A person who travels for pleasure",
+    "vietnamese_translation": "khách du lịch",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "example": "Many tourists visit this city every year",
+    "ipa": "/ˈtʊr.ɪst/"
+  },
+  {
+    "word": "itinerary",
+    "definition": "A planned route or schedule for a journey",
+    "vietnamese_translation": "lịch trình",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "example": "Our travel itinerary includes visits to five cities",
+    "ipa": "/aɪˈtɪn.ə.rer.i/"
+  },
+  {
+    "word": "accommodation",
+    "definition": "A place to stay or live, especially when traveling",
+    "vietnamese_translation": "chỗ ở",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "example": "We booked accommodation near the beach",
+    "ipa": "/əˌkɑː.məˈdeɪ.ʃən/"
+  },
+  {
+    "word": "reservation",
+    "definition": "An arrangement to have something kept for you",
+    "vietnamese_translation": "đặt chỗ trước",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "example": "I made a reservation at the hotel for next week",
+    "ipa": "/ˌrez.ərˈveɪ.ʃən/"
+  },
+  {
+    "word": "excursion",
+    "definition": "A short journey or trip, especially for leisure",
+    "vietnamese_translation": "chuyến tham quan",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "example": "We went on an excursion to the nearby islands",
+    "ipa": "/ɪkˈskɜː.ʒən/"
+  },
+  {
+    "word": "jet lag",
+    "definition": "Tiredness and confusion after a long flight to a different time zone",
+    "vietnamese_translation": "mệt mỏi do chênh lệch múi giờ",
+    "part_of_speech": "phrase",
+    "topic": "travel",
+    "difficulty": "advanced",
+    "example": "I'm still suffering from jet lag after my trip to Europe",
+    "ipa": "/ˈdʒet ˌlæɡ/"
+  },
+  {
+    "word": "wanderlust",
+    "definition": "A strong desire to travel and explore the world",
+    "vietnamese_translation": "niềm đam mê du lịch",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "advanced",
+    "example": "Her wanderlust led her to visit 30 countries",
+    "ipa": "/ˈwɑːn.dər.lʌst/"
+  },
+  {
+    "word": "ecotourism",
+    "definition": "Tourism that focuses on environmental conservation and sustainability",
+    "vietnamese_translation": "du lịch sinh thái",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "advanced",
+    "example": "Ecotourism helps protect natural habitats",
+    "ipa": "/ˈiː.koʊˌtʊr.ɪ.zəm/"
+  },
+  {
+    "word": "backpacking",
+    "definition": "Traveling with minimal luggage, often on a budget",
+    "vietnamese_translation": "du lịch bụi",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "advanced",
+    "example": "Backpacking through Southeast Asia was an amazing experience",
+    "ipa": "/ˈbæk.pæk.ɪŋ/"
+  },
+  {
+    "word": "software",
+    "definition": "Programs and operating systems used by a computer",
+    "vietnamese_translation": "phần mềm",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "We need to install new software on the computers",
+    "ipa": "/ˈsɔːft.wer/"
+  },
+  {
+    "word": "network",
+    "definition": "A system of connected computers or devices",
+    "vietnamese_translation": "mạng lưới",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "The office network allows us to share files easily",
+    "ipa": "/ˈnet.wɜːrk/"
+  },
+  {
+    "word": "encryption",
+    "definition": "The process of converting information into a code to prevent unauthorized access",
+    "vietnamese_translation": "mã hóa",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "Encryption protects sensitive data from hackers",
+    "ipa": "/ɪnˈkrɪp.ʃən/"
+  },
+  {
+    "word": "budget",
+    "definition": "A plan for how to spend money",
+    "vietnamese_translation": "ngân sách",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "We need to create a budget for the new project",
+    "ipa": "/ˈbʌdʒ.ɪt/"
+  },
+  {
+    "word": "strategy",
+    "definition": "A plan of action designed to achieve a long-term goal",
+    "vietnamese_translation": "chiến lược",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "The company developed a new marketing strategy",
+    "ipa": "/ˈstræt.ə.dʒi/"
+  },
+  {
+    "word": "leverage",
+    "definition": "To use something to maximum advantage",
+    "vietnamese_translation": "tận dụng, đòn bẩy",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "We can leverage our expertise to win new clients",
+    "ipa": "/ˈlev.ər.ɪdʒ/"
+  },
+  {
+    "word": "student",
+    "definition": "A person who is studying at a school or university",
+    "vietnamese_translation": "học sinh, sinh viên",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "beginner",
+    "example": "The student asked an interesting question",
+    "ipa": "/ˈstuː.dənt/"
+  },
+  {
+    "word": "lecture",
+    "definition": "An educational talk given to a group of students",
+    "vietnamese_translation": "bài giảng",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "intermediate",
+    "example": "The professor gave an interesting lecture on history",
+    "ipa": "/ˈlek.tʃər/"
+  },
+  {
+    "word": "thesis",
+    "definition": "A long piece of writing on a particular subject for a university degree",
+    "vietnamese_translation": "luận án",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "advanced",
+    "example": "He defended his doctoral thesis successfully",
+    "ipa": "/ˈθiː.sɪs/"
+  },
+  {
+    "word": "kitchen",
+    "definition": "A room where food is prepared and cooked",
+    "vietnamese_translation": "nhà bếp",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "beginner",
+    "example": "I'm cooking dinner in the kitchen",
+    "ipa": "/ˈkɪtʃ.ɪn/"
+  },
+  {
+    "word": "schedule",
+    "definition": "A plan that lists things to be done and when",
+    "vietnamese_translation": "lịch trình, thời gian biểu",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "example": "My schedule is very busy this week",
+    "ipa": "/ˈskedʒ.uːl/"
+  },
+  {
+    "word": "prioritize",
+    "definition": "To arrange things in order of importance",
+    "vietnamese_translation": "ưu tiên",
+    "part_of_speech": "verb",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "example": "You need to prioritize your tasks to be more efficient",
+    "ipa": "/praɪˈɔːr.ə.taɪz/"
+  },
+  {
+    "word": "hotel",
+    "definition": "A place where travelers can pay to stay overnight",
+    "vietnamese_translation": "khách sạn",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "example": "We stayed at a nice hotel near the beach",
+    "ipa": "/hoʊˈtel/"
+  },
+  {
+    "word": "destination",
+    "definition": "The place where someone or something is going",
+    "vietnamese_translation": "điểm đến",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "example": "Paris is a popular travel destination",
+    "ipa": "/ˌdes.tɪˈneɪ.ʃən/"
+  },
+  {
+    "word": "expedition",
+    "definition": "A journey undertaken for a specific purpose, often exploration",
+    "vietnamese_translation": "cuộc thám hiểm",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "advanced",
+    "example": "The expedition to Antarctica took three months",
+    "ipa": "/ˌek.spəˈdɪʃ.ən/"
+  },
+  {
+    "word": "innovative",
+    "definition": "Introducing new ideas or methods",
+    "vietnamese_translation": "sáng tạo, đổi mới",
+    "part_of_speech": "adjective",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "The company is known for its innovative products",
+    "ipa": "/ˈɪn.ə.veɪ.tɪv/"
+  },
+  {
+    "word": "collaborate",
+    "definition": "To work together with others on a project",
+    "vietnamese_translation": "hợp tác",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Our teams collaborate on international projects",
+    "ipa": "/kəˈlæb.ə.reɪt/"
+  },
+  {
+    "word": "graduate",
+    "definition": "To complete a course of study and receive a degree",
+    "vietnamese_translation": "tốt nghiệp",
+    "part_of_speech": "verb",
+    "topic": "education",
+    "difficulty": "beginner",
+    "example": "She will graduate from university next year",
+    "ipa": "/ˈɡrædʒ.u.eɪt/"
+  },
+  {
+    "word": "exercise",
+    "definition": "Physical activity done to stay healthy",
+    "vietnamese_translation": "tập thể dục",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "beginner",
+    "example": "I do exercise every morning",
+    "ipa": "/ˈek.sər.saɪz/"
+  },
+  {
+    "word": "sightseeing",
+    "definition": "Visiting interesting places as a tourist",
+    "vietnamese_translation": "tham quan",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "example": "We spent the day sightseeing in the old city",
+    "ipa": "/ˈsaɪt.siː.ɪŋ/"
+  },
+  {
+    "word": "interface",
+    "definition": "A point where two systems meet and interact",
+    "vietnamese_translation": "giao diện",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "The user interface is very intuitive",
+    "ipa": "/ˈɪn.tər.feɪs/"
+  },
+  {
+    "word": "productivity",
+    "definition": "The effectiveness of effort in producing results",
+    "vietnamese_translation": "năng suất",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "New tools have increased our productivity",
+    "ipa": "/ˌproʊ.dʌkˈtɪv.ə.ti/"
+  },
+  {
+    "word": "tuition",
+    "definition": "Money paid for teaching or instruction",
+    "vietnamese_translation": "học phí",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "intermediate",
+    "example": "University tuition has increased this year",
+    "ipa": "/tuˈɪʃ.ən/"
+  },
+  {
+    "word": "relax",
+    "definition": "To rest and become less tense",
+    "vietnamese_translation": "thư giãn",
+    "part_of_speech": "verb",
+    "topic": "daily life",
+    "difficulty": "beginner",
+    "example": "I like to relax by reading books",
+    "ipa": "/rɪˈlæks/"
+  },
+  {
+    "word": "souvenir",
+    "definition": "An object kept as a reminder of a place visited",
+    "vietnamese_translation": "quà lưu niệm",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "example": "I bought souvenirs for my family",
+    "ipa": "/ˌsuː.vəˈnɪr/"
+  },
+  {
+    "word": "virtual reality",
+    "definition": "A computer-generated simulation of a three-dimensional environment",
+    "vietnamese_translation": "thực tế ảo",
+    "part_of_speech": "phrase",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "Virtual reality is changing the gaming industry",
+    "ipa": "/ˌvɜː.tʃu.əl riˈæl.ə.ti/"
+  },
+  {
+    "word": "franchise",
+    "definition": "Authorization to sell a company's goods or services in a particular area",
+    "vietnamese_translation": "nhượng quyền thương mại",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "He opened a franchise of the popular restaurant chain",
+    "ipa": "/ˈfræn.tʃaɪz/"
+  },
+  {
+    "word": "seminar",
+    "definition": "A meeting for discussion or training",
+    "vietnamese_translation": "hội thảo",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "intermediate",
+    "example": "I attended a seminar on digital marketing",
+    "ipa": "/ˈsem.ɪ.nɑːr/"
+  },
+  {
+    "word": "balance",
+    "definition": "A state of equilibrium or equal distribution",
+    "vietnamese_translation": "cân bằng",
+    "part_of_speech": "noun",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "example": "It's important to maintain balance in your life",
+    "ipa": "/ˈbæl.əns/"
+  },
+  {
+    "word": "cruise",
+    "definition": "A vacation on a ship that travels to different places",
+    "vietnamese_translation": "du thuyền",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "example": "We went on a cruise around the Mediterranean",
+    "ipa": "/kruːz/"
+  },
+  {
+    "word": "automation",
+    "definition": "The use of machines or computers to do work without human control",
+    "vietnamese_translation": "tự động hóa",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "Automation is transforming manufacturing",
+    "ipa": "/ˌɔː.təˈmeɪ.ʃən/"
+  },
+  {
+    "word": "partnership",
+    "definition": "A business relationship between two or more people or organizations",
+    "vietnamese_translation": "quan hệ đối tác",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "The two companies formed a strategic partnership",
+    "ipa": "/ˈpɑːrt.nər.ʃɪp/"
+  },
+  {
+    "word": "certificate",
+    "definition": "An official document proving completion of a course or achievement",
+    "vietnamese_translation": "chứng chỉ",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "beginner",
+    "example": "I received a certificate after completing the course",
+    "ipa": "/sərˈtɪf.ɪ.kət/"
+  },
+  {
+    "word": "organize",
+    "definition": "To arrange things in an orderly way",
+    "vietnamese_translation": "tổ chức, sắp xếp",
+    "part_of_speech": "verb",
+    "topic": "daily life",
+    "difficulty": "beginner",
+    "example": "I need to organize my desk",
+    "ipa": "/ˈɔːr.ɡə.naɪz/"
+  },
+  {
+    "word": "landmark",
+    "definition": "A famous building or place that is easily recognized",
+    "vietnamese_translation": "địa danh nổi tiếng",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "example": "The Eiffel Tower is a famous landmark in Paris",
+    "ipa": "/ˈlænd.mɑːrk/"
+  },
+  {
+    "word": "prototype",
+    "definition": "An early model of a product used for testing",
+    "vietnamese_translation": "nguyên mẫu",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "The engineers are testing the prototype",
+    "ipa": "/ˈproʊ.t̬ə.taɪp/"
+  },
+  {
+    "word": "consultant",
+    "definition": "An expert who provides professional advice",
+    "vietnamese_translation": "chuyên gia tư vấn",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "We hired a consultant to improve our processes",
+    "ipa": "/kənˈsʌl.tənt/"
+  },
+  {
+    "word": "research",
+    "definition": "Careful study to discover new information",
+    "vietnamese_translation": "nghiên cứu",
+    "part_of_speech": "noun",
+    "topic": "education",
+    "difficulty": "intermediate",
+    "example": "She is conducting research on climate change",
+    "ipa": "/rɪˈsɜːrtʃ/"
+  },
+  {
+    "word": "efficient",
+    "definition": "Working well without wasting time or energy",
+    "vietnamese_translation": "hiệu quả",
+    "part_of_speech": "adjective",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "example": "This new method is more efficient",
+    "ipa": "/ɪˈfɪʃ.ənt/"
+  },
+  {
+    "word": "adventure",
+    "definition": "An exciting or unusual experience",
+    "vietnamese_translation": "cuộc phiêu lưu",
+    "part_of_speech": "noun",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "example": "Our trip to the mountains was a great adventure",
+    "ipa": "/ədˈven.tʃər/"
+  }
+]
