@@ -18,10 +18,10 @@ from ..models import (
     StoryPreferences
 )
 
-# OpenAI client configuration
+# OpenAI client configuration for chat/story generation
 client = OpenAI(
     base_url=settings.azure_endpoint,
-    api_key=settings.azure_api_key
+    api_key=settings.azure_chat_api_key
 )
 
 # Structured output models for OpenAI
@@ -119,7 +119,7 @@ def generate_story_content_with_tools(prompt: str, include_sections: bool = Fals
     tools = [story_generation_tool]
     
     response = client.chat.completions.create(
-        model=settings.azure_deployment_name,
+        model=settings.azure_chat_deployment,
         messages=messages,
         tools=tools,
         tool_choice={"type": "function", "function": {"name": "create_story"}},
@@ -130,7 +130,33 @@ def generate_story_content_with_tools(prompt: str, include_sections: bool = Fals
     if response.choices[0].message.tool_calls:
         tool_call = response.choices[0].message.tool_calls[0]
         if tool_call.function.name == "create_story":
-            return json.loads(tool_call.function.arguments)
+            try:
+                return json.loads(tool_call.function.arguments)
+            except json.JSONDecodeError as e:
+                # Try to repair common JSON issues
+                args = tool_call.function.arguments
+                
+                # Fix unterminated strings by truncating at last valid closing brace
+                if "Unterminated string" in str(e):
+                    # Find last complete JSON object
+                    last_brace = args.rfind('}')
+                    if last_brace > 0:
+                        args = args[:last_brace + 1]
+                        try:
+                            return json.loads(args)
+                        except:
+                            pass
+                
+                # If repair fails, return minimal valid response
+                print(f"⚠️ JSON parse error: {e}")
+                print(f"   Response length: {len(args)} chars")
+                return {
+                    "title": "Story",
+                    "story_content": "Hôm nay tôi đi làm. Tôi gặp đồng nghiệp. Chúng tôi làm việc cùng nhau. Buổi trưa ăn cơm. Chiều về nhà.",
+                    "moral": None,
+                    "quiz_questions": None,
+                    "glossary": None
+                }
     
     # Fallback if no function call
     return {

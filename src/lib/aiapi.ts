@@ -96,6 +96,80 @@ export interface ChatResponse {
   error?: string;
 }
 
+// RAG Word Insertion types
+export interface InsertionConfig {
+  topic: string;
+  difficulty: "beginner" | "intermediate" | "advanced";
+  insertion_count: number;
+  bold_format?: boolean;
+  show_translation?: boolean;
+}
+
+export interface VocabularyWord {
+  word: string;
+  definition: string;
+  vietnamese_translation: string;
+  part_of_speech: string;
+  topic: string;
+  difficulty: string;
+  example: string;
+  ipa?: string;
+  similarity?: number; // For search results
+}
+
+export interface GlossaryEntry {
+  word: string;
+  translation: string;
+  definition: string;
+  example: string;
+  ipa?: string;
+}
+
+export interface InsertionMetrics {
+  total_insertions: number;
+  insertion_density: number;
+  avg_position_score: number;
+  readability_score: number;
+  language_ratio: { vi: number; en: number };
+}
+
+export interface StoryInsertionRequest {
+  prompt: string;
+  config?: {
+    length?: "short" | "medium" | "long";
+    style?: string;
+    tone?: string;
+  };
+  insertion_config: InsertionConfig;
+}
+
+export interface StoryInsertionResponse {
+  title: string;
+  original_content: string;
+  enhanced_content: string;
+  inserted_words: VocabularyWord[];
+  glossary: GlossaryEntry[];
+  metrics: InsertionMetrics;
+  metadata: {
+    word_count: number;
+    language_ratio: { vi: number; en: number };
+    generation_time: number;
+    readability_score: number;
+  };
+  error?: string;
+}
+
+export interface VocabularySearchRequest {
+  query: string;
+  n_results?: number;
+  topic_filter?: string;
+  difficulty_filter?: string;
+}
+
+export interface BatchStoryRequest {
+  requests: StoryInsertionRequest[];
+}
+
 // API client class
 class AIApiClient {
   private baseUrl: string;
@@ -213,6 +287,66 @@ class AIApiClient {
     );
     return response.json();
   }
+
+  // RAG Word Insertion methods
+  async generateStoryWithInsertion(
+    request: StoryInsertionRequest
+  ): Promise<StoryInsertionResponse> {
+    return this.makeRequest<StoryInsertionResponse>(
+      "/generate-story-with-insertion",
+      request
+    );
+  }
+
+  async enhanceStory(
+    storyContent: string,
+    insertionConfig: InsertionConfig
+  ): Promise<StoryInsertionResponse> {
+    return this.makeRequest<StoryInsertionResponse>("/enhance-story", {
+      story_content: storyContent,
+      insertion_config: insertionConfig,
+    });
+  }
+
+  // Vocabulary methods
+  async searchVocabulary(
+    request: VocabularySearchRequest
+  ): Promise<VocabularyWord[]> {
+    return this.makeRequest<VocabularyWord[]>("/vocabulary/search", request);
+  }
+
+  async getVocabularyByTopic(
+    topic: string,
+    difficulty: string,
+    limit: number = 20
+  ): Promise<VocabularyWord[]> {
+    const response = await fetch(
+      `${this.baseUrl}/vocabulary/${encodeURIComponent(
+        topic
+      )}/${difficulty}?limit=${limit}`
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch vocabulary: ${response.statusText}`);
+    }
+    return response.json();
+  }
+
+  async batchAddVocabulary(words: VocabularyWord[]): Promise<{
+    success: number;
+    failed: number;
+    errors: string[];
+  }> {
+    return this.makeRequest("/vocabulary/batch-add", { words });
+  }
+
+  // Batch processing
+  async batchGenerateStories(
+    requests: StoryInsertionRequest[],
+    parallel: boolean = true
+  ): Promise<StoryInsertionResponse[]> {
+    const endpoint = `/batch-generate-stories?parallel=${parallel}`;
+    return this.makeRequest<StoryInsertionResponse[]>(endpoint, { requests });
+  }
 }
 
 // Export singleton instance
@@ -302,6 +436,86 @@ export async function generateStoryWithTTS(
     return result;
   } catch (error) {
     console.error("💥 generateStoryWithTTS error:", error);
+    throw error;
+  }
+}
+
+// RAG Word Insertion convenience functions
+export async function generateStoryWithInsertion(
+  request: StoryInsertionRequest
+): Promise<StoryInsertionResponse> {
+  try {
+    console.log("🎯 generateStoryWithInsertion called with:", request);
+    const result = await aiApiClient.generateStoryWithInsertion(request);
+    console.log("✅ generateStoryWithInsertion result:", result);
+    return result;
+  } catch (error) {
+    console.error("💥 generateStoryWithInsertion error:", error);
+    throw error;
+  }
+}
+
+export async function enhanceStory(
+  storyContent: string,
+  insertionConfig: InsertionConfig
+): Promise<StoryInsertionResponse> {
+  try {
+    const result = await aiApiClient.enhanceStory(
+      storyContent,
+      insertionConfig
+    );
+    return result;
+  } catch (error) {
+    console.error("Error enhancing story:", error);
+    throw error;
+  }
+}
+
+export async function searchVocabulary(
+  query: string,
+  filters?: { topic?: string; difficulty?: string; limit?: number }
+): Promise<VocabularyWord[]> {
+  try {
+    const result = await aiApiClient.searchVocabulary({
+      query,
+      n_results: filters?.limit || 10,
+      topic_filter: filters?.topic,
+      difficulty_filter: filters?.difficulty,
+    });
+    return result;
+  } catch (error) {
+    console.error("Error searching vocabulary:", error);
+    throw error;
+  }
+}
+
+export async function getVocabularyByTopic(
+  topic: string,
+  difficulty: string,
+  limit?: number
+): Promise<VocabularyWord[]> {
+  try {
+    const result = await aiApiClient.getVocabularyByTopic(
+      topic,
+      difficulty,
+      limit
+    );
+    return result;
+  } catch (error) {
+    console.error("Error getting vocabulary:", error);
+    throw error;
+  }
+}
+
+export async function batchGenerateStories(
+  requests: StoryInsertionRequest[],
+  parallel?: boolean
+): Promise<StoryInsertionResponse[]> {
+  try {
+    const result = await aiApiClient.batchGenerateStories(requests, parallel);
+    return result;
+  } catch (error) {
+    console.error("Error batch generating stories:", error);
     throw error;
   }
 }

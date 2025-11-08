@@ -319,32 +319,35 @@ def generate_story_with_insertion(request: StoryInsertionRequest) -> StoryInsert
             
             # Step 2: Analyze story structure to find insertion positions
             logger.info("Analyzing story structure for insertion positions...")
+            logger.info(f"Story has {len(original_content.split())} words")
+            
             positions = analyze_story_structure(original_content)
+            logger.info(f"Found {len(positions)} insertion positions")
             
             if not positions:
-                logger.warning("No suitable insertion positions found")
-            # Return story without insertions
-            return StoryInsertionResponse(
-                title=title,
-                original_content=original_content,
-                enhanced_content=original_content,
-                inserted_words=[],
-                glossary=[],
-                metrics=InsertionMetrics(
-                    total_insertions=0,
-                    insertion_density=0.0,
-                    avg_position_score=0.0,
-                    readability_score=story_response.metadata.readability_score if story_response.metadata else 70,
-                    language_ratio=story_response.metadata.language_ratio if story_response.metadata else {"vi": 100, "en": 0}
-                ),
-                metadata=story_response.metadata or StoryMetadata(
-                    word_count=len(original_content.split()),
-                    language_ratio={"vi": 100, "en": 0},
-                    generation_time=int((time.time() - start_time) * 1000),
-                    readability_score=70
-                ),
-                error="No suitable insertion positions found"
-            )
+                logger.warning("No suitable insertion positions found - returning story without insertions")
+                # Return story without insertions
+                return StoryInsertionResponse(
+                    title=title,
+                    original_content=original_content,
+                    enhanced_content=original_content,
+                    inserted_words=[],
+                    glossary=[],
+                    metrics=InsertionMetrics(
+                        total_insertions=0,
+                        insertion_density=0.0,
+                        avg_position_score=0.0,
+                        readability_score=story_response.metadata.readability_score if story_response.metadata else 70,
+                        language_ratio=story_response.metadata.language_ratio if story_response.metadata else {"vi": 100, "en": 0}
+                    ),
+                    metadata=story_response.metadata or StoryMetadata(
+                        word_count=len(original_content.split()),
+                        language_ratio={"vi": 100, "en": 0},
+                        generation_time=int((time.time() - start_time) * 1000),
+                        readability_score=70
+                    ),
+                    error="No suitable insertion positions found"
+                )
         
             # Step 3: Select vocabulary for insertion
             logger.info(f"Selecting vocabulary for insertion (count: {request.insertion_config.insertion_count})...")
@@ -557,7 +560,7 @@ def enhance_existing_story(
     insertion_config: "InsertionConfig"
 ) -> StoryInsertionResponse:
     """
-    Add English words to an existing story.
+    Add English words to an existing story from ChromaDB.
     
     Args:
         story_id: ID of existing story in ChromaDB
@@ -566,29 +569,149 @@ def enhance_existing_story(
     Returns:
         StoryInsertionResponse with enhanced story
     """
+    start_time = time.time()
+    
     try:
-        # TODO: Implement retrieval of existing story from ChromaDB
-        # For now, return error as this requires ChromaDB story storage
+        # Step 1: Retrieve story from ChromaDB
+        logger.info(f"Retrieving story {story_id} from ChromaDB...")
+        from .chromadb_service import get_story_by_id
+        
+        story_data = get_story_by_id(story_id)
+        
+        if not story_data:
+            logger.error(f"Story {story_id} not found in ChromaDB")
+            return StoryInsertionResponse(
+                title="Error",
+                original_content="",
+                enhanced_content="",
+                inserted_words=[],
+                glossary=[],
+                metrics=InsertionMetrics(
+                    total_insertions=0,
+                    insertion_density=0.0,
+                    avg_position_score=0.0,
+                    readability_score=0,
+                    language_ratio={"vi": 50, "en": 50}
+                ),
+                metadata=StoryMetadata(
+                    word_count=0,
+                    language_ratio={"vi": 50, "en": 50},
+                    generation_time=0,
+                    readability_score=0
+                ),
+                error=f"Story {story_id} not found"
+            )
+        
+        # Extract story data
+        title = story_data.get("title", "Story")
+        original_content = story_data.get("content", "")
+        
+        logger.info(f"Retrieved story: {title} ({len(original_content)} chars)")
+        
+        # Step 2: Analyze story structure
+        logger.info("Analyzing story structure for insertion positions...")
+        positions = analyze_story_structure(original_content)
+        logger.info(f"Found {len(positions)} insertion positions")
+        
+        if not positions:
+            logger.warning("No suitable insertion positions found")
+            return StoryInsertionResponse(
+                title=title,
+                original_content=original_content,
+                enhanced_content=original_content,
+                inserted_words=[],
+                glossary=[],
+                metrics=InsertionMetrics(
+                    total_insertions=0,
+                    insertion_density=0.0,
+                    avg_position_score=0.0,
+                    readability_score=70,
+                    language_ratio={"vi": 100, "en": 0}
+                ),
+                metadata=StoryMetadata(
+                    word_count=len(original_content.split()),
+                    language_ratio={"vi": 100, "en": 0},
+                    generation_time=int((time.time() - start_time) * 1000),
+                    readability_score=70
+                ),
+                error="No suitable insertion positions found"
+            )
+        
+        # Step 3: Select vocabulary
+        logger.info(f"Selecting vocabulary for insertion (count: {insertion_config.insertion_count})...")
+        insertion_count = min(insertion_config.insertion_count, len(positions))
+        
+        vocabulary = select_vocabulary_for_insertion(
+            topic=insertion_config.topic,
+            difficulty=insertion_config.difficulty,
+            count=insertion_count,
+            context=original_content
+        )
+        
+        if not vocabulary:
+            logger.warning("No suitable vocabulary found")
+            return StoryInsertionResponse(
+                title=title,
+                original_content=original_content,
+                enhanced_content=original_content,
+                inserted_words=[],
+                glossary=[],
+                metrics=InsertionMetrics(
+                    total_insertions=0,
+                    insertion_density=0.0,
+                    avg_position_score=0.0,
+                    readability_score=70,
+                    language_ratio={"vi": 100, "en": 0}
+                ),
+                metadata=StoryMetadata(
+                    word_count=len(original_content.split()),
+                    language_ratio={"vi": 100, "en": 0},
+                    generation_time=int((time.time() - start_time) * 1000),
+                    readability_score=70
+                ),
+                error="No suitable vocabulary found"
+            )
+        
+        logger.info(f"Selected {len(vocabulary)} vocabulary words")
+        
+        # Step 4: Insert words
+        selected_positions = positions[:len(vocabulary)]
+        enhanced_content = insert_words_into_story(
+            story=original_content,
+            vocabulary=vocabulary,
+            positions=selected_positions,
+            bold_format=insertion_config.bold_format,
+            show_translation=insertion_config.show_translation
+        )
+        
+        # Step 5: Create glossary
+        glossary = create_glossary(vocabulary)
+        
+        # Step 6: Calculate metrics
+        metrics = calculate_insertion_metrics(
+            original_story=original_content,
+            enhanced_story=enhanced_content,
+            inserted_words=vocabulary,
+            positions=selected_positions
+        )
+        
+        generation_time = int((time.time() - start_time) * 1000)
+        
+        logger.info(f"✅ Story enhanced successfully: {len(vocabulary)} words inserted in {generation_time}ms")
+        
         return StoryInsertionResponse(
-            title="Error",
-            original_content="",
-            enhanced_content="",
-            inserted_words=[],
-            glossary=[],
-            metrics=InsertionMetrics(
-                total_insertions=0,
-                insertion_density=0.0,
-                avg_position_score=0.0,
-                readability_score=0,
-                language_ratio={"vi": 50, "en": 50}
-            ),
+            title=title,
+            original_content=original_content,
+            enhanced_content=enhanced_content,
+            inserted_words=vocabulary,
+            glossary=glossary,
+            metrics=metrics,
             metadata=StoryMetadata(
-                word_count=0,
-                language_ratio={"vi": 50, "en": 50},
-                generation_time=0,
-                readability_score=0
-            ),
-            error="Story enhancement from existing story not yet implemented"
+                word_count=len(original_content.split()),
+                language_ratio=metrics.language_ratio,
+                generation_time=generation_time,
+                readability_score=metrics.readability_score
+            )
         )
         
     except Exception as e:

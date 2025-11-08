@@ -1,0 +1,12 @@
+[
+  {"word": "time", "definition": "The indefinite continued progress of existence", "vietnamese_translation": "thời gian", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "What time is it?", "ipa": "/taɪm/"},
+  {"word": "person", "definition": "A human being", "vietnamese_translation": "người", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "She is a nice person", "ipa": "/ˈpɜːrsn/"},
+  {"word": "year", "definition": "A period of 365 days", "vietnamese_translation": "năm", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "Happy new year!", "ipa": "/jɪr/"},
+  {"word": "way", "definition": "A method or manner", "vietnamese_translation": "cách", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "This is the best way", "ipa": "/weɪ/"},
+  {"word": "day", "definition": "A 24-hour period", "vietnamese_translation": "ngày", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "Have a nice day", "ipa": "/deɪ/"},
+  {"word": "thing", "definition": "An object or item", "vietnamese_translation": "thứ, vật", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "What is that thing?", "ipa": "/θɪŋ/"},
+  {"word": "man", "definition": "An adult male human", "vietnamese_translation": "đàn ông", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "He is a tall man", "ipa": "/mæn/"},
+  {"word": "world", "definition": "The earth and all people", "vietnamese_translation": "thế giới", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "Travel around the world", "ipa": "/wɜːrld/"},
+  {"word": "life", "definition": "The existence of a living being", "vietnamese_translation": "cuộc sống", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "Life is beautiful", "ipa": "/laɪf/"},
+  {"word": "hand", "definition": "The end part of the arm", "vietnamese_translation": "tay", "part_of_speech": "noun", "topic": "general", "difficulty": "beginner", "example": "Raise your hand", "ipa": "/hænd/"}
+]

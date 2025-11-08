@@ -123,24 +123,9 @@ export async function createAndSaveStory(
 
   console.log("✅ Story saved to DB:", story.id);
 
-  // Sync to ChromaDB for vector search (async, don't block)
-  (async () => {
-    try {
-      await fetch("http://localhost:8000/api/v1/sync-story-to-chromadb", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          story_id: story.id,
-          title: "Story",
-          content: content,
-          prompt: prompt,
-        }),
-      });
-      console.log("✅ Story synced to ChromaDB");
-    } catch (error) {
-      console.error("❌ Failed to sync to ChromaDB:", error);
-    }
-  })();
+  // Note: Stories with word insertion are automatically saved to ChromaDB
+  // via the /generate-story-with-insertion endpoint.
+  // No manual sync needed for those stories.
 
   return story;
 }

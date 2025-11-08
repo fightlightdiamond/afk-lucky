@@ -6,10 +6,10 @@ from openai import OpenAI, RateLimitError, APIError
 
 from ..config import settings
 
-# OpenAI client configuration
+# OpenAI client configuration for chat
 client = OpenAI(
     base_url=settings.azure_endpoint,
-    api_key=settings.azure_api_key
+    api_key=settings.azure_chat_api_key
 )
 
 # Function definitions for OpenAI
@@ -50,7 +50,7 @@ def call_openai_function(prompt: str, destination: str, days: int):
         OpenAI API response
     """
     response = client.chat.completions.create(
-        model=settings.azure_deployment_name,
+        model=settings.azure_chat_deployment,
         messages=[
             {"role": "user", "content": prompt}
         ],

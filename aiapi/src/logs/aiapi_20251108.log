@@ -1,0 +1,31 @@
+2025-11-08 12:21:39 | INFO     | aiapi | <module>:21 | Starting AI Services API...
+2025-11-08 12:21:39 | INFO     | aiapi | startup_event:116 | AI Services API started successfully
+2025-11-08 12:21:39 | INFO     | aiapi | startup_event:117 | Rate limiting: enabled
+2025-11-08 12:21:39 | INFO     | aiapi | startup_event:118 | ChromaDB path: ./chroma_data
+2025-11-08 12:21:39 | INFO     | aiapi | shutdown_event:124 | AI Services API shutting down...
+2025-11-08 12:22:28 | INFO     | aiapi | <module>:21 | Starting AI Services API...
+2025-11-08 12:22:28 | INFO     | aiapi | startup_event:116 | AI Services API started successfully
+2025-11-08 12:22:28 | INFO     | aiapi | startup_event:117 | Rate limiting: enabled
+2025-11-08 12:22:28 | INFO     | aiapi | startup_event:118 | ChromaDB path: ./chroma_data
+2025-11-08 12:22:52 | INFO     | aiapi | search_and_enhance_story:39 | Searching ChromaDB for stories matching: 'đi làm'
+2025-11-08 12:22:52 | WARNING  | aiapi | search_and_enhance_story:47 | No stories found in ChromaDB
+2025-11-08 12:25:13 | INFO     | aiapi | <module>:27 | Starting AI Services API...
+2025-11-08 12:25:13 | INFO     | aiapi | startup_event:122 | AI Services API started successfully
+2025-11-08 12:25:13 | INFO     | aiapi | startup_event:123 | Rate limiting: enabled
+2025-11-08 12:25:13 | INFO     | aiapi | startup_event:124 | ChromaDB path: ./chroma_data
+2025-11-08 12:25:41 | INFO     | aiapi | search_and_enhance_story:39 | Searching ChromaDB for stories matching: 'đi làm'
+2025-11-08 12:25:41 | WARNING  | aiapi | search_and_enhance_story:47 | No stories found in ChromaDB
+2025-11-08 12:30:49 | INFO     | aiapi | <module>:27 | Starting AI Services API...
+2025-11-08 12:30:49 | INFO     | aiapi | startup_event:122 | AI Services API started successfully
+2025-11-08 12:30:49 | INFO     | aiapi | startup_event:123 | Rate limiting: enabled
+2025-11-08 12:30:49 | INFO     | aiapi | startup_event:124 | ChromaDB path: ./chroma_data
+2025-11-08 12:31:39 | INFO     | aiapi | search_and_enhance_story:39 | Searching ChromaDB for stories matching: 'đi làm'
+2025-11-08 12:31:40 | WARNING  | aiapi | search_and_enhance_story:47 | No stories found in ChromaDB
+2025-11-08 12:33:59 | INFO     | aiapi | search_and_enhance_story:39 | Searching ChromaDB for stories matching: 'Học tập'
+2025-11-08 12:33:59 | WARNING  | aiapi | search_and_enhance_story:47 | No stories found in ChromaDB
+2025-11-08 12:34:02 | INFO     | aiapi | search_and_enhance_story:39 | Searching ChromaDB for stories matching: 'Học tập'
+2025-11-08 12:34:02 | WARNING  | aiapi | search_and_enhance_story:47 | No stories found in ChromaDB
+2025-11-08 12:34:03 | INFO     | aiapi | search_and_enhance_story:39 | Searching ChromaDB for stories matching: 'Học tập'
+2025-11-08 12:34:03 | WARNING  | aiapi | search_and_enhance_story:47 | No stories found in ChromaDB
+2025-11-08 12:36:05 | INFO     | aiapi | search_and_enhance_story:39 | Searching ChromaDB for stories matching: 'Học tập'
+2025-11-08 12:36:05 | WARNING  | aiapi | search_and_enhance_story:47 | No stories found in ChromaDB

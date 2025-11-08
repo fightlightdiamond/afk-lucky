@@ -1,0 +1,1522 @@
+[
+  {
+    "word": "time",
+    "definition": "Common English word: time",
+    "vietnamese_translation": "thời gian",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with time",
+    "ipa": "/time/"
+  },
+  {
+    "word": "person",
+    "definition": "Common English word: person",
+    "vietnamese_translation": "người",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with person",
+    "ipa": "/person/"
+  },
+  {
+    "word": "year",
+    "definition": "Common English word: year",
+    "vietnamese_translation": "năm",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with year",
+    "ipa": "/year/"
+  },
+  {
+    "word": "way",
+    "definition": "Common English word: way",
+    "vietnamese_translation": "cách",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with way",
+    "ipa": "/way/"
+  },
+  {
+    "word": "day",
+    "definition": "Common English word: day",
+    "vietnamese_translation": "ngày",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with day",
+    "ipa": "/day/"
+  },
+  {
+    "word": "thing",
+    "definition": "Common English word: thing",
+    "vietnamese_translation": "thứ, vật",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with thing",
+    "ipa": "/thing/"
+  },
+  {
+    "word": "man",
+    "definition": "Common English word: man",
+    "vietnamese_translation": "đàn ông",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with man",
+    "ipa": "/man/"
+  },
+  {
+    "word": "world",
+    "definition": "Common English word: world",
+    "vietnamese_translation": "thế giới",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with world",
+    "ipa": "/world/"
+  },
+  {
+    "word": "life",
+    "definition": "Common English word: life",
+    "vietnamese_translation": "cuộc sống",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with life",
+    "ipa": "/life/"
+  },
+  {
+    "word": "hand",
+    "definition": "Common English word: hand",
+    "vietnamese_translation": "tay",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with hand",
+    "ipa": "/hand/"
+  },
+  {
+    "word": "part",
+    "definition": "Common English word: part",
+    "vietnamese_translation": "phần",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with part",
+    "ipa": "/part/"
+  },
+  {
+    "word": "child",
+    "definition": "Common English word: child",
+    "vietnamese_translation": "trẻ em",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with child",
+    "ipa": "/child/"
+  },
+  {
+    "word": "eye",
+    "definition": "Common English word: eye",
+    "vietnamese_translation": "mắt",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with eye",
+    "ipa": "/eye/"
+  },
+  {
+    "word": "woman",
+    "definition": "Common English word: woman",
+    "vietnamese_translation": "phụ nữ",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with woman",
+    "ipa": "/woman/"
+  },
+  {
+    "word": "place",
+    "definition": "Common English word: place",
+    "vietnamese_translation": "nơi",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with place",
+    "ipa": "/place/"
+  },
+  {
+    "word": "case",
+    "definition": "Common English word: case",
+    "vietnamese_translation": "trường hợp",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "intermediate",
+    "example": "Example with case",
+    "ipa": "/case/"
+  },
+  {
+    "word": "point",
+    "definition": "Common English word: point",
+    "vietnamese_translation": "điểm",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with point",
+    "ipa": "/point/"
+  },
+  {
+    "word": "government",
+    "definition": "Common English word: government",
+    "vietnamese_translation": "chính phủ",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Example with government",
+    "ipa": "/government/"
+  },
+  {
+    "word": "company",
+    "definition": "Common English word: company",
+    "vietnamese_translation": "công ty",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Example with company",
+    "ipa": "/company/"
+  },
+  {
+    "word": "number",
+    "definition": "Common English word: number",
+    "vietnamese_translation": "số",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with number",
+    "ipa": "/number/"
+  },
+  {
+    "word": "group",
+    "definition": "Common English word: group",
+    "vietnamese_translation": "nhóm",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with group",
+    "ipa": "/group/"
+  },
+  {
+    "word": "problem",
+    "definition": "Common English word: problem",
+    "vietnamese_translation": "vấn đề",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with problem",
+    "ipa": "/problem/"
+  },
+  {
+    "word": "fact",
+    "definition": "Common English word: fact",
+    "vietnamese_translation": "sự thật",
+    "part_of_speech": "noun",
+    "topic": "general",
+    "difficulty": "intermediate",
+    "example": "Example with fact",
+    "ipa": "/fact/"
+  },
+  {
+    "word": "be",
+    "definition": "Common English word: be",
+    "vietnamese_translation": "là",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with be",
+    "ipa": "/be/"
+  },
+  {
+    "word": "have",
+    "definition": "Common English word: have",
+    "vietnamese_translation": "có",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with have",
+    "ipa": "/have/"
+  },
+  {
+    "word": "do",
+    "definition": "Common English word: do",
+    "vietnamese_translation": "làm",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with do",
+    "ipa": "/do/"
+  },
+  {
+    "word": "say",
+    "definition": "Common English word: say",
+    "vietnamese_translation": "nói",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with say",
+    "ipa": "/say/"
+  },
+  {
+    "word": "get",
+    "definition": "Common English word: get",
+    "vietnamese_translation": "lấy",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with get",
+    "ipa": "/get/"
+  },
+  {
+    "word": "make",
+    "definition": "Common English word: make",
+    "vietnamese_translation": "làm",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with make",
+    "ipa": "/make/"
+  },
+  {
+    "word": "go",
+    "definition": "Common English word: go",
+    "vietnamese_translation": "đi",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with go",
+    "ipa": "/go/"
+  },
+  {
+    "word": "know",
+    "definition": "Common English word: know",
+    "vietnamese_translation": "biết",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with know",
+    "ipa": "/know/"
+  },
+  {
+    "word": "take",
+    "definition": "Common English word: take",
+    "vietnamese_translation": "lấy",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with take",
+    "ipa": "/take/"
+  },
+  {
+    "word": "see",
+    "definition": "Common English word: see",
+    "vietnamese_translation": "thấy",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with see",
+    "ipa": "/see/"
+  },
+  {
+    "word": "come",
+    "definition": "Common English word: come",
+    "vietnamese_translation": "đến",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with come",
+    "ipa": "/come/"
+  },
+  {
+    "word": "think",
+    "definition": "Common English word: think",
+    "vietnamese_translation": "nghĩ",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with think",
+    "ipa": "/think/"
+  },
+  {
+    "word": "look",
+    "definition": "Common English word: look",
+    "vietnamese_translation": "nhìn",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with look",
+    "ipa": "/look/"
+  },
+  {
+    "word": "want",
+    "definition": "Common English word: want",
+    "vietnamese_translation": "muốn",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with want",
+    "ipa": "/want/"
+  },
+  {
+    "word": "give",
+    "definition": "Common English word: give",
+    "vietnamese_translation": "cho",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with give",
+    "ipa": "/give/"
+  },
+  {
+    "word": "use",
+    "definition": "Common English word: use",
+    "vietnamese_translation": "dùng",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with use",
+    "ipa": "/use/"
+  },
+  {
+    "word": "find",
+    "definition": "Common English word: find",
+    "vietnamese_translation": "tìm",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with find",
+    "ipa": "/find/"
+  },
+  {
+    "word": "tell",
+    "definition": "Common English word: tell",
+    "vietnamese_translation": "nói",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with tell",
+    "ipa": "/tell/"
+  },
+  {
+    "word": "ask",
+    "definition": "Common English word: ask",
+    "vietnamese_translation": "hỏi",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with ask",
+    "ipa": "/ask/"
+  },
+  {
+    "word": "seem",
+    "definition": "Common English word: seem",
+    "vietnamese_translation": "có vẻ",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "intermediate",
+    "example": "Example with seem",
+    "ipa": "/seem/"
+  },
+  {
+    "word": "feel",
+    "definition": "Common English word: feel",
+    "vietnamese_translation": "cảm thấy",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with feel",
+    "ipa": "/feel/"
+  },
+  {
+    "word": "try",
+    "definition": "Common English word: try",
+    "vietnamese_translation": "thử",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with try",
+    "ipa": "/try/"
+  },
+  {
+    "word": "leave",
+    "definition": "Common English word: leave",
+    "vietnamese_translation": "rời",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with leave",
+    "ipa": "/leave/"
+  },
+  {
+    "word": "call",
+    "definition": "Common English word: call",
+    "vietnamese_translation": "gọi",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with call",
+    "ipa": "/call/"
+  },
+  {
+    "word": "good",
+    "definition": "Common English word: good",
+    "vietnamese_translation": "tốt",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with good",
+    "ipa": "/good/"
+  },
+  {
+    "word": "new",
+    "definition": "Common English word: new",
+    "vietnamese_translation": "mới",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with new",
+    "ipa": "/new/"
+  },
+  {
+    "word": "first",
+    "definition": "Common English word: first",
+    "vietnamese_translation": "đầu tiên",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with first",
+    "ipa": "/first/"
+  },
+  {
+    "word": "last",
+    "definition": "Common English word: last",
+    "vietnamese_translation": "cuối cùng",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with last",
+    "ipa": "/last/"
+  },
+  {
+    "word": "long",
+    "definition": "Common English word: long",
+    "vietnamese_translation": "dài",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with long",
+    "ipa": "/long/"
+  },
+  {
+    "word": "great",
+    "definition": "Common English word: great",
+    "vietnamese_translation": "tuyệt vời",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with great",
+    "ipa": "/great/"
+  },
+  {
+    "word": "little",
+    "definition": "Common English word: little",
+    "vietnamese_translation": "nhỏ",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with little",
+    "ipa": "/little/"
+  },
+  {
+    "word": "own",
+    "definition": "Common English word: own",
+    "vietnamese_translation": "riêng",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "intermediate",
+    "example": "Example with own",
+    "ipa": "/own/"
+  },
+  {
+    "word": "other",
+    "definition": "Common English word: other",
+    "vietnamese_translation": "khác",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with other",
+    "ipa": "/other/"
+  },
+  {
+    "word": "old",
+    "definition": "Common English word: old",
+    "vietnamese_translation": "cũ",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with old",
+    "ipa": "/old/"
+  },
+  {
+    "word": "right",
+    "definition": "Common English word: right",
+    "vietnamese_translation": "đúng",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with right",
+    "ipa": "/right/"
+  },
+  {
+    "word": "big",
+    "definition": "Common English word: big",
+    "vietnamese_translation": "to",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with big",
+    "ipa": "/big/"
+  },
+  {
+    "word": "high",
+    "definition": "Common English word: high",
+    "vietnamese_translation": "cao",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with high",
+    "ipa": "/high/"
+  },
+  {
+    "word": "different",
+    "definition": "Common English word: different",
+    "vietnamese_translation": "khác nhau",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with different",
+    "ipa": "/different/"
+  },
+  {
+    "word": "small",
+    "definition": "Common English word: small",
+    "vietnamese_translation": "nhỏ",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with small",
+    "ipa": "/small/"
+  },
+  {
+    "word": "large",
+    "definition": "Common English word: large",
+    "vietnamese_translation": "lớn",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with large",
+    "ipa": "/large/"
+  },
+  {
+    "word": "next",
+    "definition": "Common English word: next",
+    "vietnamese_translation": "tiếp theo",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with next",
+    "ipa": "/next/"
+  },
+  {
+    "word": "early",
+    "definition": "Common English word: early",
+    "vietnamese_translation": "sớm",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with early",
+    "ipa": "/early/"
+  },
+  {
+    "word": "young",
+    "definition": "Common English word: young",
+    "vietnamese_translation": "trẻ",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with young",
+    "ipa": "/young/"
+  },
+  {
+    "word": "important",
+    "definition": "Common English word: important",
+    "vietnamese_translation": "quan trọng",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with important",
+    "ipa": "/important/"
+  },
+  {
+    "word": "few",
+    "definition": "Common English word: few",
+    "vietnamese_translation": "ít",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with few",
+    "ipa": "/few/"
+  },
+  {
+    "word": "public",
+    "definition": "Common English word: public",
+    "vietnamese_translation": "công cộng",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "intermediate",
+    "example": "Example with public",
+    "ipa": "/public/"
+  },
+  {
+    "word": "bad",
+    "definition": "Common English word: bad",
+    "vietnamese_translation": "xấu",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with bad",
+    "ipa": "/bad/"
+  },
+  {
+    "word": "same",
+    "definition": "Common English word: same",
+    "vietnamese_translation": "giống",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Example with same",
+    "ipa": "/same/"
+  },
+  {
+    "word": "able",
+    "definition": "Common English word: able",
+    "vietnamese_translation": "có thể",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "intermediate",
+    "example": "Example with able",
+    "ipa": "/able/"
+  },
+  {
+    "word": "software",
+    "definition": "Technology term: software",
+    "vietnamese_translation": "phần mềm",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use software in technology",
+    "ipa": "/software/"
+  },
+  {
+    "word": "hardware",
+    "definition": "Technology term: hardware",
+    "vietnamese_translation": "phần cứng",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use hardware in technology",
+    "ipa": "/hardware/"
+  },
+  {
+    "word": "program",
+    "definition": "Technology term: program",
+    "vietnamese_translation": "chương trình",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use program in technology",
+    "ipa": "/program/"
+  },
+  {
+    "word": "system",
+    "definition": "Technology term: system",
+    "vietnamese_translation": "hệ thống",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use system in technology",
+    "ipa": "/system/"
+  },
+  {
+    "word": "file",
+    "definition": "Technology term: file",
+    "vietnamese_translation": "tập tin",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use file in technology",
+    "ipa": "/file/"
+  },
+  {
+    "word": "folder",
+    "definition": "Technology term: folder",
+    "vietnamese_translation": "thư mục",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use folder in technology",
+    "ipa": "/folder/"
+  },
+  {
+    "word": "document",
+    "definition": "Technology term: document",
+    "vietnamese_translation": "tài liệu",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use document in technology",
+    "ipa": "/document/"
+  },
+  {
+    "word": "screen",
+    "definition": "Technology term: screen",
+    "vietnamese_translation": "màn hình",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use screen in technology",
+    "ipa": "/screen/"
+  },
+  {
+    "word": "mouse",
+    "definition": "Technology term: mouse",
+    "vietnamese_translation": "chuột",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use mouse in technology",
+    "ipa": "/mouse/"
+  },
+  {
+    "word": "printer",
+    "definition": "Technology term: printer",
+    "vietnamese_translation": "máy in",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use printer in technology",
+    "ipa": "/printer/"
+  },
+  {
+    "word": "scanner",
+    "definition": "Technology term: scanner",
+    "vietnamese_translation": "máy quét",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use scanner in technology",
+    "ipa": "/scanner/"
+  },
+  {
+    "word": "monitor",
+    "definition": "Technology term: monitor",
+    "vietnamese_translation": "màn hình",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use monitor in technology",
+    "ipa": "/monitor/"
+  },
+  {
+    "word": "speaker",
+    "definition": "Technology term: speaker",
+    "vietnamese_translation": "loa",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use speaker in technology",
+    "ipa": "/speaker/"
+  },
+  {
+    "word": "microphone",
+    "definition": "Technology term: microphone",
+    "vietnamese_translation": "micro",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use microphone in technology",
+    "ipa": "/microphone/"
+  },
+  {
+    "word": "camera",
+    "definition": "Technology term: camera",
+    "vietnamese_translation": "máy ảnh",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use camera in technology",
+    "ipa": "/camera/"
+  },
+  {
+    "word": "video",
+    "definition": "Technology term: video",
+    "vietnamese_translation": "video",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use video in technology",
+    "ipa": "/video/"
+  },
+  {
+    "word": "audio",
+    "definition": "Technology term: audio",
+    "vietnamese_translation": "âm thanh",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use audio in technology",
+    "ipa": "/audio/"
+  },
+  {
+    "word": "image",
+    "definition": "Technology term: image",
+    "vietnamese_translation": "hình ảnh",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use image in technology",
+    "ipa": "/image/"
+  },
+  {
+    "word": "photo",
+    "definition": "Technology term: photo",
+    "vietnamese_translation": "ảnh",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use photo in technology",
+    "ipa": "/photo/"
+  },
+  {
+    "word": "picture",
+    "definition": "Technology term: picture",
+    "vietnamese_translation": "hình",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use picture in technology",
+    "ipa": "/picture/"
+  },
+  {
+    "word": "click",
+    "definition": "Technology term: click",
+    "vietnamese_translation": "nhấp chuột",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use click in technology",
+    "ipa": "/click/"
+  },
+  {
+    "word": "type",
+    "definition": "Technology term: type",
+    "vietnamese_translation": "gõ",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use type in technology",
+    "ipa": "/type/"
+  },
+  {
+    "word": "save",
+    "definition": "Technology term: save",
+    "vietnamese_translation": "lưu",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use save in technology",
+    "ipa": "/save/"
+  },
+  {
+    "word": "delete",
+    "definition": "Technology term: delete",
+    "vietnamese_translation": "xóa",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use delete in technology",
+    "ipa": "/delete/"
+  },
+  {
+    "word": "copy",
+    "definition": "Technology term: copy",
+    "vietnamese_translation": "sao chép",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use copy in technology",
+    "ipa": "/copy/"
+  },
+  {
+    "word": "paste",
+    "definition": "Technology term: paste",
+    "vietnamese_translation": "dán",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use paste in technology",
+    "ipa": "/paste/"
+  },
+  {
+    "word": "cut",
+    "definition": "Technology term: cut",
+    "vietnamese_translation": "cắt",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use cut in technology",
+    "ipa": "/cut/"
+  },
+  {
+    "word": "print",
+    "definition": "Technology term: print",
+    "vietnamese_translation": "in",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use print in technology",
+    "ipa": "/print/"
+  },
+  {
+    "word": "scan",
+    "definition": "Technology term: scan",
+    "vietnamese_translation": "quét",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use scan in technology",
+    "ipa": "/scan/"
+  },
+  {
+    "word": "upload",
+    "definition": "Technology term: upload",
+    "vietnamese_translation": "tải lên",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use upload in technology",
+    "ipa": "/upload/"
+  },
+  {
+    "word": "install",
+    "definition": "Technology term: install",
+    "vietnamese_translation": "cài đặt",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use install in technology",
+    "ipa": "/install/"
+  },
+  {
+    "word": "update",
+    "definition": "Technology term: update",
+    "vietnamese_translation": "cập nhật",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use update in technology",
+    "ipa": "/update/"
+  },
+  {
+    "word": "connect",
+    "definition": "Technology term: connect",
+    "vietnamese_translation": "kết nối",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use connect in technology",
+    "ipa": "/connect/"
+  },
+  {
+    "word": "disconnect",
+    "definition": "Technology term: disconnect",
+    "vietnamese_translation": "ngắt kết nối",
+    "part_of_speech": "verb",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use disconnect in technology",
+    "ipa": "/disconnect/"
+  },
+  {
+    "word": "online",
+    "definition": "Technology term: online",
+    "vietnamese_translation": "trực tuyến",
+    "part_of_speech": "adjective",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use online in technology",
+    "ipa": "/online/"
+  },
+  {
+    "word": "offline",
+    "definition": "Technology term: offline",
+    "vietnamese_translation": "ngoại tuyến",
+    "part_of_speech": "adjective",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use offline in technology",
+    "ipa": "/offline/"
+  },
+  {
+    "word": "digital",
+    "definition": "Technology term: digital",
+    "vietnamese_translation": "kỹ thuật số",
+    "part_of_speech": "adjective",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "Use digital in technology",
+    "ipa": "/digital/"
+  },
+  {
+    "word": "virtual",
+    "definition": "Technology term: virtual",
+    "vietnamese_translation": "ảo",
+    "part_of_speech": "adjective",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "Use virtual in technology",
+    "ipa": "/virtual/"
+  },
+  {
+    "word": "wireless",
+    "definition": "Technology term: wireless",
+    "vietnamese_translation": "không dây",
+    "part_of_speech": "adjective",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "Use wireless in technology",
+    "ipa": "/wireless/"
+  },
+  {
+    "word": "mobile",
+    "definition": "Technology term: mobile",
+    "vietnamese_translation": "di động",
+    "part_of_speech": "adjective",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Use mobile in technology",
+    "ipa": "/mobile/"
+  },
+  {
+    "word": "business",
+    "definition": "Business term: business",
+    "vietnamese_translation": "kinh doanh",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use business in business",
+    "ipa": "/business/"
+  },
+  {
+    "word": "market",
+    "definition": "Business term: market",
+    "vietnamese_translation": "thị trường",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use market in business",
+    "ipa": "/market/"
+  },
+  {
+    "word": "customer",
+    "definition": "Business term: customer",
+    "vietnamese_translation": "khách hàng",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use customer in business",
+    "ipa": "/customer/"
+  },
+  {
+    "word": "client",
+    "definition": "Business term: client",
+    "vietnamese_translation": "khách hàng",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use client in business",
+    "ipa": "/client/"
+  },
+  {
+    "word": "product",
+    "definition": "Business term: product",
+    "vietnamese_translation": "sản phẩm",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use product in business",
+    "ipa": "/product/"
+  },
+  {
+    "word": "service",
+    "definition": "Business term: service",
+    "vietnamese_translation": "dịch vụ",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use service in business",
+    "ipa": "/service/"
+  },
+  {
+    "word": "price",
+    "definition": "Business term: price",
+    "vietnamese_translation": "giá",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use price in business",
+    "ipa": "/price/"
+  },
+  {
+    "word": "sale",
+    "definition": "Business term: sale",
+    "vietnamese_translation": "bán hàng",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use sale in business",
+    "ipa": "/sale/"
+  },
+  {
+    "word": "purchase",
+    "definition": "Business term: purchase",
+    "vietnamese_translation": "mua",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use purchase in business",
+    "ipa": "/purchase/"
+  },
+  {
+    "word": "order",
+    "definition": "Business term: order",
+    "vietnamese_translation": "đơn hàng",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use order in business",
+    "ipa": "/order/"
+  },
+  {
+    "word": "delivery",
+    "definition": "Business term: delivery",
+    "vietnamese_translation": "giao hàng",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use delivery in business",
+    "ipa": "/delivery/"
+  },
+  {
+    "word": "payment",
+    "definition": "Business term: payment",
+    "vietnamese_translation": "thanh toán",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use payment in business",
+    "ipa": "/payment/"
+  },
+  {
+    "word": "invoice",
+    "definition": "Business term: invoice",
+    "vietnamese_translation": "hóa đơn",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use invoice in business",
+    "ipa": "/invoice/"
+  },
+  {
+    "word": "receipt",
+    "definition": "Business term: receipt",
+    "vietnamese_translation": "biên lai",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use receipt in business",
+    "ipa": "/receipt/"
+  },
+  {
+    "word": "discount",
+    "definition": "Business term: discount",
+    "vietnamese_translation": "giảm giá",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use discount in business",
+    "ipa": "/discount/"
+  },
+  {
+    "word": "promotion",
+    "definition": "Business term: promotion",
+    "vietnamese_translation": "khuyến mãi",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use promotion in business",
+    "ipa": "/promotion/"
+  },
+  {
+    "word": "advertisement",
+    "definition": "Business term: advertisement",
+    "vietnamese_translation": "quảng cáo",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use advertisement in business",
+    "ipa": "/advertisement/"
+  },
+  {
+    "word": "brand",
+    "definition": "Business term: brand",
+    "vietnamese_translation": "thương hiệu",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use brand in business",
+    "ipa": "/brand/"
+  },
+  {
+    "word": "quality",
+    "definition": "Business term: quality",
+    "vietnamese_translation": "chất lượng",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use quality in business",
+    "ipa": "/quality/"
+  },
+  {
+    "word": "quantity",
+    "definition": "Business term: quantity",
+    "vietnamese_translation": "số lượng",
+    "part_of_speech": "noun",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use quantity in business",
+    "ipa": "/quantity/"
+  },
+  {
+    "word": "manage",
+    "definition": "Business term: manage",
+    "vietnamese_translation": "quản lý",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use manage in business",
+    "ipa": "/manage/"
+  },
+  {
+    "word": "organize",
+    "definition": "Business term: organize",
+    "vietnamese_translation": "tổ chức",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use organize in business",
+    "ipa": "/organize/"
+  },
+  {
+    "word": "plan",
+    "definition": "Business term: plan",
+    "vietnamese_translation": "lên kế hoạch",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "Use plan in business",
+    "ipa": "/plan/"
+  },
+  {
+    "word": "schedule",
+    "definition": "Business term: schedule",
+    "vietnamese_translation": "lên lịch",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use schedule in business",
+    "ipa": "/schedule/"
+  },
+  {
+    "word": "arrange",
+    "definition": "Business term: arrange",
+    "vietnamese_translation": "sắp xếp",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use arrange in business",
+    "ipa": "/arrange/"
+  },
+  {
+    "word": "coordinate",
+    "definition": "Business term: coordinate",
+    "vietnamese_translation": "phối hợp",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "Use coordinate in business",
+    "ipa": "/coordinate/"
+  },
+  {
+    "word": "supervise",
+    "definition": "Business term: supervise",
+    "vietnamese_translation": "giám sát",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "Use supervise in business",
+    "ipa": "/supervise/"
+  },
+  {
+    "word": "monitor",
+    "definition": "Business term: monitor",
+    "vietnamese_translation": "theo dõi",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use monitor in business",
+    "ipa": "/monitor/"
+  },
+  {
+    "word": "evaluate",
+    "definition": "Business term: evaluate",
+    "vietnamese_translation": "đánh giá",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "Use evaluate in business",
+    "ipa": "/evaluate/"
+  },
+  {
+    "word": "assess",
+    "definition": "Business term: assess",
+    "vietnamese_translation": "đánh giá",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "Use assess in business",
+    "ipa": "/assess/"
+  },
+  {
+    "word": "professional",
+    "definition": "Business term: professional",
+    "vietnamese_translation": "chuyên nghiệp",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use professional in business",
+    "ipa": "/professional/"
+  },
+  {
+    "word": "corporate",
+    "definition": "Business term: corporate",
+    "vietnamese_translation": "thuộc công ty",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "Use corporate in business",
+    "ipa": "/corporate/"
+  },
+  {
+    "word": "commercial",
+    "definition": "Business term: commercial",
+    "vietnamese_translation": "thương mại",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use commercial in business",
+    "ipa": "/commercial/"
+  },
+  {
+    "word": "financial",
+    "definition": "Business term: financial",
+    "vietnamese_translation": "tài chính",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use financial in business",
+    "ipa": "/financial/"
+  },
+  {
+    "word": "economic",
+    "definition": "Business term: economic",
+    "vietnamese_translation": "kinh tế",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use economic in business",
+    "ipa": "/economic/"
+  },
+  {
+    "word": "profitable",
+    "definition": "Business term: profitable",
+    "vietnamese_translation": "có lợi nhuận",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "Use profitable in business",
+    "ipa": "/profitable/"
+  },
+  {
+    "word": "competitive",
+    "definition": "Business term: competitive",
+    "vietnamese_translation": "cạnh tranh",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use competitive in business",
+    "ipa": "/competitive/"
+  },
+  {
+    "word": "effective",
+    "definition": "Business term: effective",
+    "vietnamese_translation": "hiệu quả",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use effective in business",
+    "ipa": "/effective/"
+  },
+  {
+    "word": "productive",
+    "definition": "Business term: productive",
+    "vietnamese_translation": "năng suất",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use productive in business",
+    "ipa": "/productive/"
+  },
+  {
+    "word": "reliable",
+    "definition": "Business term: reliable",
+    "vietnamese_translation": "đáng tin cậy",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "Use reliable in business",
+    "ipa": "/reliable/"
+  }
+]

@@ -131,7 +131,7 @@ class VocabularyWord(BaseModel):
 class InsertionPosition(BaseModel):
     sentence_index: int = Field(..., description="Index of the sentence in the story")
     word_index: int = Field(..., description="Index of the word position in the sentence")
-    position_type: Literal["noun", "verb", "adjective", "phrase"] = Field(..., description="Type of position")
+    position_type: Literal["noun", "verb", "adjective", "adverb", "phrase"] = Field(..., description="Type of position")
     score: float = Field(..., ge=0.0, le=1.0, description="Quality score for this position (0-1)")
     context: str = Field(..., description="Context around the insertion position")
 

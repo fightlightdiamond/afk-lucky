@@ -1,0 +1,17 @@
+{
+  "title": "Error",
+  "original_content": "",
+  "enhanced_content": "",
+  "inserted_words": [],
+  "metrics": {
+    "total_insertions": 0,
+    "insertion_density": 0.0,
+    "avg_position_score": 0.0,
+    "readability_score": 0,
+    "language_ratio": {
+      "vi": 50,
+      "en": 50
+    }
+  },
+  "error": "Unterminated string starting at: line 1 column 4807 (char 4806)"
+}

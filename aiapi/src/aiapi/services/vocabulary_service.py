@@ -255,14 +255,25 @@ def search_vocabulary_semantic(
                 include=["documents", "metadatas", "distances"]
             )
             
-            # Format results
+            # Format results - flatten metadata for frontend
             vocabulary = []
             if results["ids"] and len(results["ids"][0]) > 0:
                 for i in range(len(results["ids"][0])):
+                    metadata = results["metadatas"][0][i]
+                    similarity = 1 - results["distances"][0][i] if "distances" in results else None
+                    
+                    # Flatten metadata into the main object
+                    # Map backend field names to frontend expected names
                     vocab_item = {
-                        "id": results["ids"][0][i],
-                        "metadata": results["metadatas"][0][i],
-                        "similarity_score": 1 - results["distances"][0][i] if "distances" in results else None
+                        "word": metadata.get("word", ""),
+                        "definition": metadata.get("definition", ""),
+                        "vietnamese_translation": metadata.get("vietnamese", ""),  # Backend uses "vietnamese"
+                        "part_of_speech": metadata.get("pos", ""),  # Backend uses "pos"
+                        "topic": metadata.get("topic", ""),
+                        "difficulty": metadata.get("difficulty", ""),
+                        "example": metadata.get("example", ""),
+                        "ipa": metadata.get("ipa"),
+                        "similarity": similarity
                     }
                     vocabulary.append(vocab_item)
             

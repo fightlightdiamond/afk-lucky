@@ -1,0 +1,1842 @@
+[
+  {
+    "word": "computer",
+    "vietnamese_translation": "máy tính",
+    "part_of_speech": "noun",
+    "definition": "A machine used for storing and processing data electronically",
+    "example": "I use my computer to write documents.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/computer/"
+  },
+  {
+    "word": "software",
+    "vietnamese_translation": "phần mềm",
+    "part_of_speech": "noun",
+    "definition": "Programs and other operating information used by a computer",
+    "example": "The software needs to be updated regularly.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/software/"
+  },
+  {
+    "word": "hardware",
+    "vietnamese_translation": "phần cứng",
+    "part_of_speech": "noun",
+    "definition": "The physical components of a computer",
+    "example": "The hardware includes the monitor and keyboard.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/hardware/"
+  },
+  {
+    "word": "keyboard",
+    "vietnamese_translation": "bàn phím",
+    "part_of_speech": "noun",
+    "definition": "A device with keys used to input data into a computer",
+    "example": "I typed the message using the keyboard.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/keyboard/"
+  },
+  {
+    "word": "monitor",
+    "vietnamese_translation": "màn hình",
+    "part_of_speech": "noun",
+    "definition": "A screen used to display information from a computer",
+    "example": "The monitor is connected to the computer tower.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/monitor/"
+  },
+  {
+    "word": "mouse",
+    "vietnamese_translation": "chuột máy tính",
+    "part_of_speech": "noun",
+    "definition": "A hand-held device used to control the cursor on a computer screen",
+    "example": "I clicked the link using the mouse.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/mouse/"
+  },
+  {
+    "word": "internet",
+    "vietnamese_translation": "mạng internet",
+    "part_of_speech": "noun",
+    "definition": "A global network connecting millions of computers",
+    "example": "I searched for information on the internet.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/internet/"
+  },
+  {
+    "word": "website",
+    "vietnamese_translation": "trang web",
+    "part_of_speech": "noun",
+    "definition": "A location on the internet with pages of information",
+    "example": "I visited the website to read the news.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/website/"
+  },
+  {
+    "word": "email",
+    "vietnamese_translation": "thư điện tử",
+    "part_of_speech": "noun",
+    "definition": "A system for sending messages electronically",
+    "example": "I sent an email to my teacher yesterday.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/email/"
+  },
+  {
+    "word": "password",
+    "vietnamese_translation": "mật khẩu",
+    "part_of_speech": "noun",
+    "definition": "A secret word or code used for security",
+    "example": "You need a password to access your account.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/password/"
+  },
+  {
+    "word": "download",
+    "vietnamese_translation": "tải xuống",
+    "part_of_speech": "verb",
+    "definition": "To copy data from the internet to a computer",
+    "example": "I downloaded the app on my phone.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/download/"
+  },
+  {
+    "word": "upload",
+    "vietnamese_translation": "tải lên",
+    "part_of_speech": "verb",
+    "definition": "To send data from a computer to the internet",
+    "example": "I uploaded my photos to the website.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/upload/"
+  },
+  {
+    "word": "file",
+    "vietnamese_translation": "tệp tin",
+    "part_of_speech": "noun",
+    "definition": "A collection of information stored on a computer",
+    "example": "I saved the document as a file on my desktop.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/file/"
+  },
+  {
+    "word": "application",
+    "vietnamese_translation": "ứng dụng",
+    "part_of_speech": "noun",
+    "definition": "A program designed for a specific purpose",
+    "example": "I use a photo editing application on my phone.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/application/"
+  },
+  {
+    "word": "program",
+    "vietnamese_translation": "chương trình",
+    "part_of_speech": "noun",
+    "definition": "A set of instructions that a computer can execute",
+    "example": "I use a program to edit videos.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/program/"
+  },
+  {
+    "word": "code",
+    "vietnamese_translation": "mã",
+    "part_of_speech": "noun",
+    "definition": "Instructions written in a programming language",
+    "example": "I learned how to write code in school.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/code/"
+  },
+  {
+    "word": "robot",
+    "vietnamese_translation": "robot",
+    "part_of_speech": "noun",
+    "definition": "A machine that can perform tasks automatically",
+    "example": "The robot can clean the floor by itself.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/robot/"
+  },
+  {
+    "word": "battery",
+    "vietnamese_translation": "pin",
+    "part_of_speech": "noun",
+    "definition": "A device that stores energy for use in other devices",
+    "example": "My phone's battery needs charging.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/battery/"
+  },
+  {
+    "word": "signal",
+    "vietnamese_translation": "tín hiệu",
+    "part_of_speech": "noun",
+    "definition": "A transmitted message or data",
+    "example": "The internet signal is very weak here.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/signal/"
+  },
+  {
+    "word": "network",
+    "vietnamese_translation": "mạng lưới",
+    "part_of_speech": "noun",
+    "definition": "A system of connected devices for communication",
+    "example": "The home network connects all the computers.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/network/"
+  },
+  {
+    "word": "server",
+    "vietnamese_translation": "máy chủ",
+    "part_of_speech": "noun",
+    "definition": "A computer that provides data to other computers",
+    "example": "The website is hosted on a secure server.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/server/"
+  },
+  {
+    "word": "screen",
+    "vietnamese_translation": "màn hình",
+    "part_of_speech": "noun",
+    "definition": "The surface where information is displayed",
+    "example": "My phone screen cracked when I dropped it.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/screen/"
+  },
+  {
+    "word": "processor",
+    "vietnamese_translation": "bộ xử lý",
+    "part_of_speech": "noun",
+    "definition": "The part of a computer that performs calculations",
+    "example": "This computer has a fast processor.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/processor/"
+  },
+  {
+    "word": "cloud",
+    "vietnamese_translation": "đám mây",
+    "part_of_speech": "noun",
+    "definition": "Online storage space for data",
+    "example": "I store my photos in the cloud.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/cloud/"
+  },
+  {
+    "word": "database",
+    "vietnamese_translation": "cơ sở dữ liệu",
+    "part_of_speech": "noun",
+    "definition": "A system for organizing and storing data",
+    "example": "The company uses a database to track sales.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/database/"
+  },
+  {
+    "word": "technology",
+    "vietnamese_translation": "công nghệ",
+    "part_of_speech": "noun",
+    "definition": "The application of scientific knowledge for practical purposes",
+    "example": "Technology has improved our lives.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/technology/"
+  },
+  {
+    "word": "device",
+    "vietnamese_translation": "thiết bị",
+    "part_of_speech": "noun",
+    "definition": "A tool or machine made for a particular purpose",
+    "example": "I use a smart device to control my home lights.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/device/"
+  },
+  {
+    "word": "engineer",
+    "vietnamese_translation": "kỹ sư",
+    "part_of_speech": "noun",
+    "definition": "A person who designs and builds machines or structures",
+    "example": "She is an engineer working in the tech industry.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/engineer/"
+  },
+  {
+    "word": "developer",
+    "vietnamese_translation": "nhà phát triển",
+    "part_of_speech": "noun",
+    "definition": "A person who creates software programs",
+    "example": "The developer created a useful app for smartphones.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/developer/"
+  },
+  {
+    "word": "electricity",
+    "vietnamese_translation": "điện",
+    "part_of_speech": "noun",
+    "definition": "Energy used to power devices and machines",
+    "example": "The computer cannot work without electricity.",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "ipa": "/electricity/"
+  },
+  {
+    "word": "computer",
+    "vietnamese_translation": "máy tính",
+    "part_of_speech": "noun",
+    "definition": "An electronic device for processing data",
+    "example": "She uses a computer to complete her work.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/computer/"
+  },
+  {
+    "word": "software",
+    "vietnamese_translation": "phần mềm",
+    "part_of_speech": "noun",
+    "definition": "Programs and other operating information used by a computer",
+    "example": "This software helps you edit photos easily.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/software/"
+  },
+  {
+    "word": "hardware",
+    "vietnamese_translation": "phần cứng",
+    "part_of_speech": "noun",
+    "definition": "The physical parts of a computer system",
+    "example": "The technician repaired the hardware of my laptop.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/hardware/"
+  },
+  {
+    "word": "internet",
+    "vietnamese_translation": "internet",
+    "part_of_speech": "noun",
+    "definition": "A global network that connects millions of private, public, academic, and business networks",
+    "example": "I use the internet every day for research.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/internet/"
+  },
+  {
+    "word": "network",
+    "vietnamese_translation": "mạng lưới",
+    "part_of_speech": "noun",
+    "definition": "A system of connected computers or devices",
+    "example": "The office is connected through a local network.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/network/"
+  },
+  {
+    "word": "website",
+    "vietnamese_translation": "trang web",
+    "part_of_speech": "noun",
+    "definition": "A set of related web pages located under a single domain name",
+    "example": "Google is a popular search engine website.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/website/"
+  },
+  {
+    "word": "application",
+    "vietnamese_translation": "ứng dụng",
+    "part_of_speech": "noun",
+    "definition": "A program or software designed for a specific purpose",
+    "example": "She downloaded a new application for photo editing.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/application/"
+  },
+  {
+    "word": "algorithm",
+    "vietnamese_translation": "thuật toán",
+    "part_of_speech": "noun",
+    "definition": "A set of rules for solving a problem in a finite number of steps",
+    "example": "The search engine uses a complex algorithm to find results.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/algorithm/"
+  },
+  {
+    "word": "robot",
+    "vietnamese_translation": "người máy",
+    "part_of_speech": "noun",
+    "definition": "A machine capable of carrying out tasks automatically",
+    "example": "The factory uses robots to assemble cars.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/robot/"
+  },
+  {
+    "word": "database",
+    "vietnamese_translation": "cơ sở dữ liệu",
+    "part_of_speech": "noun",
+    "definition": "A collection of organized data that can be accessed electronically",
+    "example": "The company stores customer information in a database.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/database/"
+  },
+  {
+    "word": "password",
+    "vietnamese_translation": "mật khẩu",
+    "part_of_speech": "noun",
+    "definition": "A secret word or phrase used to gain access to a system",
+    "example": "You must enter your password to log in.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/password/"
+  },
+  {
+    "word": "update",
+    "vietnamese_translation": "cập nhật",
+    "part_of_speech": "verb",
+    "definition": "To make something more modern or current",
+    "example": "The app needs to update to the latest version.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/update/"
+  },
+  {
+    "word": "upload",
+    "vietnamese_translation": "tải lên",
+    "part_of_speech": "verb",
+    "definition": "To transfer data or files to a server or website",
+    "example": "She uploaded her photos to the social media platform.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/upload/"
+  },
+  {
+    "word": "download",
+    "vietnamese_translation": "tải xuống",
+    "part_of_speech": "verb",
+    "definition": "To transfer data or files from a server to your device",
+    "example": "I need to download the latest software update.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/download/"
+  },
+  {
+    "word": "cloud",
+    "vietnamese_translation": "đám mây",
+    "part_of_speech": "noun",
+    "definition": "Online storage that allows you to save and access data over the internet",
+    "example": "The cloud is very useful for storing important files.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/cloud/"
+  },
+  {
+    "word": "data",
+    "vietnamese_translation": "dữ liệu",
+    "part_of_speech": "noun",
+    "definition": "Facts or information used for analysis",
+    "example": "The company collects data to improve its products.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/data/"
+  },
+  {
+    "word": "programming",
+    "vietnamese_translation": "lập trình",
+    "part_of_speech": "noun",
+    "definition": "The process of writing computer programs",
+    "example": "She is learning programming to create her own apps.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/programming/"
+  },
+  {
+    "word": "code",
+    "vietnamese_translation": "mã",
+    "part_of_speech": "noun",
+    "definition": "A system of words, letters, or symbols used to represent information",
+    "example": "The developer wrote a new code for the software.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/code/"
+  },
+  {
+    "word": "technology",
+    "vietnamese_translation": "công nghệ",
+    "part_of_speech": "noun",
+    "definition": "The application of scientific knowledge for practical purposes",
+    "example": "Modern technology has changed the way we live.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/technology/"
+  },
+  {
+    "word": "device",
+    "vietnamese_translation": "thiết bị",
+    "part_of_speech": "noun",
+    "definition": "A machine or tool designed for a specific task",
+    "example": "This device helps measure temperature accurately.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/device/"
+  },
+  {
+    "word": "server",
+    "vietnamese_translation": "máy chủ",
+    "part_of_speech": "noun",
+    "definition": "A computer that provides data to other computers",
+    "example": "The server is down, so we can't access the website.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/server/"
+  },
+  {
+    "word": "keyboard",
+    "vietnamese_translation": "bàn phím",
+    "part_of_speech": "noun",
+    "definition": "A panel of keys for typing on a computer",
+    "example": "The keyboard is not working properly.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/keyboard/"
+  },
+  {
+    "word": "mouse",
+    "vietnamese_translation": "chuột",
+    "part_of_speech": "noun",
+    "definition": "A small device that is moved across a surface to control the cursor on a computer screen",
+    "example": "I need a new mouse for my computer.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/mouse/"
+  },
+  {
+    "word": "screen",
+    "vietnamese_translation": "màn hình",
+    "part_of_speech": "noun",
+    "definition": "The flat surface of a computer or TV where images are displayed",
+    "example": "The screen is very bright and clear.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/screen/"
+  },
+  {
+    "word": "monitor",
+    "vietnamese_translation": "màn hình máy tính",
+    "part_of_speech": "noun",
+    "definition": "A screen used to display information from a computer",
+    "example": "The monitor is connected to the computer by a cable.",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "ipa": "/monitor/"
+  },
+  {
+    "word": "school",
+    "vietnamese_translation": "trường học",
+    "part_of_speech": "noun",
+    "definition": "A place where children go to learn",
+    "example": "She goes to school every day.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/school/"
+  },
+  {
+    "word": "teacher",
+    "vietnamese_translation": "giáo viên",
+    "part_of_speech": "noun",
+    "definition": "A person who teaches students",
+    "example": "The teacher explained the lesson clearly.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/teacher/"
+  },
+  {
+    "word": "student",
+    "vietnamese_translation": "học sinh",
+    "part_of_speech": "noun",
+    "definition": "A person who is learning in a school or college",
+    "example": "The student studies hard for the exam.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/student/"
+  },
+  {
+    "word": "learn",
+    "vietnamese_translation": "học",
+    "part_of_speech": "verb",
+    "definition": "To gain knowledge or skill in something",
+    "example": "I want to learn how to speak English.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/learn/"
+  },
+  {
+    "word": "class",
+    "vietnamese_translation": "lớp học",
+    "part_of_speech": "noun",
+    "definition": "A group of students who are taught together",
+    "example": "Our class starts at 8 a.m.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/class/"
+  },
+  {
+    "word": "book",
+    "vietnamese_translation": "sách",
+    "part_of_speech": "noun",
+    "definition": "A set of written or printed pages bound together",
+    "example": "She borrowed a book from the library.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/book/"
+  },
+  {
+    "word": "pen",
+    "vietnamese_translation": "bút",
+    "part_of_speech": "noun",
+    "definition": "A tool used for writing with ink",
+    "example": "He writes his notes with a blue pen.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/pen/"
+  },
+  {
+    "word": "pencil",
+    "vietnamese_translation": "bút chì",
+    "part_of_speech": "noun",
+    "definition": "A tool used for writing or drawing with lead",
+    "example": "Use a pencil to draw the picture.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/pencil/"
+  },
+  {
+    "word": "desk",
+    "vietnamese_translation": "bàn học",
+    "part_of_speech": "noun",
+    "definition": "A piece of furniture used for writing or working",
+    "example": "There is a computer on my desk.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/desk/"
+  },
+  {
+    "word": "homework",
+    "vietnamese_translation": "bài tập về nhà",
+    "part_of_speech": "noun",
+    "definition": "Work given to students to do at home",
+    "example": "I have a lot of homework to do tonight.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/homework/"
+  },
+  {
+    "word": "exam",
+    "vietnamese_translation": "kỳ thi",
+    "part_of_speech": "noun",
+    "definition": "A formal test of knowledge or skill",
+    "example": "The final exam will be next week.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/exam/"
+  },
+  {
+    "word": "classroom",
+    "vietnamese_translation": "phòng học",
+    "part_of_speech": "noun",
+    "definition": "A room where students are taught",
+    "example": "The students are waiting in the classroom.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/classroom/"
+  },
+  {
+    "word": "study",
+    "vietnamese_translation": "học tập",
+    "part_of_speech": "verb",
+    "definition": "To spend time learning about a subject",
+    "example": "I study English every evening.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/study/"
+  },
+  {
+    "word": "read",
+    "vietnamese_translation": "đọc",
+    "part_of_speech": "verb",
+    "definition": "To look at and understand written words",
+    "example": "She likes to read books before bed.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/read/"
+  },
+  {
+    "word": "write",
+    "vietnamese_translation": "viết",
+    "part_of_speech": "verb",
+    "definition": "To form letters or words on a surface",
+    "example": "I need to write an essay for school.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/write/"
+  },
+  {
+    "word": "eraser",
+    "vietnamese_translation": "cục tẩy",
+    "part_of_speech": "noun",
+    "definition": "A small piece of rubber used to remove pencil marks",
+    "example": "I need an eraser to fix my mistake.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/eraser/"
+  },
+  {
+    "word": "notebook",
+    "vietnamese_translation": "vở",
+    "part_of_speech": "noun",
+    "definition": "A book with blank or lined pages for writing notes",
+    "example": "I wrote the lecture notes in my notebook.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/notebook/"
+  },
+  {
+    "word": "subject",
+    "vietnamese_translation": "môn học",
+    "part_of_speech": "noun",
+    "definition": "An area of knowledge studied in school",
+    "example": "Math is my favorite subject.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/subject/"
+  },
+  {
+    "word": "lesson",
+    "vietnamese_translation": "bài học",
+    "part_of_speech": "noun",
+    "definition": "A period of learning or teaching",
+    "example": "Today's lesson is about animals.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/lesson/"
+  },
+  {
+    "word": "teacher's desk",
+    "vietnamese_translation": "bàn giáo viên",
+    "part_of_speech": "phrase",
+    "definition": "A desk used by the teacher in a classroom",
+    "example": "The teacher is sitting at the teacher's desk.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/teacher's desk/"
+  },
+  {
+    "word": "homework assignment",
+    "vietnamese_translation": "bài tập về nhà",
+    "part_of_speech": "phrase",
+    "definition": "A task given to students to complete at home",
+    "example": "Our homework assignment is due tomorrow.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/homework assignment/"
+  },
+  {
+    "word": "chalkboard",
+    "vietnamese_translation": "bảng đen",
+    "part_of_speech": "noun",
+    "definition": "A black or green board for writing with chalk",
+    "example": "The teacher wrote the date on the chalkboard.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/chalkboard/"
+  },
+  {
+    "word": "blackboard",
+    "vietnamese_translation": "bảng đen",
+    "part_of_speech": "noun",
+    "definition": "Another word for chalkboard",
+    "example": "The blackboard was full of math problems.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/blackboard/"
+  },
+  {
+    "word": "whiteboard",
+    "vietnamese_translation": "bảng trắng",
+    "part_of_speech": "noun",
+    "definition": "A smooth white board for writing with markers",
+    "example": "The teacher uses the whiteboard for notes.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/whiteboard/"
+  },
+  {
+    "word": "marker",
+    "vietnamese_translation": "bút lông",
+    "part_of_speech": "noun",
+    "definition": "A pen with colored ink for writing on whiteboards",
+    "example": "We need a new marker for the whiteboard.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/marker/"
+  },
+  {
+    "word": "classmates",
+    "vietnamese_translation": "bạn cùng lớp",
+    "part_of_speech": "noun",
+    "definition": "The other students in the same class",
+    "example": "My classmates are very friendly.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/classmates/"
+  },
+  {
+    "word": "recess",
+    "vietnamese_translation": "giờ giải lao",
+    "part_of_speech": "noun",
+    "definition": "A short break during school",
+    "example": "Recess is my favorite part of the school day.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/recess/"
+  },
+  {
+    "word": "playground",
+    "vietnamese_translation": "sân chơi",
+    "part_of_speech": "noun",
+    "definition": "An outdoor area where children can play",
+    "example": "The children are playing on the playground.",
+    "topic": "education",
+    "difficulty": "beginner",
+    "ipa": "/playground/"
+  },
+  {
+    "word": "morning",
+    "vietnamese_translation": "buổi sáng",
+    "part_of_speech": "noun",
+    "definition": "The early part of the day, from sunrise until noon",
+    "example": "I usually go for a jog in the morning.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/morning/"
+  },
+  {
+    "word": "breakfast",
+    "vietnamese_translation": "bữa sáng",
+    "part_of_speech": "noun",
+    "definition": "The first meal of the day, usually eaten in the morning",
+    "example": "She had toast and coffee for breakfast.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/breakfast/"
+  },
+  {
+    "word": "work",
+    "vietnamese_translation": "làm việc",
+    "part_of_speech": "verb",
+    "definition": "To perform a job or task",
+    "example": "He works at a bank downtown.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/work/"
+  },
+  {
+    "word": "dinner",
+    "vietnamese_translation": "bữa tối",
+    "part_of_speech": "noun",
+    "definition": "The main meal of the day, usually eaten in the evening",
+    "example": "We had pasta for dinner last night.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/dinner/"
+  },
+  {
+    "word": "exercise",
+    "vietnamese_translation": "tập thể dục",
+    "part_of_speech": "verb",
+    "definition": "To participate in physical activity to improve health",
+    "example": "I try to exercise at least three times a week.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/exercise/"
+  },
+  {
+    "word": "homework",
+    "vietnamese_translation": "bài tập về nhà",
+    "part_of_speech": "noun",
+    "definition": "Schoolwork done at home",
+    "example": "She is finishing her math homework.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/homework/"
+  },
+  {
+    "word": "clean",
+    "vietnamese_translation": "dọn dẹp",
+    "part_of_speech": "verb",
+    "definition": "To remove dirt or mess from something",
+    "example": "I need to clean my room before guests arrive.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/clean/"
+  },
+  {
+    "word": "laundry",
+    "vietnamese_translation": "giặt đồ",
+    "part_of_speech": "noun",
+    "definition": "Clothes and linens that need to be washed or have been washed",
+    "example": "She folded the clean laundry and put it away.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/laundry/"
+  },
+  {
+    "word": "routine",
+    "vietnamese_translation": "thói quen",
+    "part_of_speech": "noun",
+    "definition": "A regular way of doing things",
+    "example": "My morning routine includes brushing my teeth and having coffee.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/routine/"
+  },
+  {
+    "word": "shower",
+    "vietnamese_translation": "tắm vòi sen",
+    "part_of_speech": "noun",
+    "definition": "A brief bath in which water is sprayed over the body",
+    "example": "I take a shower every morning before work.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/shower/"
+  },
+  {
+    "word": "lunch",
+    "vietnamese_translation": "bữa trưa",
+    "part_of_speech": "noun",
+    "definition": "A meal eaten in the middle of the day",
+    "example": "We had sandwiches for lunch.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/lunch/"
+  },
+  {
+    "word": "study",
+    "vietnamese_translation": "học tập",
+    "part_of_speech": "verb",
+    "definition": "To learn about a subject, especially in an educational setting",
+    "example": "I study English at the university.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/study/"
+  },
+  {
+    "word": "read",
+    "vietnamese_translation": "đọc",
+    "part_of_speech": "verb",
+    "definition": "To look at and comprehend the meaning of written words",
+    "example": "She likes to read books before going to sleep.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/read/"
+  },
+  {
+    "word": "sleep",
+    "vietnamese_translation": "ngủ",
+    "part_of_speech": "verb",
+    "definition": "To rest your body and mind by closing your eyes and becoming unconscious",
+    "example": "I usually sleep for eight hours every night.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/sleep/"
+  },
+  {
+    "word": "wake up",
+    "vietnamese_translation": "thức dậy",
+    "part_of_speech": "phrase",
+    "definition": "To stop sleeping and become conscious",
+    "example": "I wake up at 6 a.m. every day.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/wake up/"
+  },
+  {
+    "word": "cook",
+    "vietnamese_translation": "nấu ăn",
+    "part_of_speech": "verb",
+    "definition": "To prepare food by heating it",
+    "example": "I love to cook pasta for my family.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/cook/"
+  },
+  {
+    "word": "shopping",
+    "vietnamese_translation": "mua sắm",
+    "part_of_speech": "noun",
+    "definition": "The activity of buying goods from stores",
+    "example": "We went shopping for groceries on Sunday.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/shopping/"
+  },
+  {
+    "word": "relax",
+    "vietnamese_translation": "thư giãn",
+    "part_of_speech": "verb",
+    "definition": "To rest and enjoy free time",
+    "example": "I like to relax by listening to music.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/relax/"
+  },
+  {
+    "word": "friends",
+    "vietnamese_translation": "bạn bè",
+    "part_of_speech": "noun",
+    "definition": "People you know well and like",
+    "example": "I am meeting my friends at the park this afternoon.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/friends/"
+  },
+  {
+    "word": "family",
+    "vietnamese_translation": "gia đình",
+    "part_of_speech": "noun",
+    "definition": "A group of people related by blood or marriage",
+    "example": "I spend weekends with my family.",
+    "topic": "daily life",
+    "difficulty": "intermediate",
+    "ipa": "/family/"
+  },
+  {
+    "word": "routine",
+    "vietnamese_translation": "thói quen",
+    "part_of_speech": "noun",
+    "definition": "A regular course of action or behavior",
+    "example": "My morning routine includes coffee and a quick workout.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/routine/"
+  },
+  {
+    "word": "commute",
+    "vietnamese_translation": "đi lại",
+    "part_of_speech": "verb",
+    "definition": "To travel regularly between home and work or school",
+    "example": "She commutes to work by train every day.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/commute/"
+  },
+  {
+    "word": "errand",
+    "vietnamese_translation": "việc vặt",
+    "part_of_speech": "noun",
+    "definition": "A short trip to accomplish a specific task",
+    "example": "I have a few errands to run this afternoon.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/errand/"
+  },
+  {
+    "word": "meal",
+    "vietnamese_translation": "bữa ăn",
+    "part_of_speech": "noun",
+    "definition": "An occasion when food is eaten",
+    "example": "We shared a delicious meal with friends last night.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/meal/"
+  },
+  {
+    "word": "chores",
+    "vietnamese_translation": "công việc nhà",
+    "part_of_speech": "noun",
+    "definition": "Routine tasks, especially household ones",
+    "example": "I spent all morning doing household chores.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/chores/"
+  },
+  {
+    "word": "schedule",
+    "vietnamese_translation": "lịch trình",
+    "part_of_speech": "noun",
+    "definition": "A plan for carrying out a process or activity",
+    "example": "I have a busy schedule today with back-to-back meetings.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/schedule/"
+  },
+  {
+    "word": "habit",
+    "vietnamese_translation": "thói quen",
+    "part_of_speech": "noun",
+    "definition": "A regular practice or tendency",
+    "example": "Waking up early has become a habit for me.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/habit/"
+  },
+  {
+    "word": "multitask",
+    "vietnamese_translation": "làm nhiều việc cùng lúc",
+    "part_of_speech": "verb",
+    "definition": "To perform multiple tasks simultaneously",
+    "example": "She can multitask efficiently while working from home.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/multitask/"
+  },
+  {
+    "word": "deadline",
+    "vietnamese_translation": "hạn chót",
+    "part_of_speech": "noun",
+    "definition": "The latest time or date by which something should be completed",
+    "example": "We need to meet the project deadline by Friday.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/deadline/"
+  },
+  {
+    "word": "prioritize",
+    "vietnamese_translation": "ưu tiên",
+    "part_of_speech": "verb",
+    "definition": "To arrange or deal with in order of importance",
+    "example": "You should prioritize your tasks to manage your time better.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/prioritize/"
+  },
+  {
+    "word": "grocery",
+    "vietnamese_translation": "hàng tạp hóa",
+    "part_of_speech": "noun",
+    "definition": "Items of food sold in a supermarket or store",
+    "example": "I need to pick up some groceries after work.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/grocery/"
+  },
+  {
+    "word": "appointment",
+    "vietnamese_translation": "cuộc hẹn",
+    "part_of_speech": "noun",
+    "definition": "An arrangement to meet someone or do something at a particular time",
+    "example": "I have a doctor's appointment tomorrow morning.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/appointment/"
+  },
+  {
+    "word": "budget",
+    "vietnamese_translation": "ngân sách",
+    "part_of_speech": "noun",
+    "definition": "An estimate of income and expenditure for a set period of time",
+    "example": "We need to stick to our budget this month.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/budget/"
+  },
+  {
+    "word": "deadline-driven",
+    "vietnamese_translation": "bị thúc đẩy bởi hạn chót",
+    "part_of_speech": "adjective",
+    "definition": "Focused on meeting deadlines",
+    "example": "I work well in a deadline-driven environment.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/deadline-driven/"
+  },
+  {
+    "word": "procrastination",
+    "vietnamese_translation": "sự trì hoãn",
+    "part_of_speech": "noun",
+    "definition": "The action of delaying or postponing something",
+    "example": "Procrastination often leads to unnecessary stress.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/procrastination/"
+  },
+  {
+    "word": "productivity",
+    "vietnamese_translation": "năng suất",
+    "part_of_speech": "noun",
+    "definition": "The state or quality of being productive",
+    "example": "Taking regular breaks can boost your productivity.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/productivity/"
+  },
+  {
+    "word": "leisure",
+    "vietnamese_translation": "thời gian rảnh",
+    "part_of_speech": "noun",
+    "definition": "Free time when one is not working",
+    "example": "I like to spend my leisure time reading novels.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/leisure/"
+  },
+  {
+    "word": "household",
+    "vietnamese_translation": "hộ gia đình",
+    "part_of_speech": "noun",
+    "definition": "A group of people, often a family, who live together",
+    "example": "Our household uses a lot of electricity during summer.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/household/"
+  },
+  {
+    "word": "relaxation",
+    "vietnamese_translation": "sự thư giãn",
+    "part_of_speech": "noun",
+    "definition": "The state of being free from tension and anxiety",
+    "example": "Meditation is a great way to achieve relaxation.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/relaxation/"
+  },
+  {
+    "word": "time-consuming",
+    "vietnamese_translation": "tốn thời gian",
+    "part_of_speech": "adjective",
+    "definition": "Taking a lot of time to do",
+    "example": "Filing paperwork can be a very time-consuming task.",
+    "topic": "daily life",
+    "difficulty": "advanced",
+    "ipa": "/time-consuming/"
+  },
+  {
+    "word": "travel",
+    "vietnamese_translation": "du lịch",
+    "part_of_speech": "verb",
+    "definition": "To go from one place to another",
+    "example": "I love to travel to new countries.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/travel/"
+  },
+  {
+    "word": "passport",
+    "vietnamese_translation": "hộ chiếu",
+    "part_of_speech": "noun",
+    "definition": "An official document for traveling to other countries",
+    "example": "Don't forget to bring your passport!",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/passport/"
+  },
+  {
+    "word": "ticket",
+    "vietnamese_translation": "vé",
+    "part_of_speech": "noun",
+    "definition": "A piece of paper for travel, entry, or another purpose",
+    "example": "I bought a train ticket to Paris.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/ticket/"
+  },
+  {
+    "word": "luggage",
+    "vietnamese_translation": "hành lý",
+    "part_of_speech": "noun",
+    "definition": "Bags used for carrying belongings when traveling",
+    "example": "She packed her luggage for the trip.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/luggage/"
+  },
+  {
+    "word": "airport",
+    "vietnamese_translation": "sân bay",
+    "part_of_speech": "noun",
+    "definition": "A place where airplanes take off and land",
+    "example": "We arrived at the airport early.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/airport/"
+  },
+  {
+    "word": "flight",
+    "vietnamese_translation": "chuyến bay",
+    "part_of_speech": "noun",
+    "definition": "A journey made by airplane",
+    "example": "Our flight to Tokyo was delayed.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/flight/"
+  },
+  {
+    "word": "hotel",
+    "vietnamese_translation": "khách sạn",
+    "part_of_speech": "noun",
+    "definition": "A place where people stay when traveling",
+    "example": "We booked a hotel near the beach.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/hotel/"
+  },
+  {
+    "word": "map",
+    "vietnamese_translation": "bản đồ",
+    "part_of_speech": "noun",
+    "definition": "A drawing of an area showing roads, cities, etc.",
+    "example": "We used a map to find our way to the museum.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/map/"
+  },
+  {
+    "word": "adventure",
+    "vietnamese_translation": "cuộc phiêu lưu",
+    "part_of_speech": "noun",
+    "definition": "An exciting or unusual experience",
+    "example": "Traveling to the jungle was a great adventure.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/adventure/"
+  },
+  {
+    "word": "guide",
+    "vietnamese_translation": "hướng dẫn viên",
+    "part_of_speech": "noun",
+    "definition": "A person who shows you around a place",
+    "example": "The tour guide showed us the ancient temple.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/guide/"
+  },
+  {
+    "word": "backpack",
+    "vietnamese_translation": "ba lô",
+    "part_of_speech": "noun",
+    "definition": "A bag carried on your back",
+    "example": "I packed my clothes in a backpack.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/backpack/"
+  },
+  {
+    "word": "beach",
+    "vietnamese_translation": "bãi biển",
+    "part_of_speech": "noun",
+    "definition": "A sandy or rocky area by the sea",
+    "example": "We spent the day relaxing on the beach.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/beach/"
+  },
+  {
+    "word": "bus",
+    "vietnamese_translation": "xe buýt",
+    "part_of_speech": "noun",
+    "definition": "A large vehicle for carrying passengers",
+    "example": "We took a bus to the city center.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/bus/"
+  },
+  {
+    "word": "car",
+    "vietnamese_translation": "xe ô tô",
+    "part_of_speech": "noun",
+    "definition": "A vehicle with four wheels for driving",
+    "example": "We rented a car to explore the countryside.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/car/"
+  },
+  {
+    "word": "train",
+    "vietnamese_translation": "tàu hỏa",
+    "part_of_speech": "noun",
+    "definition": "A long vehicle that runs on tracks",
+    "example": "The train to London leaves at 10:00 AM.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/train/"
+  },
+  {
+    "word": "plane",
+    "vietnamese_translation": "máy bay",
+    "part_of_speech": "noun",
+    "definition": "A vehicle that flies in the air",
+    "example": "We boarded the plane for our flight to New York.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/plane/"
+  },
+  {
+    "word": "cruise",
+    "vietnamese_translation": "du thuyền",
+    "part_of_speech": "noun",
+    "definition": "A trip on a large ship for pleasure",
+    "example": "They went on a luxury cruise to the Caribbean.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/cruise/"
+  },
+  {
+    "word": "destination",
+    "vietnamese_translation": "điểm đến",
+    "part_of_speech": "noun",
+    "definition": "The place you are traveling to",
+    "example": "Our destination is the Eiffel Tower.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/destination/"
+  },
+  {
+    "word": "suitcase",
+    "vietnamese_translation": "va li",
+    "part_of_speech": "noun",
+    "definition": "A large rectangular bag for carrying clothes",
+    "example": "He packed his clothes into a suitcase.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/suitcase/"
+  },
+  {
+    "word": "adventure",
+    "vietnamese_translation": "phiêu lưu",
+    "part_of_speech": "noun",
+    "definition": "An exciting or risky experience",
+    "example": "They went on an adventure through the mountains.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/adventure/"
+  },
+  {
+    "word": "passport control",
+    "vietnamese_translation": "kiểm tra hộ chiếu",
+    "part_of_speech": "phrase",
+    "definition": "The place where passports are checked",
+    "example": "We waited in line at passport control.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/passport control/"
+  },
+  {
+    "word": "customs",
+    "vietnamese_translation": "hải quan",
+    "part_of_speech": "noun",
+    "definition": "The place where goods and baggage are checked",
+    "example": "We went through customs at the airport.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/customs/"
+  },
+  {
+    "word": "tourist",
+    "vietnamese_translation": "khách du lịch",
+    "part_of_speech": "noun",
+    "definition": "A person who is traveling for pleasure",
+    "example": "The city is full of tourists in the summer.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/tourist/"
+  },
+  {
+    "word": "journey",
+    "vietnamese_translation": "chuyến đi",
+    "part_of_speech": "noun",
+    "definition": "A trip from one place to another",
+    "example": "The journey to the mountains took 3 hours.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/journey/"
+  },
+  {
+    "word": "holiday",
+    "vietnamese_translation": "kỳ nghỉ",
+    "part_of_speech": "noun",
+    "definition": "A time when you don't have to work or study",
+    "example": "We are going to the beach for our holiday.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/holiday/"
+  },
+  {
+    "word": "tour",
+    "vietnamese_translation": "chuyến du lịch",
+    "part_of_speech": "noun",
+    "definition": "A journey for sightseeing or learning about a place",
+    "example": "The tour of the city was very interesting.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/tour/"
+  },
+  {
+    "word": "island",
+    "vietnamese_translation": "hòn đảo",
+    "part_of_speech": "noun",
+    "definition": "A piece of land surrounded by water",
+    "example": "We are planning a trip to a tropical island.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/island/"
+  },
+  {
+    "word": "adventure",
+    "vietnamese_translation": "phiêu lưu",
+    "part_of_speech": "noun",
+    "definition": "An exciting or risky experience",
+    "example": "Climbing the mountain was an incredible adventure.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/adventure/"
+  },
+  {
+    "word": "visa",
+    "vietnamese_translation": "thị thực",
+    "part_of_speech": "noun",
+    "definition": "An official document that allows you to enter a country",
+    "example": "You need a visa to visit the USA.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/visa/"
+  },
+  {
+    "word": "backpacking",
+    "vietnamese_translation": "đi phượt",
+    "part_of_speech": "noun",
+    "definition": "Traveling with a backpack, often on a budget",
+    "example": "They went backpacking across Europe.",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "ipa": "/backpacking/"
+  },
+  {
+    "word": "airport",
+    "vietnamese_translation": "sân bay",
+    "part_of_speech": "noun",
+    "definition": "A place where airplanes take off and land",
+    "example": "We arrived at the airport two hours before our flight.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/airport/"
+  },
+  {
+    "word": "passport",
+    "vietnamese_translation": "hộ chiếu",
+    "part_of_speech": "noun",
+    "definition": "An official document for traveling to other countries",
+    "example": "Don't forget to bring your passport for the trip.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/passport/"
+  },
+  {
+    "word": "luggage",
+    "vietnamese_translation": "hành lý",
+    "part_of_speech": "noun",
+    "definition": "Bags and suitcases carried while traveling",
+    "example": "She packed her luggage the night before the flight.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/luggage/"
+  },
+  {
+    "word": "destination",
+    "vietnamese_translation": "điểm đến",
+    "part_of_speech": "noun",
+    "definition": "The place where someone is going",
+    "example": "Our destination is a beautiful island in the Pacific.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/destination/"
+  },
+  {
+    "word": "ticket",
+    "vietnamese_translation": "vé",
+    "part_of_speech": "noun",
+    "definition": "A piece of paper allowing entry or travel",
+    "example": "I booked a train ticket to London.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/ticket/"
+  },
+  {
+    "word": "adventure",
+    "vietnamese_translation": "cuộc phiêu lưu",
+    "part_of_speech": "noun",
+    "definition": "An exciting or unusual experience",
+    "example": "They went on an adventure to explore the jungle.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/adventure/"
+  },
+  {
+    "word": "suitcase",
+    "vietnamese_translation": "vali",
+    "part_of_speech": "noun",
+    "definition": "A case used for carrying clothes and belongings",
+    "example": "He packed his clothes into a large suitcase.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/suitcase/"
+  },
+  {
+    "word": "tourist",
+    "vietnamese_translation": "khách du lịch",
+    "part_of_speech": "noun",
+    "definition": "A person who travels for pleasure",
+    "example": "Tourists love visiting famous landmarks.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/tourist/"
+  },
+  {
+    "word": "itinerary",
+    "vietnamese_translation": "hành trình",
+    "part_of_speech": "noun",
+    "definition": "A planned route or journey",
+    "example": "Our itinerary includes visits to three different cities.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/itinerary/"
+  },
+  {
+    "word": "explore",
+    "vietnamese_translation": "thám hiểm",
+    "part_of_speech": "verb",
+    "definition": "To travel through an area for discovery",
+    "example": "We plan to explore the ancient ruins tomorrow.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/explore/"
+  },
+  {
+    "word": "journey",
+    "vietnamese_translation": "hành trình",
+    "part_of_speech": "noun",
+    "definition": "The act of traveling from one place to another",
+    "example": "The train journey took about five hours.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/journey/"
+  },
+  {
+    "word": "guide",
+    "vietnamese_translation": "hướng dẫn viên",
+    "part_of_speech": "noun",
+    "definition": "A person who shows others the way",
+    "example": "Our guide explained the history of the castle.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/guide/"
+  },
+  {
+    "word": "adventurous",
+    "vietnamese_translation": "thích phiêu lưu",
+    "part_of_speech": "adjective",
+    "definition": "Willing to take risks or try new things",
+    "example": "She is very adventurous and loves traveling to new countries.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/adventurous/"
+  },
+  {
+    "word": "souvenir",
+    "vietnamese_translation": "quà lưu niệm",
+    "part_of_speech": "noun",
+    "definition": "An item bought as a reminder of a place",
+    "example": "I brought back a small souvenir from my trip to Paris.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/souvenir/"
+  },
+  {
+    "word": "backpack",
+    "vietnamese_translation": "ba lô",
+    "part_of_speech": "noun",
+    "definition": "A bag carried on the back for traveling",
+    "example": "He packed his backpack and went hiking.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/backpack/"
+  },
+  {
+    "word": "hotel",
+    "vietnamese_translation": "khách sạn",
+    "part_of_speech": "noun",
+    "definition": "A place where people stay when traveling",
+    "example": "We checked into a nice hotel by the beach.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/hotel/"
+  },
+  {
+    "word": "landmark",
+    "vietnamese_translation": "địa danh",
+    "part_of_speech": "noun",
+    "definition": "A well-known building or place",
+    "example": "The Eiffel Tower is a famous landmark in Paris.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/landmark/"
+  },
+  {
+    "word": "map",
+    "vietnamese_translation": "bản đồ",
+    "part_of_speech": "noun",
+    "definition": "A visual representation of an area",
+    "example": "We used a map to find our way around the city.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/map/"
+  },
+  {
+    "word": "cruise",
+    "vietnamese_translation": "chuyến du thuyền",
+    "part_of_speech": "noun",
+    "definition": "A journey on a ship for pleasure",
+    "example": "They went on a cruise to the Caribbean.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/cruise/"
+  },
+  {
+    "word": "visa",
+    "vietnamese_translation": "thị thực",
+    "part_of_speech": "noun",
+    "definition": "An official document allowing entry to a country",
+    "example": "You need a visa to travel to some countries.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/visa/"
+  },
+  {
+    "word": "backpacker",
+    "vietnamese_translation": "người đi du lịch bụi",
+    "part_of_speech": "noun",
+    "definition": "Someone who travels with a backpack",
+    "example": "Backpackers often stay in hostels to save money.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/backpacker/"
+  },
+  {
+    "word": "customs",
+    "vietnamese_translation": "hải quan",
+    "part_of_speech": "noun",
+    "definition": "The place where goods or people are checked when entering a country",
+    "example": "We had to go through customs at the airport.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/customs/"
+  },
+  {
+    "word": "foreigner",
+    "vietnamese_translation": "người nước ngoài",
+    "part_of_speech": "noun",
+    "definition": "A person from another country",
+    "example": "The city is popular with foreigners.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/foreigner/"
+  },
+  {
+    "word": "flight",
+    "vietnamese_translation": "chuyến bay",
+    "part_of_speech": "noun",
+    "definition": "A journey in an aircraft",
+    "example": "We booked an early morning flight to New York.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/flight/"
+  },
+  {
+    "word": "backpacking",
+    "vietnamese_translation": "du lịch bụi",
+    "part_of_speech": "noun",
+    "definition": "Traveling with a backpack and minimal luggage",
+    "example": "Backpacking through Europe was an amazing experience.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/backpacking/"
+  },
+  {
+    "word": "adventure",
+    "vietnamese_translation": "phiêu lưu",
+    "part_of_speech": "noun",
+    "definition": "An exciting or unusual experience",
+    "example": "The trip was a real adventure.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/adventure/"
+  },
+  {
+    "word": "travel",
+    "vietnamese_translation": "du lịch",
+    "part_of_speech": "verb",
+    "definition": "To go from one place to another",
+    "example": "He loves to travel and explore new cultures.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/travel/"
+  },
+  {
+    "word": "resort",
+    "vietnamese_translation": "khu nghỉ dưỡng",
+    "part_of_speech": "noun",
+    "definition": "A place for relaxation and recreation",
+    "example": "The resort is located by the ocean.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/resort/"
+  },
+  {
+    "word": "sightseeing",
+    "vietnamese_translation": "tham quan",
+    "part_of_speech": "noun",
+    "definition": "The activity of visiting interesting places",
+    "example": "We spent the afternoon sightseeing in the old town.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/sightseeing/"
+  },
+  {
+    "word": "local",
+    "vietnamese_translation": "người địa phương",
+    "part_of_speech": "noun",
+    "definition": "A person living in a particular area",
+    "example": "The locals were very friendly and helpful.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/local/"
+  },
+  {
+    "word": "visa-free",
+    "vietnamese_translation": "miễn thị thực",
+    "part_of_speech": "phrase",
+    "definition": "Travel that does not require a visa",
+    "example": "Many countries allow visa-free travel for short stays.",
+    "topic": "travel",
+    "difficulty": "intermediate",
+    "ipa": "/visa-free/"
+  }
+]

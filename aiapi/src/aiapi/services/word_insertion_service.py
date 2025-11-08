@@ -24,10 +24,10 @@ from .chromadb_service import get_embedding
 
 logger = get_logger(__name__)
 
-# OpenAI client configuration
+# OpenAI client configuration for chat
 client = OpenAI(
     base_url=settings.azure_endpoint,
-    api_key=settings.azure_api_key
+    api_key=settings.azure_chat_api_key
 )
 
 
@@ -69,7 +69,7 @@ Sentence: "{sentence}"
 
 For each position, identify:
 1. The word index (position in the sentence, 0-based)
-2. The type of position (noun, verb, adjective, or phrase)
+2. The type of position (noun, verb, adjective, adverb, or phrase)
 3. A quality score (0.0 to 1.0) based on:
    - Grammatical correctness after insertion
    - Readability impact
@@ -89,7 +89,7 @@ Return at least 3 positions with score > 0.7. Format as JSON array:
 Only return the JSON array, no other text."""
 
             response = client.chat.completions.create(
-                model=settings.azure_deployment_name,
+                model=settings.azure_chat_deployment,
                 messages=[
                     {
                         "role": "system",
@@ -165,23 +165,37 @@ def analyze_story_structure(story: str) -> List[InsertionPosition]:
     sentences = re.split(r'[.!?]+', story)
     sentences = [s.strip() for s in sentences if s.strip()]
     
+    logger.info(f"Story split into {len(sentences)} sentences")
+    
     all_positions = []
+    skipped = 0
     
     for sentence_idx, sentence in enumerate(sentences):
-        # Skip very short sentences
-        if len(sentence.split()) < 5:
+        word_count = len(sentence.split())
+        
+        # Skip very short sentences (lowered from 5 to 3 words)
+        if word_count < 3:
+            logger.debug(f"Skipping sentence {sentence_idx}: too short ({word_count} words)")
+            skipped += 1
             continue
         
-        # Analyze each sentence
-        positions = analyze_sentence_structure(sentence)
+        logger.debug(f"Analyzing sentence {sentence_idx}: {word_count} words")
         
-        # Update sentence index
-        for position in positions:
-            position.sentence_index = sentence_idx
-        
-        all_positions.extend(positions)
+        try:
+            # Analyze each sentence
+            positions = analyze_sentence_structure(sentence)
+            
+            # Update sentence index
+            for position in positions:
+                position.sentence_index = sentence_idx
+            
+            all_positions.extend(positions)
+            logger.debug(f"Sentence {sentence_idx}: found {len(positions)} positions")
+        except Exception as e:
+            logger.error(f"Error analyzing sentence {sentence_idx}: {e}")
+            continue
     
-    print(f"✅ Analyzed {len(sentences)} sentences, found {len(all_positions)} total positions")
+    logger.info(f"✅ Analyzed {len(sentences)} sentences ({skipped} skipped), found {len(all_positions)} total positions")
     return all_positions
 
 
@@ -271,10 +285,11 @@ def select_vocabulary_for_insertion(
                 difficulty=difficulty,
                 limit=count * 3
             )
-            # Merge with semantic results
-            existing_ids = {w["id"] for w in candidate_words}
+            # Merge with semantic results (use 'word' as unique key instead of 'id')
+            existing_words = {w.get("word") or w.get("metadata", {}).get("word") for w in candidate_words}
             for word in topic_words:
-                if word["id"] not in existing_ids:
+                word_text = word.get("word") or word.get("metadata", {}).get("word")
+                if word_text and word_text not in existing_words:
                     candidate_words.append(word)
             
             print(f"📊 Added {len(topic_words)} words from topic search, total: {len(candidate_words)}")
@@ -283,7 +298,7 @@ def select_vocabulary_for_insertion(
         if position_type:
             candidate_words = [
                 w for w in candidate_words
-                if w["metadata"].get("pos") == position_type
+                if (w["metadata"].get("pos") or w["metadata"].get("part_of_speech")) == position_type
             ]
             print(f"📊 Filtered to {len(candidate_words)} words matching position type: {position_type}")
         
@@ -291,7 +306,11 @@ def select_vocabulary_for_insertion(
         scored_words = []
         
         for word_data in candidate_words:
-            metadata = word_data["metadata"]
+            # Handle both formats: with 'metadata' key or flat structure
+            if "metadata" in word_data:
+                metadata = word_data["metadata"]
+            else:
+                metadata = word_data
             
             # Get word embedding if available, otherwise calculate
             word_embedding = word_data.get("embedding")
@@ -316,8 +335,8 @@ def select_vocabulary_for_insertion(
             vocab_word = VocabularyWord(
                 word=metadata["word"],
                 definition=metadata["definition"],
-                vietnamese_translation=metadata["vietnamese"],
-                part_of_speech=metadata["pos"],
+                vietnamese_translation=metadata.get("vietnamese") or metadata.get("vietnamese_translation", ""),
+                part_of_speech=metadata.get("pos") or metadata.get("part_of_speech", "noun"),
                 topic=metadata["topic"],
                 difficulty=metadata["difficulty"],
                 example=metadata["example"],
@@ -328,6 +347,11 @@ def select_vocabulary_for_insertion(
                 "word": vocab_word,
                 "score": final_score
             })
+        
+        print(f"📊 Scored {len(scored_words)} words total")
+        if scored_words:
+            top_scores = [(w["word"].word, w["score"]) for w in scored_words[:3]]
+            print(f"   Top scores: {top_scores}")
         
         # Sort by score (highest first)
         scored_words.sort(key=lambda x: x["score"], reverse=True)
@@ -613,7 +637,7 @@ If grammar is correct, return is_valid: true with empty issues array.
 Only return the JSON object, no other text."""
 
         response = client.chat.completions.create(
-            model=settings.azure_deployment_name,
+            model=settings.azure_chat_deployment,
             messages=[
                 {
                     "role": "system",

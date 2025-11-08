@@ -8,9 +8,12 @@ from openai import AzureOpenAI
 import os
 
 # Azure OpenAI configuration for embeddings
-AZURE_OPENAI_EMBEDDING_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
-AZURE_OPENAI_EMBEDDING_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
-AZURE_OPENAI_EMBED_MODEL = "text-embedding-3-small"
+# Import from config instead of environment variables
+from ..config import settings
+
+AZURE_OPENAI_EMBEDDING_API_KEY = settings.azure_embedding_api_key
+AZURE_OPENAI_EMBEDDING_ENDPOINT = settings.azure_endpoint
+AZURE_OPENAI_EMBED_MODEL = settings.azure_embedding_deployment
 
 # Lazy initialization
 _embedding_client = None

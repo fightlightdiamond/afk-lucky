@@ -32,11 +32,11 @@ router = APIRouter()
 @router.post("/generate-story-with-insertion", response_model=StoryInsertionResponse)
 def generate_story_with_insertion_api(req: StoryInsertionRequest):
     """
-    Generate a new story with English word insertion.
+    Search for a relevant story and enhance it with English word insertion.
     
-    This endpoint creates a Vietnamese story based on the prompt and intelligently
-    inserts English vocabulary words at natural positions. The inserted words are
-    formatted in bold with Vietnamese translations.
+    This endpoint searches ChromaDB for stories matching the prompt, selects the best match,
+    and intelligently inserts English vocabulary words at natural positions. The inserted 
+    words are formatted in bold with Vietnamese translations.
     
     Args:
         req: StoryInsertionRequest with prompt, config, preferences, and insertion_config
@@ -45,10 +45,12 @@ def generate_story_with_insertion_api(req: StoryInsertionRequest):
         StoryInsertionResponse with original and enhanced content, glossary, and metrics
         
     Raises:
-        HTTPException: If story generation fails
+        HTTPException: If story search or enhancement fails
     """
     try:
-        result = generate_story_with_insertion(req)
+        # Use story search instead of generation for faster, more reliable results
+        from ..services.story_search_service import search_and_enhance_story
+        result = search_and_enhance_story(req)
         
         # Check if there was an error but still return partial results
         if result.error and not result.enhanced_content:
@@ -61,7 +63,7 @@ def generate_story_with_insertion_api(req: StoryInsertionRequest):
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Failed to generate story with insertion: {str(e)}"
+            detail=f"Failed to search and enhance story: {str(e)}"
         )
 
 

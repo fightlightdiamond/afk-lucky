@@ -7,10 +7,10 @@ from openai import OpenAI, RateLimitError, APIError
 from ..config import settings
 from ..models import ChatMessage, ChatResponse
 
-# OpenAI client configuration
+# OpenAI client configuration for chat
 client = OpenAI(
     base_url=settings.azure_endpoint,
-    api_key=settings.azure_api_key
+    api_key=settings.azure_chat_api_key
 )
 
 @retry(
@@ -48,7 +48,7 @@ def generate_chat_response(message: ChatMessage) -> ChatResponse:
         
         # Use updated API call without deprecated parameters
         response = client.chat.completions.create(
-            model=settings.azure_deployment_name,
+            model=settings.azure_chat_deployment,
             messages=messages,
             max_tokens=1024,
             temperature=0.7

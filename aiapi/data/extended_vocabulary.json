@@ -1,0 +1,342 @@
+[
+  {
+    "word": "quickly",
+    "definition": "At a fast speed or in a short time",
+    "vietnamese_translation": "nhanh chóng",
+    "part_of_speech": "adverb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "She quickly finished her homework",
+    "ipa": "/ˈkwɪk.li/"
+  },
+  {
+    "word": "carefully",
+    "definition": "With attention and caution",
+    "vietnamese_translation": "cẩn thận",
+    "part_of_speech": "adverb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Please read the instructions carefully",
+    "ipa": "/ˈker.fəl.i/"
+  },
+  {
+    "word": "slowly",
+    "definition": "At a low speed",
+    "vietnamese_translation": "chậm rãi",
+    "part_of_speech": "adverb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "The turtle moved slowly across the road",
+    "ipa": "/ˈsloʊ.li/"
+  },
+  {
+    "word": "easily",
+    "definition": "Without difficulty",
+    "vietnamese_translation": "dễ dàng",
+    "part_of_speech": "adverb",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "He can easily solve this problem",
+    "ipa": "/ˈiː.zəl.i/"
+  },
+  {
+    "word": "suddenly",
+    "definition": "Happening quickly and unexpectedly",
+    "vietnamese_translation": "đột nhiên",
+    "part_of_speech": "adverb",
+    "topic": "general",
+    "difficulty": "intermediate",
+    "example": "The weather suddenly changed",
+    "ipa": "/ˈsʌd.ən.li/"
+  },
+  {
+    "word": "frequently",
+    "definition": "Often; many times",
+    "vietnamese_translation": "thường xuyên",
+    "part_of_speech": "adverb",
+    "topic": "general",
+    "difficulty": "intermediate",
+    "example": "I frequently visit my grandparents",
+    "ipa": "/ˈfriː.kwənt.li/"
+  },
+  {
+    "word": "efficiently",
+    "definition": "In a way that achieves maximum productivity with minimum effort",
+    "vietnamese_translation": "hiệu quả",
+    "part_of_speech": "adverb",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "The team worked efficiently to meet the deadline",
+    "ipa": "/ɪˈfɪʃ.ənt.li/"
+  },
+  {
+    "word": "significantly",
+    "definition": "In a sufficiently great or important way",
+    "vietnamese_translation": "đáng kể",
+    "part_of_speech": "adverb",
+    "topic": "general",
+    "difficulty": "advanced",
+    "example": "Sales have increased significantly this quarter",
+    "ipa": "/sɪɡˈnɪf.ɪ.kənt.li/"
+  },
+  {
+    "word": "beautiful",
+    "definition": "Pleasing to the senses or mind",
+    "vietnamese_translation": "đẹp",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "The sunset was beautiful",
+    "ipa": "/ˈbjuː.tɪ.fəl/"
+  },
+  {
+    "word": "important",
+    "definition": "Of great significance or value",
+    "vietnamese_translation": "quan trọng",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "Education is very important",
+    "ipa": "/ɪmˈpɔːr.tənt/"
+  },
+  {
+    "word": "difficult",
+    "definition": "Hard to do or understand",
+    "vietnamese_translation": "khó khăn",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "The exam was very difficult",
+    "ipa": "/ˈdɪf.ɪ.kəlt/"
+  },
+  {
+    "word": "interesting",
+    "definition": "Arousing curiosity or attention",
+    "vietnamese_translation": "thú vị",
+    "part_of_speech": "adjective",
+    "topic": "general",
+    "difficulty": "beginner",
+    "example": "The book was very interesting",
+    "ipa": "/ˈɪn.trə.stɪŋ/"
+  },
+  {
+    "word": "comfortable",
+    "definition": "Providing physical ease and relaxation",
+    "vietnamese_translation": "thoải mái",
+    "part_of_speech": "adjective",
+    "topic": "daily life",
+    "difficulty": "beginner",
+    "example": "This chair is very comfortable",
+    "ipa": "/ˈkʌm.fər.tə.bəl/"
+  },
+  {
+    "word": "successful",
+    "definition": "Achieving desired aims or results",
+    "vietnamese_translation": "thành công",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "She is a successful entrepreneur",
+    "ipa": "/səkˈses.fəl/"
+  },
+  {
+    "word": "efficient",
+    "definition": "Working in a well-organized way without wasting time or energy",
+    "vietnamese_translation": "hiệu quả",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "We need a more efficient system",
+    "ipa": "/ɪˈfɪʃ.ənt/"
+  },
+  {
+    "word": "sustainable",
+    "definition": "Able to be maintained at a certain rate or level",
+    "vietnamese_translation": "bền vững",
+    "part_of_speech": "adjective",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "The company focuses on sustainable development",
+    "ipa": "/səˈsteɪ.nə.bəl/"
+  },
+  {
+    "word": "comprehensive",
+    "definition": "Complete and including everything necessary",
+    "vietnamese_translation": "toàn diện",
+    "part_of_speech": "adjective",
+    "topic": "education",
+    "difficulty": "advanced",
+    "example": "The report provides a comprehensive analysis",
+    "ipa": "/ˌkɑːm.prɪˈhen.sɪv/"
+  },
+  {
+    "word": "study",
+    "definition": "To learn about a subject",
+    "vietnamese_translation": "học, nghiên cứu",
+    "part_of_speech": "verb",
+    "topic": "education",
+    "difficulty": "beginner",
+    "example": "I study English every day",
+    "ipa": "/ˈstʌd.i/"
+  },
+  {
+    "word": "work",
+    "definition": "To do a job or task",
+    "vietnamese_translation": "làm việc",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "beginner",
+    "example": "I work at a technology company",
+    "ipa": "/wɜːrk/"
+  },
+  {
+    "word": "travel",
+    "definition": "To go from one place to another",
+    "vietnamese_translation": "du lịch",
+    "part_of_speech": "verb",
+    "topic": "travel",
+    "difficulty": "beginner",
+    "example": "I love to travel to new countries",
+    "ipa": "/ˈtræv.əl/"
+  },
+  {
+    "word": "communicate",
+    "definition": "To share information with others",
+    "vietnamese_translation": "giao tiếp",
+    "part_of_speech": "verb",
+    "topic": "general",
+    "difficulty": "intermediate",
+    "example": "It's important to communicate clearly",
+    "ipa": "/kəˈmjuː.nɪ.keɪt/"
+  },
+  {
+    "word": "develop",
+    "definition": "To grow or cause to grow and become more advanced",
+    "vietnamese_translation": "phát triển",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "intermediate",
+    "example": "We need to develop new skills",
+    "ipa": "/dɪˈvel.əp/"
+  },
+  {
+    "word": "implement",
+    "definition": "To put a plan or system into operation",
+    "vietnamese_translation": "thực hiện",
+    "part_of_speech": "verb",
+    "topic": "business",
+    "difficulty": "advanced",
+    "example": "We will implement the new strategy next month",
+    "ipa": "/ˈɪm.plə.ment/"
+  },
+  {
+    "word": "analyze",
+    "definition": "To examine something in detail",
+    "vietnamese_translation": "phân tích",
+    "part_of_speech": "verb",
+    "topic": "education",
+    "difficulty": "advanced",
+    "example": "Scientists analyze data to find patterns",
+    "ipa": "/ˈæn.əl.aɪz/"
+  },
+  {
+    "word": "computer",
+    "definition": "An electronic device for storing and processing data",
+    "vietnamese_translation": "máy tính",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "I use my computer for work",
+    "ipa": "/kəmˈpjuː.tər/"
+  },
+  {
+    "word": "internet",
+    "definition": "A global network connecting millions of computers",
+    "vietnamese_translation": "internet",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "I search for information on the internet",
+    "ipa": "/ˈɪn.tɚ.net/"
+  },
+  {
+    "word": "email",
+    "definition": "Electronic mail sent over the internet",
+    "vietnamese_translation": "thư điện tử",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Please send me an email",
+    "ipa": "/ˈiː.meɪl/"
+  },
+  {
+    "word": "website",
+    "definition": "A set of related web pages on the internet",
+    "vietnamese_translation": "trang web",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Our company has a new website",
+    "ipa": "/ˈweb.saɪt/"
+  },
+  {
+    "word": "password",
+    "definition": "A secret word or phrase used to gain access",
+    "vietnamese_translation": "mật khẩu",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "beginner",
+    "example": "Don't share your password with anyone",
+    "ipa": "/ˈpæs.wɜːrd/"
+  },
+  {
+    "word": "data",
+    "definition": "Facts and statistics collected for analysis",
+    "vietnamese_translation": "dữ liệu",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "We need to backup our data regularly",
+    "ipa": "/ˈdeɪ.tə/"
+  },
+  {
+    "word": "server",
+    "definition": "A computer that provides data to other computers",
+    "vietnamese_translation": "máy chủ",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "The server is down for maintenance",
+    "ipa": "/ˈsɜːr.vər/"
+  },
+  {
+    "word": "programming",
+    "definition": "The process of writing computer programs",
+    "vietnamese_translation": "lập trình",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "intermediate",
+    "example": "I'm learning programming languages",
+    "ipa": "/ˈproʊ.ɡræm.ɪŋ/"
+  },
+  {
+    "word": "machine learning",
+    "definition": "A type of AI that allows computers to learn from data",
+    "vietnamese_translation": "học máy",
+    "part_of_speech": "phrase",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "Machine learning is used in recommendation systems",
+    "ipa": "/məˈʃiːn ˈlɜːr.nɪŋ/"
+  },
+  {
+    "word": "automation",
+    "definition": "The use of technology to perform tasks without human intervention",
+    "vietnamese_translation": "tự động hóa",
+    "part_of_speech": "noun",
+    "topic": "technology",
+    "difficulty": "advanced",
+    "example": "Automation increases efficiency in manufacturing",
+    "ipa": "/ˌɔː.təˈmeɪ.ʃən/"
+  }
+]

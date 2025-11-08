@@ -8,6 +8,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+# Load .env file from project root
+env_path = Path(__file__).parent.parent.parent / '.env'
+load_dotenv(env_path)
 
 from .routers import itinerary, story, chat, tts, story_search, word_insertion
 from .config import settings
@@ -71,11 +77,12 @@ async def general_exception_handler(request: Request, exc: Exception):
 app.add_middleware(RateLimitMiddleware)
 
 # Add CORS middleware for frontend integration
+# Allow all origins for development (hackathon demo)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # Add your frontend URLs
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_origins=["*"],  # Allow all origins for development
+    allow_credentials=False,  # Must be False when allow_origins is ["*"]
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
     expose_headers=["*"],
     max_age=3600,
