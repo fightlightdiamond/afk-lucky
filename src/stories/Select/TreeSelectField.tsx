@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { CheckTreePicker, CheckTreePickerProps, PickerHandle } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import styles from "./CustomInput.module.css";
+import inputStyles from "./CustomInput.module.css";
+import styles from "./TreeSelectField.module.css";
 import clsx from "clsx";
 import svgPaths from "../imports/svg-h5c2mha0kr";
 import LoadingSpinner from "./LoadingSpinner";
@@ -121,37 +122,31 @@ const TreeSelectField = React.forwardRef<PickerHandle, TreeSelectFieldProps>(
 
     return (
       <div
-        className="content-stretch flex flex-col gap-[4px] items-start w-full"
+        className={styles.treeSelectFieldWrapper}
         data-name="Tree Select field"
       >
         {/* Label */}
         {label && (
-          <div className="content-stretch flex font-['Pretendard',sans-serif] gap-[4px] items-center leading-[normal] not-italic relative shrink-0 text-nowrap whitespace-pre">
-            <p className="relative shrink-0 text-[#282c3b] text-[13px] m-0">
-              {label}
-            </p>
-            {required && (
-              <p className="relative shrink-0 text-[#d05c4e] text-[12px] m-0">
-                *
-              </p>
-            )}
+          <div className={styles.labelWrapper}>
+            <p className={styles.labelText}>{label}</p>
+            {required && <p className={styles.requiredIndicator}>*</p>}
           </div>
         )}
 
         {/* Tree Select field */}
-        <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full">
-          <div className="w-full">
+        <div className={styles.fieldWrapper}>
+          <div className={styles.inputContainer}>
             <CheckTreePicker
               ref={ref}
               className={clsx(
-                styles.customSelectWrapper,
+                inputStyles.customSelectWrapper,
                 size === "xs"
-                  ? styles.sizeXs
+                  ? inputStyles.sizeXs
                   : size === "sm"
-                  ? styles.sizeSm
+                  ? inputStyles.sizeSm
                   : size === "lg"
-                  ? styles.sizeLg
-                  : styles.sizeMd,
+                  ? inputStyles.sizeLg
+                  : inputStyles.sizeMd,
                 error && "error-state"
               )}
               cascade={true}
@@ -169,25 +164,23 @@ const TreeSelectField = React.forwardRef<PickerHandle, TreeSelectFieldProps>(
 
           {/* Help message */}
           {helpMessage && (
-            <div className="content-stretch flex gap-[4px] items-center relative shrink-0">
+            <div className={styles.helpMessageWrapper}>
               {/* Icon */}
               <div
-                className="overflow-clip relative shrink-0 size-[12px]"
+                className={styles.helpIcon}
                 data-name={
                   error ? "Filled/alert-triangle" : "Filled/info-circle"
                 }
               >
                 <div
-                  className={
-                    error
-                      ? "absolute inset-[6.96%_4.17%_12.52%_4.17%]"
-                      : "absolute inset-[8.33%_8.33%_8.3%_8.33%]"
-                  }
+                  className={`${styles.helpIconInner} ${
+                    error ? styles.helpIconInnerError : styles.helpIconInnerInfo
+                  }`}
                   data-name="Vector"
                 >
-                  <div className="absolute inset-0">
+                  <div className={styles.helpIconSvgWrapper}>
                     <svg
-                      className="block size-full"
+                      className={styles.helpIconSvg}
                       fill="none"
                       preserveAspectRatio="none"
                       viewBox={error ? "0 0 11 10" : "0 0 10 10"}
@@ -205,14 +198,13 @@ const TreeSelectField = React.forwardRef<PickerHandle, TreeSelectFieldProps>(
 
               {/* Message text */}
               <div
-                className={clsx(
-                  "flex flex-col font-['Pretendard',sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[13px] text-nowrap",
-                  error ? "text-[#d05c4e]" : "text-[#787e95]"
-                )}
+                className={`${styles.helpMessageText} ${
+                  error
+                    ? styles.helpMessageTextError
+                    : styles.helpMessageTextInfo
+                }`}
               >
-                <p className="leading-[normal] whitespace-pre m-0">
-                  {helpMessage}
-                </p>
+                <p className={styles.helpMessageParagraph}>{helpMessage}</p>
               </div>
             </div>
           )}

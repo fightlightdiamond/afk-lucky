@@ -153,50 +153,47 @@ const CustomInput = React.forwardRef<PickerHandle, CustomInputProps>(
               {(prefixText || prefixIcon) && (
                 <div
                   className={clsx(
-                    "box-border content-stretch flex gap-[10px] h-full items-center relative shrink-0",
+                    styles.prefixBox,
                     prefixInside
                       ? prefixText
-                        ? "bg-[#f1f3f8] px-[12px] py-[10px] justify-center"
-                        : "bg-[#f1f3f8] px-[12px] py-[10px]"
+                        ? styles.prefixBoxInsideText
+                        : styles.prefixBoxInsideIcon
                       : prefixText
-                      ? "justify-center pl-[12px] pr-[10px] py-[8px]"
-                      : "pl-[12px] pr-[10px] py-[10px]"
+                      ? styles.prefixBoxOutsideText
+                      : styles.prefixBoxOutsideIcon
                   )}
                   data-name="↳ hasPrefix: true"
                 >
                   {prefixInside && (
                     <div
                       aria-hidden="true"
-                      className="absolute border border-[#d1d5de] border-solid inset-0 pointer-events-none"
+                      className={styles.prefixBoxBorder}
                     />
                   )}
 
                   {prefixIcon ? (
-                    <div
-                      className="overflow-clip relative shrink-0 size-[16px]"
-                      data-name="edit-16"
-                    >
+                    <div className={styles.prefixIcon} data-name="edit-16">
                       {prefixIcon}
                     </div>
                   ) : (
-                    <p className="font-['Pretendard',sans-serif] leading-[normal] not-italic relative shrink-0 text-[#282c3b] text-[12px] text-nowrap whitespace-pre m-0">
-                      {prefixText}
-                    </p>
+                    <p className={styles.prefixText}>{prefixText}</p>
                   )}
                 </div>
               )}
 
               {/* Value/Placeholder area */}
               <div
-                className="basis-0 grow min-h-px min-w-px relative shrink-0"
+                className={styles.valueArea}
                 data-name="_Select/placeholderText"
               >
-                <div className="flex flex-row items-center size-full">
-                  <div className="box-border content-stretch flex gap-[8px] items-center pl-[10px] pr-[8px] py-0 relative w-full">
+                <div className={styles.valueAreaInner}>
+                  <div className={styles.valueContent}>
                     <p
                       className={clsx(
-                        "[white-space-collapse:collapse] basis-0 font-['Pretendard',sans-serif] grow leading-[normal] min-h-px min-w-px not-italic overflow-ellipsis overflow-hidden relative shrink-0 text-[12px] text-nowrap m-0",
-                        showPlaceholder ? "text-[#787e95]" : "text-[#282c3b]"
+                        styles.valueText,
+                        showPlaceholder
+                          ? styles.valueTextPlaceholder
+                          : styles.valueTextSelected
                       )}
                     >
                       {showPlaceholder ? placeholder : displayText}
@@ -205,13 +202,11 @@ const CustomInput = React.forwardRef<PickerHandle, CustomInputProps>(
                     {/* Badge component - chỉ hiển thị nếu có badge và có value */}
                     {badge && value && (
                       <div
-                        className="bg-[#131313] box-border content-stretch flex gap-[2px] items-center justify-center overflow-clip px-[6px] py-[5px] relative rounded-[25px] shrink-0"
+                        className={styles.badge}
                         data-name="Component/ BadgeX"
                       >
-                        <div className="flex flex-col font-['Inter',sans-serif] justify-end leading-[0] not-italic relative shrink-0 text-[10px] text-nowrap text-white">
-                          <p className="leading-[9px] whitespace-pre m-0">
-                            {badge}
-                          </p>
+                        <div className={styles.badgeText}>
+                          <p className={styles.badgeTextInner}>{badge}</p>
                         </div>
                       </div>
                     )}
@@ -221,16 +216,16 @@ const CustomInput = React.forwardRef<PickerHandle, CustomInputProps>(
 
               {/* Icon */}
               <div
-                className="overflow-clip relative shrink-0 size-[16px]"
+                className={styles.chevronIcon}
                 data-name="Outline/chevron-down"
               >
                 <div
-                  className="absolute inset-[34.38%_21.88%]"
+                  className={styles.chevronIconInner}
                   data-name="Vector (Stroke)"
                 >
-                  <div className="absolute inset-0">
+                  <div className={styles.chevronIconSvgWrapper}>
                     <svg
-                      className="block size-full"
+                      className={styles.chevronIconSvg}
                       fill="none"
                       preserveAspectRatio="none"
                       viewBox="0 0 9 5"

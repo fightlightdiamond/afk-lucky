@@ -1,0 +1,115 @@
+.treeSelectFieldWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.labelWrapper {
+  display: flex;
+  font-family: "Pretendard", sans-serif;
+  gap: 4px;
+  align-items: center;
+  line-height: normal;
+  font-style: normal;
+  position: relative;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.labelText {
+  position: relative;
+  flex-shrink: 0;
+  color: #282c3b;
+  font-size: 13px;
+  margin: 0;
+}
+
+.requiredIndicator {
+  position: relative;
+  flex-shrink: 0;
+  color: #d05c4e;
+  font-size: 12px;
+  margin: 0;
+}
+
+.fieldWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.inputContainer {
+  width: 100%;
+}
+
+.helpMessageWrapper {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.helpIcon {
+  overflow: clip;
+  position: relative;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+}
+
+.helpIconInner {
+  position: absolute;
+}
+
+.helpIconInnerError {
+  inset: 6.96% 4.17% 12.52% 4.17%;
+}
+
+.helpIconInnerInfo {
+  inset: 8.33% 8.33% 8.3% 8.33%;
+}
+
+.helpIconSvgWrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.helpIconSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.helpMessageText {
+  display: flex;
+  flex-direction: column;
+  font-family: "Pretendard", sans-serif;
+  justify-content: center;
+  line-height: 0;
+  font-style: normal;
+  position: relative;
+  flex-shrink: 0;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.helpMessageTextError {
+  color: #d05c4e;
+}
+
+.helpMessageTextInfo {
+  color: #787e95;
+}
+
+.helpMessageParagraph {
+  line-height: normal;
+  white-space: pre;
+  margin: 0;
+}
