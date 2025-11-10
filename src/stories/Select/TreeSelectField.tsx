@@ -2,11 +2,10 @@ import React, { useState, useCallback, useEffect } from "react";
 import { CheckTreePicker, CheckTreePickerProps, PickerHandle } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 import inputStyles from "./CustomInput.module.css";
-import styles from "./TreeSelectField.module.css";
 import clsx from "clsx";
-import svgPaths from "../imports/svg-h5c2mha0kr";
 import LoadingSpinner from "./LoadingSpinner";
 import SelectAllFooter from "./SelectAllFooter";
+import SelectFieldWrapper from "./SelectFieldWrapper";
 
 export interface TreeSelectFieldProps extends CheckTreePickerProps {
   label?: string;
@@ -121,95 +120,38 @@ const TreeSelectField = React.forwardRef<PickerHandle, TreeSelectFieldProps>(
     }, [showSelectAll, handleSelectAll, isAllSelected]);
 
     return (
-      <div
-        className={styles.treeSelectFieldWrapper}
-        data-name="Tree Select field"
+      <SelectFieldWrapper
+        label={label}
+        required={required}
+        helpMessage={helpMessage}
+        error={error}
+        size={size}
       >
-        {/* Label */}
-        {label && (
-          <div className={styles.labelWrapper}>
-            <p className={styles.labelText}>{label}</p>
-            {required && <p className={styles.requiredIndicator}>*</p>}
-          </div>
-        )}
-
-        {/* Tree Select field */}
-        <div className={styles.fieldWrapper}>
-          <div className={styles.inputContainer}>
-            <CheckTreePicker
-              ref={ref}
-              className={clsx(
-                inputStyles.customSelectWrapper,
-                size === "xs"
-                  ? inputStyles.sizeXs
-                  : size === "sm"
-                  ? inputStyles.sizeSm
-                  : size === "lg"
-                  ? inputStyles.sizeLg
-                  : inputStyles.sizeMd,
-                error && "error-state"
-              )}
-              cascade={true}
-              uncheckableItemValues={[]}
-              block
-              countable={false}
-              data={data}
-              value={selectedValues}
-              onChange={handleChange}
-              renderMenu={loading || renderMenu ? customRenderMenu : undefined}
-              renderExtraFooter={renderExtraFooter}
-              {...pickerProps}
-            />
-          </div>
-
-          {/* Help message */}
-          {helpMessage && (
-            <div className={styles.helpMessageWrapper}>
-              {/* Icon */}
-              <div
-                className={styles.helpIcon}
-                data-name={
-                  error ? "Filled/alert-triangle" : "Filled/info-circle"
-                }
-              >
-                <div
-                  className={`${styles.helpIconInner} ${
-                    error ? styles.helpIconInnerError : styles.helpIconInnerInfo
-                  }`}
-                  data-name="Vector"
-                >
-                  <div className={styles.helpIconSvgWrapper}>
-                    <svg
-                      className={styles.helpIconSvg}
-                      fill="none"
-                      preserveAspectRatio="none"
-                      viewBox={error ? "0 0 11 10" : "0 0 10 10"}
-                    >
-                      <path
-                        d={error ? svgPaths.p480e400 : svgPaths.p3870d900}
-                        fill={error ? "#D05C4E" : "#787E95"}
-                        stroke={error ? "#D05C4E" : "#787E95"}
-                        id="Vector"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* Message text */}
-              <div
-                className={`${styles.helpMessageText} ${
-                  error
-                    ? styles.helpMessageTextError
-                    : styles.helpMessageTextInfo
-                }`}
-              >
-                <p className={styles.helpMessageParagraph}>{helpMessage}</p>
-              </div>
-            </div>
+        <CheckTreePicker
+          ref={ref}
+          className={clsx(
+            inputStyles.customSelectWrapper,
+            size === "xs"
+              ? inputStyles.sizeXs
+              : size === "sm"
+              ? inputStyles.sizeSm
+              : size === "lg"
+              ? inputStyles.sizeLg
+              : inputStyles.sizeMd,
+            error && "error-state"
           )}
-        </div>
-      </div>
+          cascade={true}
+          uncheckableItemValues={[]}
+          block
+          countable={false}
+          data={data}
+          value={selectedValues}
+          onChange={handleChange}
+          renderMenu={loading || renderMenu ? customRenderMenu : undefined}
+          renderExtraFooter={renderExtraFooter}
+          {...pickerProps}
+        />
+      </SelectFieldWrapper>
     );
   }
 );
