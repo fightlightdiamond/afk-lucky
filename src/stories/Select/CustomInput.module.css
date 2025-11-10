@@ -120,21 +120,21 @@
   background-color: #f5f6f8;
 }
 
-/* ACTIVE/SELECTED state - #4A5568 background with white text */
+/* ACTIVE/SELECTED state - gray-blue background with white text */
 .customSelectWrapper
   :global(.rs-picker-select-menu-item.rs-picker-select-menu-item-active) {
-  background-color: #4a5568;
+  background-color: #5d6d7e;
   color: white;
 }
 
 .customSelectWrapper
   :global(.rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover) {
-  background-color: #4a5568;
+  background-color: #5d6d7e;
 }
 
 /* RECENT state - same as active */
 .customSelectWrapper :global(.rs-picker-select-menu-item[data-recent="true"]) {
-  background-color: #4a5568;
+  background-color: #5d6d7e;
   color: white;
 }
 
