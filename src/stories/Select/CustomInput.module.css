@@ -1,0 +1,511 @@
+.customSelectWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hide default rsuite picker toggle only for CustomInput (SelectPicker) */
+.customSelectWrapper :global(.rs-picker-select.rs-picker-toggle) {
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+/* Additional class to ensure picker is hidden */
+.hiddenPicker :global(.rs-picker-toggle) {
+  opacity: 0 !important;
+  position: absolute !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Style rsuite CheckPicker and CheckTreePicker */
+.customSelectWrapper :global(.rs-picker-check.rs-picker-toggle),
+.customSelectWrapper :global(.rs-picker-check-tree.rs-picker-toggle) {
+  width: 100%;
+  height: 32px;
+  border: 1px solid #d1d5de;
+  border-radius: 3px;
+  background: white;
+  font-family: "Pretendard", sans-serif;
+  font-size: 12px;
+  padding: 0 10px;
+  transition: border-color 0.2s ease;
+}
+
+.customSelectWrapper :global(.rs-picker-check.rs-picker-toggle:hover),
+.customSelectWrapper :global(.rs-picker-check-tree.rs-picker-toggle:hover) {
+  border-color: #b3b8c5;
+}
+
+.customSelectWrapper
+  :global(.rs-picker-check.rs-picker-toggle.rs-picker-toggle-active),
+.customSelectWrapper
+  :global(.rs-picker-check-tree.rs-picker-toggle.rs-picker-toggle-active) {
+  border-color: #d1d5de;
+  box-shadow: 0 0 0 2px #f1f3f8;
+}
+
+.customSelectWrapper :global(.rs-picker-toggle-placeholder) {
+  color: #787e95;
+}
+
+.customSelectWrapper :global(.rs-picker-toggle-value) {
+  color: #282c3b;
+}
+
+/* Dropdown Menu Styling */
+/* Menu gap from input: 4px, Menu border: 1px solid #D1D5DE */
+.customSelectWrapper :global(.rs-picker-menu) {
+  margin-top: 4px;
+  border: 1px solid #d1d5de;
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(40, 44, 59, 0.1);
+  padding: 0;
+  background: white;
+  min-width: 200px;
+}
+
+/* Search box in dropdown */
+.customSelectWrapper :global(.rs-picker-search-bar) {
+  padding: 8px;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.customSelectWrapper :global(.rs-picker-search-bar-input) {
+  font-family: "Pretendard", sans-serif;
+  font-size: 12px;
+  color: #282c3b;
+  border: 1px solid #d1d5de;
+  border-radius: 3px;
+  padding: 6px 10px;
+  width: 100%;
+}
+
+.customSelectWrapper :global(.rs-picker-search-bar-input:focus) {
+  outline: none;
+  border-color: #787e95;
+  box-shadow: 0 0 0 2px #f1f3f8;
+}
+
+/* Menu items container */
+.customSelectWrapper :global(.rs-picker-select-menu-items) {
+  padding: 4px 0;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+/* Individual menu item - DEFAULT state */
+/* Menu item padding: 8px 12px */
+.customSelectWrapper :global(.rs-picker-select-menu-item) {
+  padding: 8px 12px;
+  font-family: "Pretendard", sans-serif;
+  font-size: 12px;
+  color: #282c3b;
+  background-color: white;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+/* HOVER state - light gray background #F5F6F8 */
+.customSelectWrapper :global(.rs-picker-select-menu-item:hover) {
+  background-color: #f5f6f8;
+}
+
+/* ACTIVE/SELECTED state - #4A5568 background with white text */
+.customSelectWrapper
+  :global(.rs-picker-select-menu-item.rs-picker-select-menu-item-active) {
+  background-color: #4a5568;
+  color: white;
+}
+
+.customSelectWrapper
+  :global(.rs-picker-select-menu-item.rs-picker-select-menu-item-active:hover) {
+  background-color: #4a5568;
+}
+
+/* RECENT state - same as active */
+.customSelectWrapper :global(.rs-picker-select-menu-item[data-recent="true"]) {
+  background-color: #4a5568;
+  color: white;
+}
+
+/* DISABLED state - 50% opacity with disabled cursor */
+.customSelectWrapper
+  :global(.rs-picker-select-menu-item.rs-picker-select-menu-item-disabled) {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: white;
+}
+
+.customSelectWrapper
+  :global(
+    .rs-picker-select-menu-item.rs-picker-select-menu-item-disabled:hover
+  ) {
+  background-color: white;
+}
+
+/* Hide default checkbox */
+.customSelectWrapper :global(.rs-picker-select-menu-item .rs-checkbox) {
+  display: none;
+}
+
+/* Tree node styles */
+.customSelectWrapper :global(.rs-picker-menu .rs-check-tree-node) {
+  padding: 0;
+}
+
+/* Tree node labels - Menu item padding: 8px 12px */
+.customSelectWrapper :global(.rs-picker-menu .rs-check-tree-node-label) {
+  padding: 8px 12px;
+  font-family: "Pretendard", sans-serif;
+  font-size: 12px;
+  color: #282c3b;
+  background-color: white;
+  transition: background-color 0.15s ease;
+}
+
+.customSelectWrapper :global(.rs-picker-menu .rs-check-tree-node-label:hover) {
+  background-color: #f5f6f8;
+}
+
+/* Header items in tree */
+.customSelectWrapper
+  :global(.rs-picker-menu .rs-check-tree-node-expand-icon-wrapper) {
+  margin-right: 4px;
+}
+
+/* Multi-select checkboxes - Matching design exactly */
+.customSelectWrapper :global(.rs-picker-menu .rs-checkbox-wrapper) {
+  margin-right: 12px;
+}
+
+/* Checkbox base styling - 20px × 20px with 4px border radius */
+.customSelectWrapper :global(.rs-picker-menu .rs-checkbox-checker) {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5de;
+  border-radius: 4px;
+  background-color: white;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.customSelectWrapper :global(.rs-picker-menu .rs-checkbox-checker label) {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Unchecked state - white background with #D1D5DE border, 2px width */
+.customSelectWrapper
+  :global(.rs-picker-menu .rs-checkbox .rs-checkbox-checker) {
+  background-color: white;
+  border: 2px solid #d1d5de;
+}
+
+/* Checked state - #2196F3 background with white checkmark */
+.customSelectWrapper
+  :global(.rs-picker-menu .rs-checkbox-checked .rs-checkbox-checker) {
+  background-color: #2196f3;
+  border: 2px solid #2196f3;
+}
+
+/* White checkmark with smooth transitions */
+.customSelectWrapper
+  :global(.rs-picker-menu .rs-checkbox-checked .rs-checkbox-inner:before) {
+  border-color: white;
+  border-width: 2px;
+  transition: all 0.2s ease;
+}
+
+/* Checkbox inner element transitions */
+.customSelectWrapper :global(.rs-picker-menu .rs-checkbox-inner) {
+  transition: all 0.2s ease;
+}
+
+/* Indeterminate state - show as unchecked (no dash) */
+.customSelectWrapper
+  :global(.rs-picker-menu .rs-checkbox-indeterminate .rs-checkbox-checker) {
+  background-color: white;
+  border: 2px solid #d1d5de;
+}
+
+/* Hide the dash/minus icon for indeterminate state */
+.customSelectWrapper
+  :global(
+    .rs-picker-menu .rs-checkbox-indeterminate .rs-checkbox-inner:before
+  ) {
+  display: none !important;
+}
+
+.customSelectWrapper
+  :global(.rs-picker-menu .rs-checkbox-indeterminate .rs-checkbox-inner:after) {
+  display: none !important;
+}
+
+/* Tree node expand/collapse icons */
+.customSelectWrapper :global(.rs-picker-menu .rs-check-tree-node-expand-icon) {
+  color: #666;
+  font-size: 12px;
+}
+
+/* Header node styling - Light blue background when expanded */
+.customSelectWrapper
+  :global(
+    .rs-picker-menu .rs-check-tree-node-expanded > .rs-check-tree-node-label
+  ) {
+  background-color: #e3f2fd;
+  color: #282c3b;
+}
+
+/* Keep header background when hovering */
+.customSelectWrapper
+  :global(
+    .rs-picker-menu
+      .rs-check-tree-node-expanded
+      > .rs-check-tree-node-label:hover
+  ) {
+  background-color: #e3f2fd;
+}
+
+/* Child items - no special background */
+.customSelectWrapper :global(.rs-picker-menu .rs-check-tree-node-label-active) {
+  background-color: transparent;
+  color: #282c3b;
+}
+
+/* Hide Select All toolbar */
+.customSelectWrapper :global(.rs-picker-toolbar) {
+  display: none;
+}
+
+/* Tag/Badge styling for selected items count */
+.customSelectWrapper :global(.rs-picker-toggle-value .rs-tag) {
+  background-color: #2196f3;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.customSelectWrapper :global(.rs-picker-value-list) {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.customSelectWrapper :global(.rs-picker-value-item) {
+  color: #2196f3;
+  font-weight: 500;
+}
+
+.customSelectWrapper :global(.rs-picker-value-count) {
+  background-color: #2196f3;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* Loading state */
+.customSelectWrapper :global(.rs-picker-menu .rs-picker-menu-loading) {
+  padding: 12px;
+  text-align: center;
+  color: #787e95;
+  font-family: "Pretendard", sans-serif;
+  font-size: 12px;
+}
+
+/* Custom toggle UI - following Figma design exactly */
+.customToggle {
+  background: white;
+  position: relative;
+  border-radius: 3px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.customToggleInner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: clip;
+  border-radius: inherit;
+}
+
+.customToggleContent {
+  box-sizing: border-box;
+  content: stretch;
+  display: flex;
+  align-items: center;
+  padding-left: 0;
+  padding-right: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.customToggleBorder {
+  position: absolute;
+  border: 1px solid #d1d5de;
+  border-style: solid;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 3px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customToggle:hover .customToggleBorder {
+  border-color: #b3b8c5;
+}
+
+/* Active state - focus ring */
+.customToggleOpen .customToggleBorder,
+.customToggle:focus-within .customToggleBorder {
+  border-color: #d1d5de;
+  box-shadow: 0px 0px 0px 2px #f1f3f8;
+}
+
+/* Disabled state */
+.customToggleDisabled {
+  background: #f1f3f8;
+  cursor: not-allowed;
+}
+
+.customToggleDisabled:hover .customToggleBorder {
+  border-color: #d1d5de;
+}
+
+.customToggleDisabled .customToggleBorder {
+  border-color: #d1d5de;
+}
+
+/* Error/Danger state */
+.customToggleError .customToggleBorder {
+  border-color: #d05c4e;
+}
+
+.customToggleError:hover .customToggleBorder {
+  border-color: #d05c4e;
+}
+
+.customToggleError.customToggleOpen .customToggleBorder,
+.customToggleError:focus-within .customToggleBorder {
+  border-color: #d05c4e;
+  box-shadow: none;
+}
+
+/* Error state for CheckPicker and CheckTreePicker */
+.customSelectWrapper :global(.error-state.rs-picker-toggle) {
+  border-color: #d05c4e !important;
+}
+
+.customSelectWrapper :global(.error-state.rs-picker-toggle:hover) {
+  border-color: #d05c4e !important;
+}
+
+.customSelectWrapper
+  :global(.error-state.rs-picker-toggle.rs-picker-toggle-active) {
+  border-color: #d05c4e !important;
+  box-shadow: none;
+}
+
+/* Size variants */
+.customToggle.sizeXs {
+  height: 24px;
+}
+
+.customToggle.sizeXs .customToggleContent {
+  padding-right: 8px;
+}
+
+.customToggle.sizeXs p {
+  font-size: 11px;
+}
+
+.customToggle.sizeSm {
+  height: 28px;
+}
+
+.customToggle.sizeSm .customToggleContent {
+  padding-right: 9px;
+}
+
+.customToggle.sizeSm p {
+  font-size: 12px;
+}
+
+.customToggle.sizeMd {
+  height: 32px;
+}
+
+.customToggle.sizeMd .customToggleContent {
+  padding-right: 10px;
+}
+
+.customToggle.sizeMd p {
+  font-size: 12px;
+}
+
+.customToggle.sizeLg {
+  height: 40px;
+}
+
+.customToggle.sizeLg .customToggleContent {
+  padding-right: 12px;
+}
+
+.customToggle.sizeLg p {
+  font-size: 13px;
+}
+
+/* Size variants for CheckPicker and CheckTreePicker */
+.customSelectWrapper.sizeXs :global(.rs-picker-check.rs-picker-toggle),
+.customSelectWrapper.sizeXs :global(.rs-picker-check-tree.rs-picker-toggle) {
+  height: 24px;
+  font-size: 11px;
+  padding: 0 8px;
+}
+
+.customSelectWrapper.sizeSm :global(.rs-picker-check.rs-picker-toggle),
+.customSelectWrapper.sizeSm :global(.rs-picker-check-tree.rs-picker-toggle) {
+  height: 28px;
+  font-size: 12px;
+  padding: 0 9px;
+}
+
+.customSelectWrapper.sizeMd :global(.rs-picker-check.rs-picker-toggle),
+.customSelectWrapper.sizeMd :global(.rs-picker-check-tree.rs-picker-toggle) {
+  height: 32px;
+  font-size: 12px;
+  padding: 0 10px;
+}
+
+.customSelectWrapper.sizeLg :global(.rs-picker-check.rs-picker-toggle),
+.customSelectWrapper.sizeLg :global(.rs-picker-check-tree.rs-picker-toggle) {
+  height: 40px;
+  font-size: 13px;
+  padding: 0 12px;
+}
