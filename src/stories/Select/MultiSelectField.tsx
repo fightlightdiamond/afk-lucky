@@ -96,6 +96,15 @@ const MultiSelectField = React.forwardRef<PickerHandle, MultiSelectFieldProps>(
       );
     }, [showSelectAll, handleSelectAll, isAllSelected]);
 
+    const sizeClass =
+      size === "xs"
+        ? inputStyles.sizeXs
+        : size === "sm"
+        ? inputStyles.sizeSm
+        : size === "lg"
+        ? inputStyles.sizeLg
+        : inputStyles.sizeMd;
+
     return (
       <SelectFieldWrapper
         label={label}
@@ -104,28 +113,21 @@ const MultiSelectField = React.forwardRef<PickerHandle, MultiSelectFieldProps>(
         error={error}
         size={size}
       >
-        <CheckPicker
-          ref={ref}
-          className={clsx(
-            inputStyles.customSelectWrapper,
-            size === "xs"
-              ? inputStyles.sizeXs
-              : size === "sm"
-              ? inputStyles.sizeSm
-              : size === "lg"
-              ? inputStyles.sizeLg
-              : inputStyles.sizeMd,
-            error && "error-state"
-          )}
-          block
-          countable={false}
-          data={data}
-          value={selectedValues}
-          onChange={handleChange}
-          renderMenu={loading || renderMenu ? customRenderMenu : undefined}
-          renderExtraFooter={renderExtraFooter}
-          {...pickerProps}
-        />
+        <div className={clsx(inputStyles.customSelectWrapper, sizeClass)}>
+          <CheckPicker
+            ref={ref}
+            className={clsx(error && "error-state")}
+            block
+            countable={false}
+            data={data}
+            value={selectedValues}
+            onChange={handleChange}
+            menuStyle={{ marginTop: 0 }}
+            renderMenu={loading || renderMenu ? customRenderMenu : undefined}
+            renderExtraFooter={renderExtraFooter}
+            {...pickerProps}
+          />
+        </div>
       </SelectFieldWrapper>
     );
   }

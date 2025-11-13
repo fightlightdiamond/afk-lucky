@@ -254,6 +254,7 @@ const CustomInput = React.forwardRef<PickerHandle, CustomInputProps>(
           data={data || []}
           value={value}
           disabled={disabled}
+          menuStyle={{ marginTop: 0 }}
           renderMenu={
             loading
               ? (menu: React.ReactNode) => (

@@ -119,6 +119,15 @@ const TreeSelectField = React.forwardRef<PickerHandle, TreeSelectFieldProps>(
       );
     }, [showSelectAll, handleSelectAll, isAllSelected]);
 
+    const sizeClass =
+      size === "xs"
+        ? inputStyles.sizeXs
+        : size === "sm"
+        ? inputStyles.sizeSm
+        : size === "lg"
+        ? inputStyles.sizeLg
+        : inputStyles.sizeMd;
+
     return (
       <SelectFieldWrapper
         label={label}
@@ -127,30 +136,23 @@ const TreeSelectField = React.forwardRef<PickerHandle, TreeSelectFieldProps>(
         error={error}
         size={size}
       >
-        <CheckTreePicker
-          ref={ref}
-          className={clsx(
-            inputStyles.customSelectWrapper,
-            size === "xs"
-              ? inputStyles.sizeXs
-              : size === "sm"
-              ? inputStyles.sizeSm
-              : size === "lg"
-              ? inputStyles.sizeLg
-              : inputStyles.sizeMd,
-            error && "error-state"
-          )}
-          cascade={true}
-          uncheckableItemValues={[]}
-          block
-          countable={false}
-          data={data}
-          value={selectedValues}
-          onChange={handleChange}
-          renderMenu={loading || renderMenu ? customRenderMenu : undefined}
-          renderExtraFooter={renderExtraFooter}
-          {...pickerProps}
-        />
+        <div className={clsx(inputStyles.customSelectWrapper, sizeClass)}>
+          <CheckTreePicker
+            ref={ref}
+            className={clsx(error && "error-state")}
+            cascade={true}
+            uncheckableItemValues={[]}
+            block
+            countable={false}
+            data={data}
+            value={selectedValues}
+            onChange={handleChange}
+            menuStyle={{ marginTop: 0 }}
+            renderMenu={loading || renderMenu ? customRenderMenu : undefined}
+            renderExtraFooter={renderExtraFooter}
+            {...pickerProps}
+          />
+        </div>
       </SelectFieldWrapper>
     );
   }

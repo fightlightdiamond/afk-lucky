@@ -13,33 +13,7 @@ const meta: Meta<typeof SelectField> = {
   parameters: {
     layout: "centered",
     docs: {
-      description: {
-        component: `
-A custom select field component built on top of rsuite SelectPicker with custom styling.
-
-## Features
-- Label with optional required indicator
-- Prefix options (text or icon, inside or outside border)
-- Help messages with icons
-- Error states
-- Badge support for selected values
-- Disabled state support
-
-## Usage
-\`\`\`tsx
-import SelectField from '@/stories/Select/SelectField'
-
-<SelectField
-  label="Select an option"
-  data={[
-    { label: "Option 1", value: 1 },
-    { label: "Option 2", value: 2 }
-  ]}
-  placeholder="Choose..."
-/>
-\`\`\`
-        `,
-      },
+      description: {},
     },
   },
   tags: ["autodocs"],

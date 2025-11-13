@@ -2,39 +2,78 @@
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Hide default rsuite picker toggle only for CustomInput (SelectPicker) */
-.customSelectWrapper :global(.rs-picker-select.rs-picker-toggle) {
-  opacity: 0;
-  position: absolute;
-  pointer-events: none;
-  width: 0;
-  height: 0;
-}
-
-/* Additional class to ensure picker is hidden */
-.hiddenPicker :global(.rs-picker-toggle) {
-  opacity: 0 !important;
+/* Position hiddenPicker absolute at bottom of customToggle for correct dropdown positioning */
+.customSelectWrapper .hiddenPicker {
   position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: -1 !important;
+  opacity: 0 !important;
   pointer-events: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  overflow: hidden !important;
+}
+
+/* Hide the rsuite toggle but keep it for dropdown positioning */
+.customSelectWrapper .hiddenPicker :global(.rs-picker-toggle) {
+  width: 100% !important;
+  opacity: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+/* Size-specific heights for hiddenPicker to match customToggle */
+.customSelectWrapper.sizeXs .hiddenPicker {
+  height: 24px !important;
+}
+
+.customSelectWrapper.sizeXs .hiddenPicker :global(.rs-picker-toggle) {
+  height: 24px !important;
+}
+
+.customSelectWrapper.sizeSm .hiddenPicker {
+  height: 28px !important;
+}
+
+.customSelectWrapper.sizeSm .hiddenPicker :global(.rs-picker-toggle) {
+  height: 28px !important;
+}
+
+.customSelectWrapper.sizeMd .hiddenPicker {
+  height: 32px !important;
+}
+
+.customSelectWrapper.sizeMd .hiddenPicker :global(.rs-picker-toggle) {
+  height: 32px !important;
+}
+
+.customSelectWrapper.sizeLg .hiddenPicker {
+  height: 40px !important;
+}
+
+.customSelectWrapper.sizeLg .hiddenPicker :global(.rs-picker-toggle) {
+  height: 40px !important;
 }
 
 /* Style rsuite CheckPicker and CheckTreePicker */
+.customSelectWrapper :global(.rs-picker-check),
+.customSelectWrapper :global(.rs-picker-check-tree) {
+  height: 100%;
+}
+
 .customSelectWrapper :global(.rs-picker-check.rs-picker-toggle),
 .customSelectWrapper :global(.rs-picker-check-tree.rs-picker-toggle) {
   width: 100%;
-  height: 32px;
+  height: 100%;
   border: 1px solid #d1d5de;
   border-radius: 3px;
   background: white;
   font-family: "Pretendard", sans-serif;
-  font-size: 12px;
-  padding: 0 10px;
   transition: border-color 0.2s ease;
+  position: relative;
 }
 
 .customSelectWrapper :global(.rs-picker-check.rs-picker-toggle:hover),
@@ -59,15 +98,16 @@
 }
 
 /* Dropdown Menu Styling */
-/* Menu gap from input: 4px, Menu border: 1px solid #D1D5DE */
+/* Overlap with input field to remove gap, use z-index to layer on top */
 .customSelectWrapper :global(.rs-picker-menu) {
-  margin-top: 4px;
   border: 1px solid #d1d5de;
   border-radius: 3px;
   box-shadow: 0 2px 8px rgba(40, 44, 59, 0.1);
   padding: 0;
   background: white;
   min-width: 200px;
+  position: relative;
+  z-index: 1000;
 }
 
 /* Search box in dropdown */
@@ -482,32 +522,60 @@
 }
 
 /* Size variants for CheckPicker and CheckTreePicker */
-.customSelectWrapper.sizeXs :global(.rs-picker-check.rs-picker-toggle),
-.customSelectWrapper.sizeXs :global(.rs-picker-check-tree.rs-picker-toggle) {
-  height: 24px;
-  font-size: 11px;
-  padding: 0 8px;
+.customSelectWrapper.sizeXs,
+.customSelectWrapper.sizeXs :global(.rs-picker-check),
+.customSelectWrapper.sizeXs :global(.rs-picker-check-tree) {
+  height: 24px !important;
 }
 
-.customSelectWrapper.sizeSm :global(.rs-picker-check.rs-picker-toggle),
-.customSelectWrapper.sizeSm :global(.rs-picker-check-tree.rs-picker-toggle) {
-  height: 28px;
-  font-size: 12px;
-  padding: 0 9px;
+.customSelectWrapper.sizeXs :global(.rs-picker-toggle) {
+  height: 24px !important;
+  min-height: 24px !important;
+  font-size: 11px !important;
+  padding: 0 8px !important;
+  line-height: 22px !important;
 }
 
-.customSelectWrapper.sizeMd :global(.rs-picker-check.rs-picker-toggle),
-.customSelectWrapper.sizeMd :global(.rs-picker-check-tree.rs-picker-toggle) {
-  height: 32px;
-  font-size: 12px;
-  padding: 0 10px;
+.customSelectWrapper.sizeSm,
+.customSelectWrapper.sizeSm :global(.rs-picker-check),
+.customSelectWrapper.sizeSm :global(.rs-picker-check-tree) {
+  height: 28px !important;
 }
 
-.customSelectWrapper.sizeLg :global(.rs-picker-check.rs-picker-toggle),
-.customSelectWrapper.sizeLg :global(.rs-picker-check-tree.rs-picker-toggle) {
-  height: 40px;
-  font-size: 13px;
-  padding: 0 12px;
+.customSelectWrapper.sizeSm :global(.rs-picker-toggle) {
+  height: 28px !important;
+  min-height: 28px !important;
+  font-size: 12px !important;
+  padding: 0 9px !important;
+  line-height: 26px !important;
+}
+
+.customSelectWrapper.sizeMd,
+.customSelectWrapper.sizeMd :global(.rs-picker-check),
+.customSelectWrapper.sizeMd :global(.rs-picker-check-tree) {
+  height: 32px !important;
+}
+
+.customSelectWrapper.sizeMd :global(.rs-picker-toggle) {
+  height: 32px !important;
+  min-height: 32px !important;
+  font-size: 12px !important;
+  padding: 0 10px !important;
+  line-height: 30px !important;
+}
+
+.customSelectWrapper.sizeLg,
+.customSelectWrapper.sizeLg :global(.rs-picker-check),
+.customSelectWrapper.sizeLg :global(.rs-picker-check-tree) {
+  height: 40px !important;
+}
+
+.customSelectWrapper.sizeLg :global(.rs-picker-toggle) {
+  height: 40px !important;
+  min-height: 40px !important;
+  font-size: 13px !important;
+  padding: 0 12px !important;
+  line-height: 38px !important;
 }
 
 /* Prefix box styles */
