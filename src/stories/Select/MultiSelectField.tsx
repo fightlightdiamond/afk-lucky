@@ -1,20 +1,17 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { CheckPicker, CheckPickerProps, PickerHandle } from "rsuite";
+import { PickerHandle } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import inputStyles from "./CustomInput.module.css";
-import clsx from "clsx";
 import LoadingSpinner from "./LoadingSpinner";
 import SelectAllFooter from "./SelectAllFooter";
 import SelectFieldWrapper from "./SelectFieldWrapper";
+import CustomMultiInput, { CustomMultiInputProps } from "./CustomMultiInput";
 
-export interface MultiSelectFieldProps extends CheckPickerProps {
+export interface MultiSelectFieldProps extends CustomMultiInputProps {
   label?: string;
   required?: boolean;
   helpMessage?: string;
-  error?: boolean;
   loading?: boolean;
   showSelectAll?: boolean;
-  size?: "xs" | "sm" | "md" | "lg";
 }
 
 const MultiSelectField = React.forwardRef<PickerHandle, MultiSelectFieldProps>(
@@ -52,8 +49,7 @@ const MultiSelectField = React.forwardRef<PickerHandle, MultiSelectFieldProps>(
       const newValues = isAllSelected ? [] : allValues;
       setSelectedValues(newValues);
       if (onChange) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onChange(newValues, null as any);
+        onChange(newValues);
       }
     }, [data, selectedValues, onChange]);
 
@@ -62,8 +58,7 @@ const MultiSelectField = React.forwardRef<PickerHandle, MultiSelectFieldProps>(
         const values = newValue || [];
         setSelectedValues(values);
         if (onChange) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onChange(values as any, null as any);
+          onChange(values);
         }
       },
       [onChange]
@@ -96,15 +91,6 @@ const MultiSelectField = React.forwardRef<PickerHandle, MultiSelectFieldProps>(
       );
     }, [showSelectAll, handleSelectAll, isAllSelected]);
 
-    const sizeClass =
-      size === "xs"
-        ? inputStyles.sizeXs
-        : size === "sm"
-        ? inputStyles.sizeSm
-        : size === "lg"
-        ? inputStyles.sizeLg
-        : inputStyles.sizeMd;
-
     return (
       <SelectFieldWrapper
         label={label}
@@ -113,21 +99,17 @@ const MultiSelectField = React.forwardRef<PickerHandle, MultiSelectFieldProps>(
         error={error}
         size={size}
       >
-        <div className={clsx(inputStyles.customSelectWrapper, sizeClass)}>
-          <CheckPicker
-            ref={ref}
-            className={clsx(error && "error-state")}
-            block
-            countable={false}
-            data={data}
-            value={selectedValues}
-            onChange={handleChange}
-            menuStyle={{ marginTop: 0 }}
-            renderMenu={loading || renderMenu ? customRenderMenu : undefined}
-            renderExtraFooter={renderExtraFooter}
-            {...pickerProps}
-          />
-        </div>
+        <CustomMultiInput
+          ref={ref}
+          error={error}
+          size={size}
+          data={data}
+          value={selectedValues}
+          onChange={handleChange}
+          renderMenu={loading || renderMenu ? customRenderMenu : undefined}
+          renderExtraFooter={renderExtraFooter}
+          {...pickerProps}
+        />
       </SelectFieldWrapper>
     );
   }

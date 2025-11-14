@@ -522,60 +522,73 @@
 }
 
 /* Size variants for CheckPicker and CheckTreePicker */
-.customSelectWrapper.sizeXs,
-.customSelectWrapper.sizeXs :global(.rs-picker-check),
-.customSelectWrapper.sizeXs :global(.rs-picker-check-tree) {
+/* Target the picker components directly with combined classes */
+:global(.rs-picker-check).customSelectWrapper.sizeXs,
+:global(.rs-picker-check-tree).customSelectWrapper.sizeXs {
   height: 24px !important;
 }
 
-.customSelectWrapper.sizeXs :global(.rs-picker-toggle) {
+:global(.rs-picker-check).customSelectWrapper.sizeXs :global(.rs-picker-toggle),
+:global(.rs-picker-check-tree).customSelectWrapper.sizeXs
+  :global(.rs-picker-toggle) {
   height: 24px !important;
   min-height: 24px !important;
+  max-height: 24px !important;
   font-size: 11px !important;
   padding: 0 8px !important;
   line-height: 22px !important;
+  border-radius: 3px !important;
 }
 
-.customSelectWrapper.sizeSm,
-.customSelectWrapper.sizeSm :global(.rs-picker-check),
-.customSelectWrapper.sizeSm :global(.rs-picker-check-tree) {
+:global(.rs-picker-check).customSelectWrapper.sizeSm,
+:global(.rs-picker-check-tree).customSelectWrapper.sizeSm {
   height: 28px !important;
 }
 
-.customSelectWrapper.sizeSm :global(.rs-picker-toggle) {
+:global(.rs-picker-check).customSelectWrapper.sizeSm :global(.rs-picker-toggle),
+:global(.rs-picker-check-tree).customSelectWrapper.sizeSm
+  :global(.rs-picker-toggle) {
   height: 28px !important;
   min-height: 28px !important;
+  max-height: 28px !important;
   font-size: 12px !important;
   padding: 0 9px !important;
   line-height: 26px !important;
+  border-radius: 3px !important;
 }
 
-.customSelectWrapper.sizeMd,
-.customSelectWrapper.sizeMd :global(.rs-picker-check),
-.customSelectWrapper.sizeMd :global(.rs-picker-check-tree) {
+:global(.rs-picker-check).customSelectWrapper.sizeMd,
+:global(.rs-picker-check-tree).customSelectWrapper.sizeMd {
   height: 32px !important;
 }
 
-.customSelectWrapper.sizeMd :global(.rs-picker-toggle) {
+:global(.rs-picker-check).customSelectWrapper.sizeMd :global(.rs-picker-toggle),
+:global(.rs-picker-check-tree).customSelectWrapper.sizeMd
+  :global(.rs-picker-toggle) {
   height: 32px !important;
   min-height: 32px !important;
+  max-height: 32px !important;
   font-size: 12px !important;
   padding: 0 10px !important;
   line-height: 30px !important;
+  border-radius: 3px !important;
 }
 
-.customSelectWrapper.sizeLg,
-.customSelectWrapper.sizeLg :global(.rs-picker-check),
-.customSelectWrapper.sizeLg :global(.rs-picker-check-tree) {
+:global(.rs-picker-check).customSelectWrapper.sizeLg,
+:global(.rs-picker-check-tree).customSelectWrapper.sizeLg {
   height: 40px !important;
 }
 
-.customSelectWrapper.sizeLg :global(.rs-picker-toggle) {
+:global(.rs-picker-check).customSelectWrapper.sizeLg :global(.rs-picker-toggle),
+:global(.rs-picker-check-tree).customSelectWrapper.sizeLg
+  :global(.rs-picker-toggle) {
   height: 40px !important;
   min-height: 40px !important;
+  max-height: 40px !important;
   font-size: 13px !important;
   padding: 0 12px !important;
   line-height: 38px !important;
+  border-radius: 3px !important;
 }
 
 /* Prefix box styles */
