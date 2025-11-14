@@ -139,6 +139,19 @@
   overflow-y: auto;
 }
 
+/* Tree menu container - override RSuite's 360px */
+.customSelectWrapper :global(.rs-check-tree-view) {
+  max-height: 250px !important;
+  overflow-y: auto !important;
+}
+
+/* Global override for tree view (in case scoping doesn't work) */
+:global(.rs-check-tree-view) {
+  height: auto !important;
+  max-height: 250px !important;
+  overflow-y: auto !important;
+}
+
 /* Individual menu item - DEFAULT state */
 /* Menu item padding: 8px 12px */
 .customSelectWrapper :global(.rs-picker-select-menu-item) {

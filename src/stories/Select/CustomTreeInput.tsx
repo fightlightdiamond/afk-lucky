@@ -94,9 +94,54 @@ const CustomTreeInput = React.forwardRef<PickerHandle, CustomTreeInputProps>(
     const selectedValues = (value as (string | number)[]) || [];
     const selectedCount = selectedValues.length;
     const showPlaceholder = selectedCount === 0;
+
+    // Helper to get all child values of a node
+    const getChildValues = (node: any): (string | number)[] => {
+      if (!node.children || node.children.length === 0) return [];
+      const values: (string | number)[] = [];
+      node.children.forEach((child: unknown) => {
+        values.push(child.value);
+        values.push(...getChildValues(child));
+      });
+      return values;
+    };
+
+    // Build display text with parent (All) logic
+    const displayLabels: string[] = [];
+    const processedValues = new Set<string | number>();
+
+    data?.forEach((node: unknown) => {
+      if (selectedValues.includes(node.value)) {
+        // Parent is selected, always show as "Parent (All)"
+        displayLabels.push(`${node.label} (All)`);
+        processedValues.add(node.value);
+        // Mark all children as processed
+        const childValues = getChildValues(node);
+        childValues.forEach((val) => processedValues.add(val));
+      }
+    });
+
+    // Add remaining selected items
+    selectedValues.forEach((val) => {
+      if (!processedValues.has(val)) {
+        const findLabel = (nodes: unknown[]): string | null => {
+          for (const node of nodes) {
+            if (node.value === val) return node.label;
+            if (node.children) {
+              const label = findLabel(node.children);
+              if (label) return label;
+            }
+          }
+          return null;
+        };
+        const label = findLabel(data || []);
+        if (label) displayLabels.push(label);
+      }
+    });
+
     const displayText = showPlaceholder
       ? placeholder
-      : `${selectedCount} selected`;
+      : displayLabels.join(", ");
 
     if (!isClient) return null;
 
@@ -136,6 +181,17 @@ const CustomTreeInput = React.forwardRef<PickerHandle, CustomTreeInputProps>(
                     >
                       {displayText}
                     </p>
+
+                    {/* Badge for count */}
+                    {!showPlaceholder && displayLabels.length > 0 && (
+                      <div className={styles.badge}>
+                        <div className={styles.badgeText}>
+                          <p className={styles.badgeTextInner}>
+                            {displayLabels.length}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -171,6 +227,7 @@ const CustomTreeInput = React.forwardRef<PickerHandle, CustomTreeInputProps>(
           disabled={disabled}
           cascade={true}
           uncheckableItemValues={[]}
+          menuMaxHeight={250}
           menuStyle={{ marginTop: 0 }}
           renderMenu={
             loading

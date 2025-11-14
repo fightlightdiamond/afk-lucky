@@ -112,9 +112,15 @@ const CustomMultiInput = React.forwardRef<PickerHandle, CustomMultiInputProps>(
     const selectedValues = (value as (string | number)[]) || [];
     const selectedCount = selectedValues.length;
     const showPlaceholder = selectedCount === 0;
+
+    // Get selected labels
+    const selectedLabels = selectedValues
+      .map((val) => data?.find((item) => item.value === val)?.label)
+      .filter(Boolean) as string[];
+
     const displayText = showPlaceholder
       ? placeholder
-      : `${selectedCount} selected`;
+      : selectedLabels.join(", ");
 
     if (!isClient) return null;
 
@@ -154,6 +160,17 @@ const CustomMultiInput = React.forwardRef<PickerHandle, CustomMultiInputProps>(
                     >
                       {displayText}
                     </p>
+
+                    {/* Badge for count */}
+                    {!showPlaceholder && selectedCount > 0 && (
+                      <div className={styles.badge}>
+                        <div className={styles.badgeText}>
+                          <p className={styles.badgeTextInner}>
+                            {selectedCount}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
