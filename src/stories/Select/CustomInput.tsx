@@ -55,7 +55,15 @@ const CustomInput = React.forwardRef<PickerHandle, CustomInputProps>(
   ) => {
     const [isClient, setIsClient] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [internalValue, setInternalValue] = useState<string | number | null>(
+      value || null
+    );
     const pickerRef = useRef<PickerHandle>(null);
+
+    // Sync internal value with prop value
+    useEffect(() => {
+      setInternalValue(value || null);
+    }, [value]);
 
     // Expose the picker ref through the forwarded ref
     React.useImperativeHandle(
@@ -98,6 +106,7 @@ const CustomInput = React.forwardRef<PickerHandle, CustomInputProps>(
 
     const handleChange = useCallback(
       (newValue: string | number | null) => {
+        setInternalValue(newValue);
         if (onChange) onChange(newValue);
       },
       [onChange]
@@ -118,10 +127,10 @@ const CustomInput = React.forwardRef<PickerHandle, CustomInputProps>(
       setIsOpen(false);
     }, []);
 
-    // Get selected label
-    const selectedItem = data?.find((item) => item.value === value);
+    // Get selected label using internal value
+    const selectedItem = data?.find((item) => item.value === internalValue);
     const displayText = selectedItem?.label || "";
-    const showPlaceholder = !value && !selectedItem;
+    const showPlaceholder = !internalValue && !selectedItem;
 
     if (!isClient) return null;
 
