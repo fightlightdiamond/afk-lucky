@@ -3,7 +3,10 @@ import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
+const SECRET_KEY = process.env.JWT_SECRET;
+if (!SECRET_KEY) {
+    throw new Error("JWT_SECRET environment variable is not set");
+}
 
 export async function POST(req: NextRequest) {
     const { email, password } = await req.json();
